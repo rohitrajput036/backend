@@ -26,10 +26,10 @@ date_default_timezone_set('Asia/Kolkata');
  */
 switch (ENVIRONMENT) {
     case 'development':
-        $config['base_url'] = 'http://' . $_SERVER['SERVER_NAME'] . '/school-ci/';
+        $config['base_url'] = 'http://' . $_SERVER['SERVER_NAME'] . '/backend/';
         break;
     case 'production':
-        $config['base_url'] = 'https://' . $_SERVER['SERVER_NAME'] . '/';
+        $config['base_url'] = 'https://' . $_SERVER['SERVER_NAME'] . '/backend';
         break;
 }
 
