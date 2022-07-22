@@ -23,18 +23,27 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-           <table class="table table-bordered" id="DataTable">
-           <tr>
-                <th>S NO</th>
-                <th>Name</th>
-                <th>Action</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Test 1</td>
-                <td><button class="">Enter</button></td>
-            </tr>    
-           </table>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <table class="table table-bordered" id="DataTable">
+                            <thead>
+                                <tr>
+                                    <th>S NO</th>
+                                    <th>Center Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>Login Id</th>
+                                    <th>Password</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody> 
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
@@ -42,3 +51,10 @@
 </div><!-- ./wrapper -->
 {include file='footer.tpl'}
 {js('common.js')}
+<script>
+    $(document).ready(function(){
+        var DataTable = $('#DataTable').DataTable({
+            searching:true
+        });
+    });
+</script>

@@ -47,7 +47,20 @@
                     </li>
                 </ul>
             </li>
-            
+            <li {if uriseg(1)=='role' || uriseg(1)=='department'} class="treeview active"{else}class="treeview"{/if}>
+                <a href="#">
+                    <i class="fa fa-cogs"></i> <span>Setting</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li {if uriseg(1)=='role'}class="active"{/if}>
+                        <a href="{site_url('role')}"><i class="fa fa-circle-o"></i> Role</a>
+                    </li>
+                    <li {if uriseg(1)=='department'}class="active"{/if}>
+                        <a href="{site_url('department')}"><i class="fa fa-circle-o"></i> Department</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a href="{site_url('logout')}">
                     <i class="fa fa-sign-out"></i> <span>Logout</span>

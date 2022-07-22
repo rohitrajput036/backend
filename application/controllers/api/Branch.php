@@ -38,14 +38,15 @@ class Branch extends REST_Controller {
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
 
-    public function getAll_post() {
+    public function get_post() {
         $StartTime = microtime(true);
         try {
             $Request = json_decode($this->input->raw_input_stream);
             $APIName = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
-            $UUId = array_key_exists("RequestId", $Request->Control) ? $Request->Control->RequestId : generateUUId();
+            $UUId = property_exists($Request->Control,"RequestId") ? $Request->Control->RequestId : generateUUId();
             $this->log4php->log('info', 'REQUEST', $APIName, $UUId, $Request, 0);
             if (!empty($Request)) {
+                
                 $Data=[];
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
