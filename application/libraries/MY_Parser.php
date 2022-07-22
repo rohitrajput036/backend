@@ -262,6 +262,7 @@ class MY_Parser extends CI_Parser {
             'title'  => ''
         );
         $attributes = array_merge($defaults, $attributes);
+        $attributes['class'] = (isset($attributes['class'])) ? $attributes['class'] : '';
         $return = '<img src ="'.base_url('themes'.$this->get_theme()."/img/".$file).'" alt="'.$attributes['alt'].'" title="'.$attributes['title'].'" class="'.$attributes['class'].'" style="'.$attributes['style'].'"/>';
         return $return;
     }
