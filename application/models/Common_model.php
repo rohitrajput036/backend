@@ -425,7 +425,7 @@ class Common_model extends CI_Model {
         }
     }
 
-    function uploadNormalFile($File = [], $FileName, $UploadPath = '') {
+    function uploadNormalFile($File = [], $FileName = '', $UploadPath = '') {
         if (!is_dir($UploadPath)) {
             mkdir($UploadPath, 0755, true);
         }
