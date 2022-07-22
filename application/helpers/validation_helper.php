@@ -4,7 +4,7 @@ if(!function_exists('keyExist')) {
     function keyExist($Keys=[], $Array = []) {
         if(is_object($Array)) {
             foreach($Keys as $Key) {
-                if(property_exists($Array,$Key)){
+                if(!property_exists($Array,$Key)){
                     throw new Exception($Key." key missing",400);
                 }
             }
