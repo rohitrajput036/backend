@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 if(!function_exists('keyExist')) {
-    function keyExist($Keys=[], $Array) {
+    function keyExist($Keys=[], $Array = []) {
         if(is_object($Array)) {
             foreach($Keys as $Key) {
                 if(!array_key_exists($Key, $Array)) {
