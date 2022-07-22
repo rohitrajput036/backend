@@ -19,22 +19,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `palakpam_palakshi`
+-- Database: `palakshi`
 --
-
-DELIMITER $$
---
--- Procedures
---
-$$
-
-$$
-
-CREATE DEFINER=`palakpam`@`localhost` PROCEDURE `sp_test_new` (IN `var_branch_id` INT)  NO SQL
-select var_branch_id$$
-
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --

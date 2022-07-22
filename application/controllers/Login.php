@@ -14,6 +14,7 @@ class Login extends CI_Controller {
     }
 
     public function index() {
+       // $this->smarty->display("abc.tpl", $this->outputData);
         $this->parser->parse("login.tpl", $this->outputData);
     }
 
