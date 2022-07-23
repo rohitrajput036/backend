@@ -9,7 +9,7 @@ class Welcome extends CI_Controller {
     function __construct() {
         parent::__construct();
         if (!checkLogin()) {
-            redirect('login');
+            // redirect('login');
         }
     }
 
