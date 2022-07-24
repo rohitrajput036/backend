@@ -14,7 +14,7 @@ class Department_model extends CI_Model {
         $this->created_on = date('Y-m-d H:i:s');
         $this->updated_by = 0;
         $this->updated_on = date('Y-m-d H:i:s');
-        $this->table_name = 'department_master';
+        $this->table_name = DB_NAME.'department';
     }
 
     function add(){
@@ -33,11 +33,11 @@ class Department_model extends CI_Model {
         }
     }
 
-    function get(){
+    function get($for_table = false){
         if(!empty($this->is_active)){
             $where['is_active'] = $this->is_active;
         }else{
-            $where['is_active in ("Y","N")'] = NULL;
+            $where['is_active in (1,2)'] = NULL;
         }
         if(!empty($this->is_ho)){
             $where['is_ho'] = $this->is_ho;
@@ -51,13 +51,31 @@ class Department_model extends CI_Model {
             $i=0;
             foreach($results->result() as $result){
                 ++$i;
-                $output[] = [
-                    'sno'   => $i,
-                    'department_id' => $result->department_id,
-                    'department'    => $result->department,
-                    'is_ho'         => $result->is_ho,
-                    'is_active'     => $result->is_active
-                ];
+                if($for_table){
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-departmentid="'.$result->department_id.'" data-at="2"><i class="fa fa-check text-green"></i></btn>';
+                    }else{
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-departmentid="'.$result->department_id.'" data-at="1"><i class="fa fa-times text-red"></i></btn>';
+                    }
+                    $delete_btn = '<btn class="btn active_deactive" data-departmentid="'.$result->department_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
+                    $edit_btn = '<btn class="btn edit" data-departmentid="'.$result->department_id.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $btns = $active_deactive_btn.$delete_btn.$edit_btn;
+                    $output[] = [
+                        $i,
+                        '<span id="department_'.$result->department_id.'">'.$result->department.'</span>',
+                        ($result->is_ho == 1) ? 'Yes' : 'No',
+                        $btns
+                    ];
+                }else{
+                    $output[] = [
+                        'sno'   => $i,
+                        'department_id' => $result->department_id,
+                        'department'    => $result->department,
+                        'is_ho'         => $result->is_ho,
+                        'is_active'     => $result->is_active
+                    ];
+                }
+                
             }
         }
         return $output;

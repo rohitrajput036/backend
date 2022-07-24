@@ -65,7 +65,8 @@
 <script>
     $(document).ready(function(){
         var DataTable = $('#DataTable').DataTable({
-            searching:true
+            searching:true,
+            ordering:false
         });
         $(window).load(function(){
             var control  = {
@@ -112,6 +113,9 @@
         $(document).on('click','#save_role',function(){
             var role_id = $('#role_id').val();
             var role = $.trim($('#role').val());
+            if(checkBlank('role_box','role_error_msg','Required..', role, 'role', '')){
+                return false;
+            }
             var control  = {
                 request_id : generateUUId(),
                 source : 1,
@@ -144,6 +148,8 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
+                $('#role_id').val(0);
+                $('#role').val('');
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();
@@ -153,6 +159,58 @@
             }).always(function() {
                 $('#save_role').css("disabled", false);
             });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var role_id = $(this).data('roleid');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                role_id : role_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}role/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#role_id').val(0);
+                $('#role').val('');
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                $('#save_role').css("disabled", false);
+            });
+        });
+        $(document).on('click','.edit',function(){
+            var role_id = $(this).data('roleid');
+            $('#role_id').val(role_id);
+            $('#role').val($('#role_'+role_id).text());
         });
     });
 </script>

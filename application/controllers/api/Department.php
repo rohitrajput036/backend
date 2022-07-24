@@ -13,13 +13,13 @@ class Department extends REST_Controller {
     public function index_get() {
         $StartTime = microtime(true);
         $response = [
-            'Control' => [
-                'Status' => 0,
-                'Message' => 'You have wrong direction, Please check the manual',
-                'MessageCode' => REST_Controller::HTTP_BAD_REQUEST,
-                'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            'control' => [
+                'status' => 0,
+                'message' => 'You have wrong direction, Please check the manual',
+                'message_code' => REST_Controller::HTTP_BAD_REQUEST,
+                'time_taken' => (microtime(true) - $StartTime) . ' Second'
             ],
-            'Data' => []
+            'data' => []
         ];
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
@@ -27,60 +27,60 @@ class Department extends REST_Controller {
     public function index_post() {
         $StartTime = microtime(true);
         $response = [
-            'Control' => [
-                'Status' => 0,
-                'Message' => 'You have wrong direction, Please check the manual',
-                'MessageCode' => REST_0Controller::HTTP_BAD_REQUEST,
-                'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            'control' => [
+                'status' => 0,
+                'message' => 'You have wrong direction, Please check the manual',
+                'message_code' => REST_Controller::HTTP_BAD_REQUEST,
+                'time_taken' => (microtime(true) - $StartTime) . ' Second'
             ],
-            'Data' => []
+            'data' => []
         ];
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
-    function get_post() {
-        $StartTime = microtime(true);
+    function get_post(){
+        $start_time = microtime(true);
         try {
-            $Request = json_decode($this->input->raw_input_stream);
-            $APIName = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
-            $UUId = array_key_exists("RequestId", $Request->Control) ? $Request->Control->RequestId : generateUUId();
-            $this->log4php->log('info', 'REQUEST', $APIName, $UUId, $Request, 0);
-            if (!empty($Request)) {
-                if(isset($Request->Data->IsActive)){
-                    $this->department_model->is_active = $Request->Data->IsActive;
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)) {
+                if(isset($request->data->is_active)){
+                    $this->department_model->is_active = $request->data->is_active;
                 }
-                if(isset($Request->Data->IsHo)){
-                    $this->department_model->is_ho = $Request->Data->IsHo;
+                if(isset($request->data->for_table)){
+                    $request->data->for_table = true;
+                }else{
+                    $request->data->for_table = false;
                 }
-                
-                $Data=$this->department_model->get();
+                $data = $this->department_model->get($request->data->for_table);
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }
-            $Response = [
-                'Control' => [
-                    'Status' => 1,
-                    'Message' => 'List of Centers',
-                    'MessageCode' => REST_Controller::HTTP_OK,
-                    'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            $response = [
+                'control' => [
+                    'status' => 1,
+                    'message' => 'List of department',
+                    'message_code' => REST_Controller::HTTP_OK,
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
-                'Data' => $Data
+                'data' => $data
             ];
-            $this->log4php->log('info', 'RESPONSE', $APIName, $UUId, $Response, 0);
-            $this->response($Response, REST_Controller::HTTP_OK);
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, REST_Controller::HTTP_OK);
         } catch (Exception $E) {
-            $this->log4php->log('error', 'ERROR', $APIName, $UUId, $E->getMessage(), 0);
-            $Response = [
-                'Control' => [
-                    'Status' => 0,
-                    'Message' => $E->getMessage(),
-                    'MessageCode' => $E->getCode(),
-                    'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
-                'Data' => [
-                    'Id' => $this->Clientcode_model->ClientId
-                ]
+                'data' => []
             ];
-            $this->response($Response, $E->getCode());
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, $E->getCode());
         }
     }
 }

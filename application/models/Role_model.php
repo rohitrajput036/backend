@@ -91,7 +91,7 @@ class Role_model extends CI_Model {
                     $btns = $active_deactive_btn.$delete_btn.$edit_btn;
                     $output[] = [
                         $i,
-                        $result->role,
+                        '<span id="role_'.$result->role_id.'">'.$result->role.'</span>',
                         $btns
                     ];
                 }else{
