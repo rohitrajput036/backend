@@ -32,6 +32,36 @@ class Department_model extends CI_Model {
             throw new Exception("Issue in insertion", 500);
         }
     }
+    function check() {
+        $Results = $this->global_model->select($this->table_name, ['department' => $this->department]);
+        if ($Results->num_rows() > 0) {
+            $this->department_id = $Results->row()->department_id;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function update(){
+       $where['department_id'] = $this->department_id;
+       $update_data = [
+        'department'  => $this->department,
+        'is_ho' => $this->is_ho,
+        'updated_by' => $this->updated_by,
+        'updated_on' => $this->updated_on
+       ];
+       return $this->global_model->update($this->table_name,$update_data,$where); 
+    }
+
+    function delete(){
+        $where['department_id'] = $this->department_id;
+        $update_data = [
+            'is_active' => $this->is_active,
+            'updated_by' => $this->updated_by,
+            'updated_on' => $this->updated_on
+        ];
+        return $this->global_model->update($this->table_name,$update_data,$where);
+    }
 
     function get($for_table = false){
         if(!empty($this->is_active)){
@@ -58,7 +88,7 @@ class Department_model extends CI_Model {
                         $active_deactive_btn = '<btn class="btn active_deactive" data-departmentid="'.$result->department_id.'" data-at="1"><i class="fa fa-times text-red"></i></btn>';
                     }
                     $delete_btn = '<btn class="btn active_deactive" data-departmentid="'.$result->department_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
-                    $edit_btn = '<btn class="btn edit" data-departmentid="'.$result->department_id.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $edit_btn = '<btn class="btn edit" data-departmentid="'.$result->department_id.'" data-isho="'.$result->is_ho.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
                     $btns = $active_deactive_btn.$delete_btn.$edit_btn;
                     $output[] = [
                         $i,

@@ -211,6 +211,7 @@
             var role_id = $(this).data('roleid');
             $('#role_id').val(role_id);
             $('#role').val($('#role_'+role_id).text());
+            $('#role').focus();
         });
     });
 </script>

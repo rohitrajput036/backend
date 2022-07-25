@@ -144,8 +144,92 @@
             }
             request = JSON.stringify(request);
             var url = "{$smarty.const.API_URL}department/add";
-            console.log(url);
-            console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#department_id').val(0);
+                $('#department').val('');
+                $('#is_ho').prop('checked',false);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                $('#save_role').css("disabled", false);
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var role_id = $(this).data('roleid');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                role_id : role_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}role/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#role_id').val(0);
+                $('#role').val('');
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                $('#save_role').css("disabled", false);
+            });
+        });
+        $(document).on('click','.edit',function(){
+            var department_id = $(this).data('departmentid');
+            var is_ho = $(this).data('isho');
+            $('#department_id').val(department_id);
+            $('#department').val($('#department_'+department_id).text());
+            $('#is_ho').prop('checked',false);
+            if(is_ho == 1){
+                $('#is_ho').prop('checked',true);
+            }
+            $('#department').focus();
         });
     });
 </script>
