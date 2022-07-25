@@ -174,7 +174,7 @@
             });
         });
         $(document).on('click','.active_deactive',function(){
-            var role_id = $(this).data('roleid');
+            var department_id = $(this).data('departmentid');
             var is_active = $(this).data('at');
             var control  = {
                 request_id : generateUUId(),
@@ -182,7 +182,7 @@
                 request_time : Math.round(+new Date()/1000)
             }
             var data = {
-                role_id : role_id,
+                department_id : department_id,
                 is_active : is_active,
                 login_id : '{userdata('UserId')}'
             }
@@ -191,7 +191,7 @@
                 data : data
             }
             request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}role/delete";
+            var url = "{$smarty.const.API_URL}department/delete";
             $.ajax({
                 method: "POST",
                 url: url,
@@ -208,8 +208,9 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
-                $('#role_id').val(0);
-                $('#role').val('');
+                $('#department_id').val(0);
+                $('#department').val('');
+                $('#is_ho').prop('checked',false);
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();

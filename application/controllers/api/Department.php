@@ -105,20 +105,20 @@ class Department extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['role_id','is_active'],$request->data);
+                keyExist(['department_id','is_active'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['role_id' => $request->data->role_id,'is_active' => $request->data->is_active]);
-                $this->role_model->role_id = $request->data->role_id;
-                $this->role_model->is_active = $request->data->is_active;
-                $this->role_model->created_by = $this->role_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
-                $this->role_model->delete();
-                $message = 'Role update successfully';
+                checkBlank(['department_id' => $request->data->department_id,'is_active' => $request->data->is_active]);
+                $this->department_model->department_id = $request->data->department_id;
+                $this->department_model->is_active = $request->data->is_active;
+                $this->department_model->created_by = $this->department_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
+                $this->department_model->delete();
+                $message = 'Department update successfully';
                 if($request->data->is_active == 1){
-                    $message = 'Role activate successfully';
+                    $message = 'Department activate successfully';
                 }else if($request->data->is_active == 2){
-                    $message = 'Role dactivate successfully';
+                    $message = 'Department dactivate successfully';
                 }else if($request->data->is_active == 3){
-                    $message = 'Role delete successfully';
+                    $message = 'Department delete successfully';
                 }
             }else{
                 throw new Exception('Invalid request',400);
