@@ -69,7 +69,7 @@ class Department_model extends CI_Model {
         }else{
             $where['is_active in (1,2)'] = NULL;
         }
-        if(!empty($this->is_ho)){
+        if($this->is_ho != ''){
             $where['is_ho'] = $this->is_ho;
         }
         if($this->department_id > 0){

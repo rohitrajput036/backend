@@ -42,8 +42,21 @@
                             <i class="fa fa-circle-o"></i>Add Branch</a>
                     </li>
                     <li {if uriseg(2)=='all_branch'}class="active"{/if}>
-                        <a href="{site_url('branch/all_branch')}">
-                            <i class="fa fa-circle-o"></i>All Branch</a>
+                        <a href="{site_url('branch/all_branch')}"><i class="fa fa-circle-o"></i>All Branch</a>
+                    </li>
+                </ul>
+            </li>
+            <li {if uriseg(1)=='user'}class="treeview active"{else}class="treeview"{/if}>
+                <a href="#">
+                    <i class="fa fa-user"></i> <span>User Management</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                <li {if uriseg(1)=='user' && uriseg(2)=='add'}class="active"{/if}>
+                    <a href="{site_url('user/add')}"><i class="fa fa-circle-o"></i> Add</a>
+                </li>        
+                <li {if uriseg(1)=='user' && uriseg(2)==''}class="active"{/if}>
+                        <a href="{site_url('user/')}"><i class="fa fa-circle-o"></i> List</a>
                     </li>
                 </ul>
             </li>

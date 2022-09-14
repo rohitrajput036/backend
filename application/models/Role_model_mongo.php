@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Role_model_back extends CI_Model {
+class Role_model extends CI_Model {
 
     public $role_id, $role, $is_dev_op, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
 
@@ -15,7 +15,7 @@ class Role_model_back extends CI_Model {
         $this->created_on   = date('Y-m-d H:i:s');
         $this->updated_by   = 0;
         $this->updated_on   = date('Y-m-d H:i:s');
-        $this->table_name   = DB_NAME.'role';
+        $this->table_name   = 'role';
     }
 
     function add(){
@@ -24,16 +24,21 @@ class Role_model_back extends CI_Model {
             'is_dev_op' => $this->is_dev_op,
             'is_active' => $this->is_active,
             'created_by' => $this->created_by,
-            'created_on' => $this->created_on
+            'created_on' => $this->created_on,
+            'updated_by' => $this->updated_by,
+            'updated_on' => NULL
         ];
-        if ($this->global_model->insert($this->table_name, $insert_data)) {
-            $this->role_id = $this->db->insert_id();
-        } else {
-            throw new Exception("Issue in insertion", 500);
-        }
+        $results = $this->mongo_db->insert($this->table_name,$insert_data);
+        print_r($results);exit;
+        // if ($this->global_model->insert($this->table_name, $insert_data)) {
+        //     $this->role_id = $this->db->insert_id();
+        // } else {
+        //     throw new Exception("Issue in insertion", 500);
+        // }
     }
 
     function check() {
+        return false;
         $Results = $this->global_model->select($this->table_name, ['role' => $this->role]);
         if ($Results->num_rows() > 0) {
             $this->role_id = $Results->row()->role_id;
@@ -65,6 +70,16 @@ class Role_model_back extends CI_Model {
     }
 
     function get($data_table = false){
+        // $results = $this->mongo_db->get($this->table_name);
+        // print_r($results);
+        $where = [];
+        if(!empty($this->is_active)){
+            $where['is_active'] = $this->is_active;
+        }
+
+        $results = $this->mongo_db->get_where($this->table_name,$where);
+
+        print_r($results);exit;
         $output = [];
         if($this->role_id > 0){
             $where['role_id'] = $this->role_id;

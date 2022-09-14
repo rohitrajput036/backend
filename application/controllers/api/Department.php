@@ -160,7 +160,10 @@ class Department extends REST_Controller {
                 if(isset($request->data->is_active)){
                     $this->department_model->is_active = $request->data->is_active;
                 }
-                if(isset($request->data->for_table)){
+                if(isset($request->data->is_ho)){
+                    $this->department_model->is_ho = $request->data->is_ho;
+                }
+                if(isset($request->data->for_table) && $request->data->for_table == true){
                     $request->data->for_table = true;
                 }else{
                     $request->data->for_table = false;
