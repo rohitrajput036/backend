@@ -117,7 +117,7 @@
             }).always(function() {
             });
         });
-        $(document).on('click' '#save', function(){
+        $(document).on('click', '#save', function(){
 
         });
         $(document).on('click','.edit',function(){
