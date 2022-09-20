@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Role_model extends CI_Model {
+class Role_model_mango extends CI_Model {
 
     public $role_id, $role, $is_dev_op, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
 

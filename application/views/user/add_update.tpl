@@ -37,17 +37,17 @@
                             <label id="first_name_error_msg"></label>
                         </div>
                         <div class="col-md-2 form-group" id="middel_name_box">
-                            <label>Middel Name<span class="text-red">*</span></label>
+                            <label>Middel Name</label>
                             <input type="text" name="middel_name" id="middel_name" class="form-control"/>
                             <label id="middel_name_error_msg"></label>
                         </div>
                         <div class="col-md-2 form-group" id="last_name_box">
-                            <label>Last Name<span class="text-red">*</span></label>
+                            <label>Last Name</label>
                             <input type="text" name="last_name" id="last_name" class="form-control"/>
                             <label id="last_name_error_msg"></label>
                         </div>
                         <div class="col-md-2 form-group" id="display_name_box">
-                            <label>Display Name<span class="text-red">*</span></label>
+                            <label>Display Name</label>
                             <input type="text" name="display_name" id="display_name" class="form-control"/>
                             <label id="display_name_error_msg"></label>
                         </div>

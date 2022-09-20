@@ -100,3 +100,14 @@ CREATE TABLE user_student (
   updated_on datetime DEFAULT NULL,
   PRIMARY KEY (user_student_id)
 ) ENGINE=InnoDB;
+
+CREATE TABLE fee_structure_master (
+	fee_structure_master_id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	structure_name VARCHAR(100) NOT NULL,
+	is_required TINYINT(1) NOT NULL DEFAULT 0,
+	is_active TINYINT(1) NOT NULL DEFAULT 0,
+	created_by INT(11) NOT NULL DEFAULT 0,
+	created_on DATETIME NOT NULL,
+	updated_by INT(11) NULL DEFAULT NULL,
+	updated_on DATETIME NULL DEFAULT NULL
+);

@@ -78,9 +78,9 @@ switch (ENVIRONMENT) {
         $db['default'] = array(
             'dsn' => '',
             'hostname' => 'localhost',
-            'username' => 'palakpam',
-            'password' => '1fC3J5?6J4H7x+x4',
-            'database' => 'palakpam_palakshi',
+            'username' => 'root',
+            'password' => '',
+            'database' => 'backend',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
             'pconnect' => FALSE,

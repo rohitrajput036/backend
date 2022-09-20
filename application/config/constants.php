@@ -87,10 +87,10 @@ defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatic
 switch (ENVIRONMENT) {
   case 'development':
     defined('API_URL') OR define('API_URL', 'http://'.$_SERVER['SERVER_NAME'].'/backend/api/'); // highest automatically-assigned error code
-    defined('DB_NAME') OR define('DB_NAME', 'school_db.'); // highest automatically-assigned error code
+    defined('DB_NAME') OR define('DB_NAME', 'backend.'); // highest automatically-assigned error code
     break;
   case 'production':
     defined('API_URL') OR define('API_URL', 'https://'.$_SERVER['SERVER_NAME'].'/backend/api/'); // highest automatically-assigned error code
-    defined('DB_NAME') OR define('DB_NAME', 'school_db.'); // highest automatically-assigned error code    
+    defined('DB_NAME') OR define('DB_NAME', 'backend.'); // highest automatically-assigned error code    
     break;
 }
