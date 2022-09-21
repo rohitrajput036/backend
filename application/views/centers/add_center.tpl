@@ -168,30 +168,26 @@
                                     </ul>
                                 {/if} 
                             </div>
-                            <div class="col-md-12" style="border-radius:10px; border:1px solid blue; margin-top:10px">
+                            <div class="col-md-12" style="border-radius:10px; border:1px solid blue; margin-top:10px; padding-bottom:10px;">
                                 <h3 style="margin-top:6px;">Center Default Fee</h3>
                                 {if isset($fee_headers) && !empty($fee_headers)}
-                                    <table class="table table-bordered">
-                                        {foreach $fee_headers as $fee_header}
-                                            <tr>
-                                                <td colspan="2">
-                                                {$fee_header['sno']}.  
-                                                {$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}<span class="text-red">*</span>{/if}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input type="number" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="form-control default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fsid']}"/>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type">
-                                                        <option value="Annual">Annual</option>
-                                                        <option value="Monthly">Monthly</option>
-                                                        <option value="Quarterly">Quarterly</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        {/foreach}
-                                    </table> 
+                                    {foreach $fee_headers as $fee_header}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {$fee_header['sno']}. {$fee_header['structure_name']} {if $fee_header['is_required'] == '1'}<span class="text-red">*</span>{/if}
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="number" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_id']}" style="width:100%"/>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" style="width:100%">
+                                                    <option value="Annual">Annual</option>
+                                                    <option value="Monthly">Monthly</option>
+                                                    <option value="Quarterly">Quarterly</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    {/foreach}
                                 {/if}
                             </div>
                         </div>
@@ -221,6 +217,101 @@ $(document).ready(function(){
     var centre_start_day = $('#centre_start_day').datepicker({
         format: 'mm/dd/yyyy',
         todayHighlight : true
+    });
+    $(window).load(function(){
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            cersion : 1.0
+        };
+        var data = {
+            is_active : 1
+        };
+        var request = {
+            control : control,
+            data : data
+        }
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}state/get";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            $('#state_id').children().remove();
+            $('#state_id').append("<option value='0'>--Select State--</option>");
+            $.each(response.data,function(k,v){
+                $('#state_id').append("<option value='"+v.state_id+"'>"+v.state_name+"</option>");    
+            });
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
+    });
+    $(document).on('change','#state_id',function(){
+        var state_id = $(this).val();
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            cersion : 1.0
+        };
+        var data = {
+            is_active : 1,
+            state_id : state_id
+        };
+        var request = {
+            control : control,
+            data : data
+        }
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}city/get";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            $('#city_id').children().remove();
+            $('#city_id').append("<option value='0'>--Select City--</option>");
+            $.each(response.data,function(k,v){
+                $('#city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");    
+            });
+            $('#city_id').trigger('change');
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
     });
     $(document).on('click','#save',function(){
         var centre_id = $.trim($('#centre_id').val());

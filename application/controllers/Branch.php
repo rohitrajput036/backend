@@ -20,25 +20,27 @@ class Branch extends CI_Controller {
     public function add_branch() {
         $api_url = API_URL."department/get";
         $request = [
-            'Control' => [
-                'RequestId'     => generateUUId(),
-                'Source'        => 1,
-                'RequestTime'   => time()
+            'control' => [
+                'request_id'     => generateUUId(),
+                'source'        => 1,
+                'request_time'   => time()
             ],
-            'Data'              => [
-                'IsActive'      => 'Y',
-                'IsHo'          => 'N'
+            'data'              => [
+                'is_active'      => '1',
+                'is_ho'          => '1'
             ]
         ];
         $response = callAPI($api_url,'POST',json_encode($request));
-        if(isset($response['Data'])){
-            $this->outputData['departments'] = $response['Data'];
+        // print_r($response['data']);exit;
+        if(isset($response['data'])){
+            $this->outputData['departments'] = $response['data'];
         }
-        $api_url = API_URL.'fee_master/get';
+        $api_url = API_URL.'feestructure/get';
         $response = callAPI($api_url,'POST',json_encode($request));
-        if(isset($response['Data'])){
-            $this->outputData['fee_headers'] = $response['Data'];
+        if(isset($response['data'])){
+            $this->outputData['fee_headers'] = $response['data'];
         }
+        // print_r($this->outputData);exit;
         $this->parser->parse("centers/add_center.tpl", $this->outputData);
     }
 
