@@ -9,7 +9,7 @@ class City_model extends CI_Model {
         parent::__construct();
         $this->state_id = 0;
         $this->is_active = '';
-        $this->table_name = 'city';
+        $this->table_name = DB_NAME.'city';
     }
 
     function get(){

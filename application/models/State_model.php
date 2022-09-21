@@ -9,7 +9,7 @@ class State_model extends CI_Model {
         parent::__construct();
         $this->country_id = 0;
         $this->status = '';
-        $this->table_name = 'state';
+        $this->table_name = DB_NAME.'state';
     }
 
     function get(){

@@ -276,3 +276,11 @@ if (!function_exists('MobileNo10Digits')) {
     }
 
 }
+
+if(!function_exists('sum_in_string')){
+    function sum_in_string($string = '',$value=1){
+        list($Code, $No) = sscanf($string, "%[A-Z]%d");
+        $No = str_pad(($No + $value), 4, '0', STR_PAD_LEFT);
+        return $Code . $No;
+    }
+}
