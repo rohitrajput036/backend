@@ -27,7 +27,8 @@ class State_model extends CI_Model {
             foreach($results->result() as $result){
                 $output[] = [
                     'state_id' => $result->state_id,
-                    'state_name' => $result->state_name
+                    'state_name' => $result->state_name,
+                    'state_code' => $result->state_code
                 ];
             }
         }

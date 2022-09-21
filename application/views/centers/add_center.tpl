@@ -177,7 +177,7 @@
                                                 {$fee_header['sno']}. {$fee_header['structure_name']} {if $fee_header['is_required'] == '1'}<span class="text-red">*</span>{/if}
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="number" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_id']}" style="width:100%"/>
+                                                <input type="text" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_id']}" style="width:100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
                                             </div>
                                             <div class="col-md-4">
                                                 <select class="default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" style="width:100%">
@@ -253,7 +253,7 @@ $(document).ready(function(){
             $('#state_id').children().remove();
             $('#state_id').append("<option value='0'>--Select State--</option>");
             $.each(response.data,function(k,v){
-                $('#state_id').append("<option value='"+v.state_id+"'>"+v.state_name+"</option>");    
+                $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");    
             });
         }).fail(function(response) {
             $("#animatedLoader").hide();
@@ -266,6 +266,8 @@ $(document).ready(function(){
     });
     $(document).on('change','#state_id',function(){
         var state_id = $(this).val();
+        var state_code = $('#state_id option:selected').data('sc');
+        $("#state_code").val(state_code);
         var control = {
             request_id : generateUUId(),
             source : 1,
@@ -406,13 +408,13 @@ $(document).ready(function(){
         if(checkBlank('centre_start_day_box','centre_start_day_error_msg','Required!', centre_start_day, 'centre_start_day', '')){
             return false;
         }
-        var Control = {
-            RequestId : generateUUId(),
-            Source : 1,
-            RequestTime : Math.round(+new Date() / 1000),
-            Version : 1.0
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            version : 1.0
         };
-        var Data = {
+        var data = {
             centre_id : centre_id,
             centre_name : centre_name,
             centre_gst : centre_gst,
@@ -440,10 +442,13 @@ $(document).ready(function(){
             default_fees : default_fees
             
         };
-        var Request = {
-            Control : Control,
-            Data : Data
-        }
+        var request = {
+            control : control,
+            data : data
+        };
+        request = JSON.stringify(request);
+        console.log(request);
+
     });
     $(document).on('click','#cancel',function(){
 
