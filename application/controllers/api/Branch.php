@@ -83,7 +83,44 @@ class Branch extends REST_Controller {
                 }
                 
                 if(!empty($request->data->centre_id) && $request->data->centre_id == 0){
+                    $this->load->model('branch_fee_structure_model');
+                    $this->load->model('user_model');
+                    $this->load->model('user_department_model');
+                    $this->load->model('user_branch_model');
+                    $this->load->model('user_role_model');
+                    // code for add fee structure
+                    foreach($request->data->default_fees as $fee){
+                        $this->branch_fee_structure_model->branch_id = $this->branch_model->branch_id;
+                        $this->branch_fee_structure_model->fee_structure_master_id = $fee->fsid;
+                        $this->branch_fee_structure_model->fee_amount = $fee->fee_amt;
+                        $this->branch_fee_structure_model->fee_type = $fee->fee_type;
+                        $this->branch_fee_structure_model->add();
+                    }
                     // code for add in user
+                    $this->user_model->unique_no = '';
+                    $this->user_model->first_name = $request->data->first_name;
+                    $this->user_model->middel_name = $request->data->middle_name;
+                    $this->user_model->last_name = $request->data->last_name;
+                    $this->user_model->display_name = '';
+                    $this->user_model->email_id = $request->data->sign_email_id;
+                    $this->user_model->alt_email_id = $request->data->alt_email_id;
+                    $this->user_model->display_password = $request->data->sign_password;
+                    $this->user_model->password = $request->data->sign_password;
+                    $this->user_model->dob = NULL;
+                    $this->user_model->doj = date('Y-m-d',strtotime($request->data->centre_start_day));
+                    $this->user_model->gender = $request->data->gender;
+                    $this->user_model->contact_no = $request->data->contact_no;
+                    $this->user_model->alt_contact_no = $request->data->alt_contact_no;
+                    $this->user_model->address_line_1 = $request->data->add_line_1;
+                    $this->user_model->address_line_2 = '';
+                    $this->user_model->city_id = '';
+                    $this->user_model->state_id = '';
+                    $this->user_model->pincode = '';
+                    $this->user_model->country_id = '0';
+                    $this->user_model->comment = 'User for '.$request->data->centre_name.' Centre';
+                    $this->user_model->is_active = 1;
+                    $this->user_model->created_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
+
                 }
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
