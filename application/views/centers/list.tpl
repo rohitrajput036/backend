@@ -29,14 +29,13 @@
                         <table class="table table-bordered" id="DataTable">
                             <thead>
                                 <tr>
-                                    <th>S NO</th>
+                                    <th style="width:7%">S NO</th>
                                     <th>Center Name</th>
                                     <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>City</th>
+                                    <th>Location</th>
                                     <th>Login Id</th>
-                                    <th>Password</th>
-                                    <th>#</th>
+                                    <th style="width:10%;">Password</th>
+                                    <th style="width:15%;">#</th>
                                 </tr>
                             </thead>
                             <tbody></tbody> 
@@ -55,6 +54,49 @@
     $(document).ready(function(){
         var DataTable = $('#DataTable').DataTable({
             searching:true
+        });
+        $(window).load(function(){
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                cersion : 1.0
+            };
+            var data = {
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}branch/get";
+            $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            DataTable.clear().draw();
+            DataTable.rows.add(response.data).draw();
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
         });
     });
 </script>

@@ -94,3 +94,4 @@ switch (ENVIRONMENT) {
     defined('DB_NAME') OR define('DB_NAME', 'backend.'); // highest automatically-assigned error code    
     break;
 }
+defined('PROJECT_NAME') OR define('PROJECT_NAME', 'School');

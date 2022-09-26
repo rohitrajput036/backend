@@ -225,7 +225,7 @@ class Branch extends REST_Controller {
                     'id' => $this->Clientcode_model->Client_id
                 ]
             ];
-            $this->response($Response, $E->getCode());
+            $this->response($response, $E->getCode());
         }
     }
 

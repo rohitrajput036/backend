@@ -120,7 +120,7 @@ class Branch_model extends CI_Model {
             $this->user_model->table_name.' u' => ['(ub.user_id = u.user_id AND u.is_active = 1)','INNER'],
             $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER']
         ];
-        $fields = "b.branch_id,b.branch_code,b.branch_name,b.add_line_1,b.add_line_2,c.city_name,b.pincode,b.contact_no,u.email_id,u.display_password";
+        $fields = "b.branch_id,b.branch_code,b.branch_name,b.add_line_1,b.add_line_2,c.city_name,b.pincode,b.contact_no,u.email_id,u.display_password,b.is_active,b.branch_location";
         $order_by= ['b.branch_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' b',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
@@ -129,14 +129,25 @@ class Branch_model extends CI_Model {
             foreach($results->result() as $result){
                 ++$i;
                 if($this->for_table){
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-branchid="'.$result->branch_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
+                    }else{
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-branchid="'.$result->branch_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                    }
+                    $delete_btn = '<button class="btn active_deactive btn-xs" data-branchid="'.$result->branch_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    $edit_btn = '<button class="btn edit btn-xs" data-branchid="'.$result->branch_id.'" style="background:none"><i class="fa fa-pencil-square-o text-primary"></i></button>';
+                    $enter_btn = '<button class="btn btn-success enter btn-xs" data-branchid="'.$result->branch_id.'">
+                    Enter
+                    </button>';
+                    $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.' '.$enter_btn;
                     $output[] = [
                         $i,
-                        $result->branch_name,
+                        $result->branch_name.' ('.$result->branch_code.')',
                         $result->contact_no,
-                        $result->add_line_1.' '.$result->add_line_2.' '.$result->city_name.' '.$result->pincode,
-                        $result->city_name,
+                        $result->branch_location.' ('.$result->city_name.')',
                         $result->email_id,
-                        $result->display_password
+                        $result->display_password,
+                        $btns
                     ];
                 }else{
                     $output[] = [

@@ -1,6 +1,6 @@
 <header class="main-header">
         <!-- Logo -->
-        <a class="logo"><b>School </b>Backend</a>
+        <a class="logo"><b>{$smarty.const.PROJECT_NAME}</b> Backend</a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
@@ -13,20 +13,10 @@
               <li class="dropdown notifications-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">
-                    
-                      0
-                    
-                  </span>
+                  <span class="label label-warning">0</span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li class="header">
-                    You have 
-                    
-                      0
-                    
-                    notifications
-                  </li>
+                  <li class="header">You have 0 notifications</li>
                   <li>
                     <!-- inner menu: contains the actual data -->
                     <ul class="menu">
@@ -44,23 +34,30 @@
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <!-- {image('dist/user2-160x160.jpg',['class'=>'user-image', 'alt'=>'user image'])} -->
-                  <span>{userdata('UserName')}</span>
+                  <span>
+                  Rohit Rajput
+                  {* {userdata('UserName')} *}
+                  </span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
                       {image('dist/avatar.png',['class'=>'img-circle', 'alt'=>'user image'])}
                     <p>
-                      {userdata('UserName')}
-                      <small>{userdata('Email')}</small>
+                    Rohit Rajput
+                      {* {userdata('UserName')} *}
+                      <small>
+                      rohit.rajput@bsa.co.in
+                      {* {userdata('Email')} *}
+                      </small>
                     </p>
                   </li>
                   <li class="user-footer">
                     <div class="pull-left">
-                      <a href="{base_url()}" class="btn btn-default btn-flat">Profile</a>
+                      <a href="{base_url()}" class="btn btn-primary btn-flat">Profile</a>
                     </div>
                     <div class="pull-right">
-                      <a href="{base_url('logout')}" class="btn btn-default btn-flat">Sign out</a>
+                      <a href="{base_url('logout')}" class="btn btn-danger btn-flat">Sign out</a>
                     </div>
                   </li>
                 </ul>

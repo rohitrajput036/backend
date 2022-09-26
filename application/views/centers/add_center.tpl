@@ -446,6 +446,7 @@ $(document).ready(function(){
             control : control,
             data : data
         };
+        request = JSON.stringify(request);
         var url = "{$smarty.const.API_URL}branch/add";
         console.log(request);
         $.ajax({
