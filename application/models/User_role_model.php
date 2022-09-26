@@ -33,7 +33,7 @@ class User_role_model extends CI_Model {
     }
 
     function check(){
-        $Results = $this->global_model->select($this->table_name, ['user_id' => $this->user_id, 'role_id' => $this->role_id, 'is_active' => $this->is_active]);
+        $Results = $this->global_model->select($this->table_name, ['user_id' => $this->user_id, 'is_active' => $this->is_active]);
         if ($Results->num_rows() > 0) {
             $this->user_role_id = $Results->row()->user_role_id;
             return true;

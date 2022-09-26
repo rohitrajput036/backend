@@ -121,7 +121,8 @@ class User_model extends CI_Model {
         return $this->global_model->update($this->table_name,$update_data,$where);
     }
 
-    function get(){
-
+    function get_unique_id(){
+        $result = $this->global_model->select($this->table_name);
+        return sum_in_string('UR000'.$result->num_rows());
     }
 }

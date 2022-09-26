@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Branch_model extends CI_Model {
 
-    public $branch_id, $branch_code, $branch_name, $gst_no, $add_line_1, $add_line_2, $state_id, $state_code, $city_id, $pincode, $branch_location, $start_date, $concat_person_name, $contact_no, $alt_contact_no, $email_id, $royality_case, $comments, $user_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
+    public $branch_id, $branch_code, $branch_name, $gst_no, $add_line_1, $add_line_2, $state_id, $state_code, $city_id, $pincode, $branch_location, $start_date, $concat_person_name, $contact_no, $alt_contact_no, $email_id, $royality_case, $comments, $user_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name,$for_table;
 
     function __construct() {
         parent::__construct();
@@ -33,6 +33,7 @@ class Branch_model extends CI_Model {
         $this->updated_by           = 0;
         $this->updated_on           = date('Y-m-d H:i:s');
         $this->table_name           = DB_NAME.'branch';
+        $this->for_table            = false;
     }
 
     function add() {
@@ -101,51 +102,48 @@ class Branch_model extends CI_Model {
     }
 
     function get($for_table = false){
-        if($this->BranchId > 0){
-            $where[$this->TableName.'.branch_id'] = $this->BranchId;
+        $this->load->model('user_model');
+        $this->load->model('user_branch_model');
+        $this->load->model('user_role_model');
+        $this->load->model('city_model');
+        if($this->branch_id > 0){
+            $where['b.branch_id'] = $this->branch_id;
         }
-        if(!empty($this->isActive)){
-            $where[$this->TableName.'.is_active'] = $this->IsActive;
+        if(!empty($this->is_active)){
+            $where['b.is_active'] = $this->is_active;
         }else{
-            $where[$this->TableName.'.is_active IN ("Y","N")'] = NULL;
+            $where['b.is_active IN ("1","2")'] = NULL;
         }
-        $fields = $this->TableName.'.branch_id, center_id, branch_name, branch_gst, branch_phone, login_email, login_password, 
-        address, address_line_2, city, state, pincode, state_code, location, start_date, roylity_case, 
-        comments, '.$this->TableName.'.is_active, '.$this->TableName.'.created_by, '.$this->TableName.'.created_on';
-        $order_by = ['branch_name' => 'ASC'];
-        $results = $this->global_model->select($this->TableName,$where,$fields,NULL,NULL,NULL,$order_by);
+        $joins = [
+            $this->city_model->table_name.' c'=> ['(b.city_id = c.city_id AND c.is_active = 1)','INNER'],
+            $this->user_branch_model->table_name.' ub' => ['(b.branch_id = ub.branch_id AND ub.is_active = 1)','INNER'],
+            $this->user_model->table_name.' u' => ['(ub.user_id = u.user_id AND u.is_active = 1)','INNER'],
+            $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER']
+        ];
+        $fields = "b.branch_id,b.branch_code,b.branch_name,b.add_line_1,b.add_line_2,c.city_name,b.pincode,b.contact_no,u.email_id,u.display_password";
+        $order_by= ['b.branch_name' => 'ASC'];
+        $results = $this->global_model->select($this->table_name.' b',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
             $i=0;
             foreach($results->result() as $result){
                 ++$i;
-                if($for_table){
+                if($this->for_table){
                     $output[] = [
                         $i,
-                        
+                        $result->branch_name,
+                        $result->contact_no,
+                        $result->add_line_1.' '.$result->add_line_2.' '.$result->city_name.' '.$result->pincode,
+                        $result->city_name,
+                        $result->email_id,
+                        $result->display_password
                     ];
                 }else{
                     $output[] = [
+                        'sno'               => $i,
                         'branch_id'         => $result->branch_id,
-                        'center_id'         => $result->center_id,
-                        'branch_name'       => $result->branch_name,
-                        'branch_gst'        => $result->branch_gst,
-                        'branch_phone'      => $result->branch_phone,
-                        'login_email'       => $result->login_email,
-                        'login_password'    => $result->login_password,
-                        'address'           => $result->address,
-                        'address_line_2'    => $result->address_line_2,
-                        'city'              => $result->city,
-                        'state'             => $result->state,
-                        'pincode'           => $result->pincode,
-                        'state_code'        => $result->state_code,
-                        'location'          => $result->location,
-                        'start_date'        => $result->start_date,
-                        'roylity_case'      => $result->roylity_case,
-                        'comments'          => $result->comments,
-                        'is_active'         => $result->is_active,
-                        'created_by'        => $result->created_by,
-                        'created_on'        => $result->created_on
+                        'branch_code'       => $result->branch_code,
+                        'branch_name'       => $result->branch_name
                     ];
                 }
             }

@@ -446,9 +446,35 @@ $(document).ready(function(){
             control : control,
             data : data
         };
-        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}branch/add";
         console.log(request);
-
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('<span class="text-green">'+response.control.message+'</span>');
+            setTimeout(function(){
+                location.reload();
+            }, 2000);
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
     });
     $(document).on('click','#cancel',function(){
 

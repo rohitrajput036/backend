@@ -27,7 +27,7 @@ class Branch extends CI_Controller {
             ],
             'data'              => [
                 'is_active'      => '1',
-                'is_ho'          => '1'
+                'is_ho'          => '0'
             ]
         ];
         $response = callAPI($api_url,'POST',json_encode($request));

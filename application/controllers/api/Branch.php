@@ -77,50 +77,79 @@ class Branch extends REST_Controller {
                 }else{
                     if(!$this->branch_model->check()){
                         $this->branch_model->add();
+                        $this->load->model('branch_fee_structure_model');
+                        $this->load->model('user_model');
+                        $this->load->model('user_department_model');
+                        $this->load->model('user_branch_model');
+                        $this->load->model('user_role_model');
+                        // add in fee_stru
+                        foreach($request->data->default_fees as $fee){
+                            $this->branch_fee_structure_model->branch_id = $this->branch_model->branch_id;
+                            $this->branch_fee_structure_model->fee_structure_master_id = $fee->fsid;
+                            $this->branch_fee_structure_model->fee_amount = $fee->fee_amt;
+                            $this->branch_fee_structure_model->fee_type = $fee->fee_type;
+                            $this->branch_fee_structure_model->add();
+                        }
+                        // add in user
+                        $options = ['cost' => 11];
+                        $this->user_model->user_id = (!empty($request->data->centre_id)) ? $request->data->centre_id : 0;
+                        $this->user_model->unique_no = $this->user_model->get_unique_id(); ;
+                        $this->user_model->first_name = $request->data->first_name;
+                        $this->user_model->middel_name = $request->data->middle_name;
+                        $this->user_model->last_name = $request->data->last_name;
+                        $this->user_model->display_name = '';
+                        $this->user_model->email_id = $request->data->sign_email_id;
+                        $this->user_model->alt_email_id = $request->data->alt_email_id;
+                        $this->user_model->display_password = $request->data->sign_password;
+                        $this->user_model->password = password_hash($request->data->sign_password, PASSWORD_BCRYPT, $options);
+                        $this->user_model->dob = NULL;
+                        $this->user_model->doj = date('Y-m-d',strtotime($request->data->centre_start_day));
+                        $this->user_model->gender = $request->data->gender;
+                        $this->user_model->contact_no = $request->data->contact_no;
+                        $this->user_model->alt_contact_no = $request->data->alt_contact_no;
+                        $this->user_model->address_line_1 = $request->data->add_line_1;
+                        $this->user_model->address_line_2 = '';
+                        $this->user_model->city_id = '';
+                        $this->user_model->state_id = '';
+                        $this->user_model->pincode = '';
+                        $this->user_model->country_id = '0';
+                        $this->user_model->comment = 'User for '.$request->data->centre_name.' Centre';
+                        $this->user_model->is_active = 1;
+                        $this->user_model->created_by = $this->user_model->updated_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
+                        if(!empty($request->data->centre_id) && $request->data->centre_id > 0){
+                            $this->user_model->update();
+                        }else{
+                            if(!$this->user_model->check()){
+                                $this->user_model->add();
+                                
+                                $this->user_branch_model->branch_id = $this->branch_model->branch_id;
+                                $this->user_branch_model->user_id = $this->user_model->user_id;
+                                $this->user_branch_model->is_active = "1";
+                                if(!$this->user_branch_model->check()){
+                                    $this->user_branch_model->add();
+                                }
+                                foreach($request->data->departments as $department){
+                                    $this->user_department_model->user_id = $this->user_model->user_id;
+                                    $this->user_department_model->department_id = $department;
+                                    $this->user_department_model->is_active = "1";
+                                    if(!$this->user_department_model->check()){
+                                        $this->user_department_model->add();
+                                    }
+                                }
+                                $this->user_role_model->user_id = $this->user_model->user_id;
+                                $this->user_role_model->role_id = "3";
+                                $this->user_role_model->is_active = "1";
+                                if(!$this->user_role_model->check()){
+                                    $this->user_role_model->add();
+                                }
+                            }else{
+                                throw new Exception('User already exists!');
+                            }
+                        }
+
                     }else{
                         throw new Exception('Centre already exists!');
                     }
-                }
-                
-                if(!empty($request->data->centre_id) && $request->data->centre_id == 0){
-                    $this->load->model('branch_fee_structure_model');
-                    $this->load->model('user_model');
-                    $this->load->model('user_department_model');
-                    $this->load->model('user_branch_model');
-                    $this->load->model('user_role_model');
-                    // code for add fee structure
-                    foreach($request->data->default_fees as $fee){
-                        $this->branch_fee_structure_model->branch_id = $this->branch_model->branch_id;
-                        $this->branch_fee_structure_model->fee_structure_master_id = $fee->fsid;
-                        $this->branch_fee_structure_model->fee_amount = $fee->fee_amt;
-                        $this->branch_fee_structure_model->fee_type = $fee->fee_type;
-                        $this->branch_fee_structure_model->add();
-                    }
-                    // code for add in user
-                    $this->user_model->unique_no = '';
-                    $this->user_model->first_name = $request->data->first_name;
-                    $this->user_model->middel_name = $request->data->middle_name;
-                    $this->user_model->last_name = $request->data->last_name;
-                    $this->user_model->display_name = '';
-                    $this->user_model->email_id = $request->data->sign_email_id;
-                    $this->user_model->alt_email_id = $request->data->alt_email_id;
-                    $this->user_model->display_password = $request->data->sign_password;
-                    $this->user_model->password = $request->data->sign_password;
-                    $this->user_model->dob = NULL;
-                    $this->user_model->doj = date('Y-m-d',strtotime($request->data->centre_start_day));
-                    $this->user_model->gender = $request->data->gender;
-                    $this->user_model->contact_no = $request->data->contact_no;
-                    $this->user_model->alt_contact_no = $request->data->alt_contact_no;
-                    $this->user_model->address_line_1 = $request->data->add_line_1;
-                    $this->user_model->address_line_2 = '';
-                    $this->user_model->city_id = '';
-                    $this->user_model->state_id = '';
-                    $this->user_model->pincode = '';
-                    $this->user_model->country_id = '0';
-                    $this->user_model->comment = 'User for '.$request->data->centre_name.' Centre';
-                    $this->user_model->is_active = 1;
-                    $this->user_model->created_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
-
                 }
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
@@ -151,40 +180,49 @@ class Branch extends REST_Controller {
         }
     }
     function get_post() {
-        $StartTime = microtime(true);
+        $start_time = microtime(true);
         try {
-            $Request = json_decode($this->input->raw_input_stream);
-            $APIName = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
-            $UUId = property_exists($Request->Control,"RequestId") ? $Request->Control->RequestId : generateUUId();
-            $this->log4php->log('info', 'REQUEST', $APIName, $UUId, $Request, 0);
-            if (!empty($Request)) {
-                
-                $Data=[];
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)) {
+                if(isset($request->data->is_active)){
+                    $this->branch_model->is_active = $request->data->is_active;
+                }
+                if(isset( $request->data->centre_id)){
+                    $this->branch_model->branch_id = $request->data->centre_id;
+                }
+                if(!isset($request->data->for_table)){
+                    $request->data->for_table = false;
+                }
+                $this->branch_model->for_table = $request->data->for_table;
+                $data = $this->branch_model->get();
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }
-            $Response = [
-                'Control' => [
-                    'Status' => 1,
-                    'Message' => 'List of Centers',
-                    'MessageCode' => REST_Controller::HTTP_OK,
-                    'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            $response = [
+                'control' => [
+                    'status' => 1,
+                    'message' => 'List of Centers',
+                    'message_code' => REST_Controller::HTTP_OK,
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
-                'Data' => $Data
+                'data' => $data
             ];
-            $this->log4php->log('info', 'RESPONSE', $APIName, $UUId, $Response, 0);
-            $this->response($Response, REST_Controller::HTTP_OK);
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, REST_Controller::HTTP_OK);
         } catch (Exception $E) {
-            $this->log4php->log('error', 'ERROR', $APIName, $UUId, $E->getMessage(), 0);
-            $Response = [
-                'Control' => [
-                    'Status' => 0,
-                    'Message' => $E->getMessage(),
-                    'MessageCode' => $E->getCode(),
-                    'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
-                'Data' => [
-                    'Id' => $this->Clientcode_model->ClientId
+                'data' => [
+                    'id' => $this->Clientcode_model->Client_id
                 ]
             ];
             $this->response($Response, $E->getCode());

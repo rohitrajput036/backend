@@ -58,6 +58,7 @@ class Feestructure extends REST_Controller {
                 $this->fee_structure_master_model->is_required = $request->data->is_required;
                 $this->fee_structure_master_model->is_active = 1;
                 $this->fee_structure_master_model->created_by = $this->fee_structure_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ?$request->data->login_id : 0;
+                // print_r($this->fee_structure_master_model);exit;
                 $message = 'Fee structure add successfully';
                 if($request->data->fee_structure_id > 0){
                     $this->fee_structure_master_model->update();
