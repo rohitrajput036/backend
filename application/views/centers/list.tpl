@@ -84,19 +84,68 @@
             beforeSend: function(xhr) {
                 $("#animatedLoader").show();
             }
-        }).done(function(response) {
-            $("#animatedLoader").hide();
-            $('#api_error').html('');
-            DataTable.clear().draw();
-            DataTable.rows.add(response.data).draw();
-        }).fail(function(response) {
-            $("#animatedLoader").hide();
-            if (response.responseJSON.control) {
-                $('#api_error').text(response.responseJSON.control.message);
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {  
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var centre_id = $(this).data('branchid');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
             }
-        }).always(function() {
             
+            var data = {
+                centre_id : centre_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            
+            
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+           
+            var url = "{$smarty.const.API_URL}branch/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#centre_id').val('0');
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
         });
-        });
+        
     });
 </script>

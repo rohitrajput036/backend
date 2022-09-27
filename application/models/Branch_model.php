@@ -120,7 +120,7 @@ class Branch_model extends CI_Model {
             $this->user_model->table_name.' u' => ['(ub.user_id = u.user_id AND u.is_active = 1)','INNER'],
             $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER']
         ];
-        $fields = "b.branch_id,b.branch_code,b.branch_name,b.add_line_1,b.add_line_2,c.city_name,b.pincode,b.contact_no,u.email_id,u.display_password,b.is_active,b.branch_location";
+        $fields = "b.*,c.city_name,u.email_id,u.display_password";
         $order_by= ['b.branch_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' b',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
@@ -135,7 +135,7 @@ class Branch_model extends CI_Model {
                         $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-branchid="'.$result->branch_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
                     }
                     $delete_btn = '<button class="btn active_deactive btn-xs" data-branchid="'.$result->branch_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
-                    $edit_btn = '<button class="btn edit btn-xs" data-branchid="'.$result->branch_id.'" style="background:none"><i class="fa fa-pencil-square-o text-primary"></i></button>';
+                    $edit_btn = '<a class="btn edit btn-xs" href="'.base_url('branch/edit/'.$result->branch_id).'" data-branchid="'.$result->branch_id.'" data-branch_name="'.$result->branch_name.'" data-branch_code="'.$result->branch_code.'" data-add_line_1="'. $result->add_line_1.'" data-add_line_2="'.$result->add_line_2.'" data-pincode="'.$result->pincode.'"  data-branch_location="'.$result->branch_location.'" data-email_id="'.$result->email_id.'" style="background:none"><i class="fa fa-pencil-square-o text-primary"></i></a>';
                     $enter_btn = '<button class="btn btn-success enter btn-xs" data-branchid="'.$result->branch_id.'">
                     Enter
                     </button>';
@@ -153,14 +153,39 @@ class Branch_model extends CI_Model {
                     $output[] = [
                         'sno'               => $i,
                         'branch_id'         => $result->branch_id,
+                        'branch_name'       => $result->branch_name,
                         'branch_code'       => $result->branch_code,
-                        'branch_name'       => $result->branch_name
+                        'gst_no'            => $result->gst_no,
+                        'state_id'          => $result->state_id,
+                        'state_code'        => $result->state_code,
+                        'concat_person_name'=>$result->concat_person_name,
+                        'add_line_1'        => $result->add_line_1, 
+                        'add_line_2'        => $result->add_line_2, 
+                        'pincode'           => $result->pincode, 
+                        'branch_location'   => $result->branch_location, 
+                        'email_id'          => $result->email_id,
+                        'start_date'        => $result->start_date,
+                        'comments'          => $result->comments,
+                        'contact_no'        => $result->contact_no,
+                        'alt_contact_no'    => $result->alt_contact_no,
                     ];
                 }
             }
         }
         return $output;
     }
+    function delete(){
+        $where['branch_id'] = $this->branch_id;
+        $update_data = [
+            'is_active' => $this->is_active,
+            'updated_by' => $this->updated_by,
+            'updated_on' => $this->updated_on
+        ];
+        $results = $this->global_model->update($this->table_name,$update_data,$where);
+        echo $this->db->last_query();exit;
+        return $results;
+    }
+
     function get_branch_code(){
         $result = $this->global_model->select($this->table_name);
         return sum_in_string('CT000'.$result->num_rows());

@@ -16,7 +16,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Centre</a></li>
-            <li class="active">Add Centre</li>
+            <li class="active">{if $action=='edit'}Edit{else}Add{/if} Centre</li>
         </ol>
     </section>
 
@@ -29,22 +29,22 @@
                         <div class="col-md-8">
                             <div class="col-md-6 form-group" id="centre_name_box">
                                 <label>Centre Name <span class="text-red">*</span></label>
-                                <input type="text" name="centre_name" id="centre_name" class="form-control"/>
+                                <input type="text" name="centre_name" id="centre_name" value="{if $action=='edit'}{$centre_data['branch_name']}{/if}" class="form-control"/>
                                 <label for="centre_name" id="centre_name_error_msg"></label>
                             </div>
                             <div class="col-md-6 form-group" id="centre_gst_box">
                                 <label>Centre GST</label>
-                                <input type="text" name="centre_gst" id="centre_gst" class="form-control"/>
+                                <input type="text" name="centre_gst" id="centre_gst" value="{if $action=='edit'}{$centre_data['gst_no']}{/if}" class="form-control"/>
                                 <label for="centre_gst" id="centre_gst_error_msg"></label>
                             </div>
                             <div class="col-md-6 form-group" id="add_line_1_box">
                                 <label>Address Line 1 <span class="text-red">*</span></label>
-                                <input type="text" name="add_line_1" id="add_line_1" class="form-control"/>
+                                <input type="text" name="add_line_1" id="add_line_1" value="{if $action=='edit'}{$centre_data['add_line_1']}{/if}" class="form-control"/>
                                 <label for="add_line_1" id="add_line_1_error_msg"></label>
                             </div>
                             <div class="col-md-6 form-group" id="add_line_2_box">
                                 <label>Address Line 2</label>
-                                <input type="text" name="add_line_2" id="add_line_2" class="form-control"/>
+                                <input type="text" name="add_line_2" id="add_line_2" value="{if $action=='edit'}{$centre_data['add_line_2']}{/if}" class="form-control"/>
                                 <label for="add_line_2" id="add_line_2_error_msg"></label>
                             </div>
                             <div class="col-md-3 form-group" id="state_id_box">
@@ -63,12 +63,12 @@
                             </div>
                             <div class="col-md-3 form-group" id="pincode_box">
                                 <label>Pincode <span class="text-red">*</span></label>
-                                <input type="text" name="pincode" id="pincode" class="form-control"/>
+                                <input type="text" name="pincode" id="pincode" value="{if $action=='edit'}{$centre_data['pincode']}{/if}" class="form-control"/>
                                 <label for="pincode" id="pincode_error_msg"></label>
                             </div>
                             <div class="col-md-3 form-group" id="state_code_box">
                                 <label>State Code <span class="text-red">*</span></label>
-                                <input type="text" name="state_code" id="state_code" class="form-control"/>
+                                <input type="text" name="state_code" id="state_code" value="{if $action=='edit'}{$centre_data['state_code']}{/if}" class="form-control"/>
                                 <label for="state_code" id="state_code_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="first_name_box">
@@ -97,7 +97,7 @@
                             </div>
                             <div class="col-md-4 form-group" id="sign_email_id_box">
                                 <label>Signing Email Id <span class="text-red">*</span></label>
-                                <input type="text" name="sign_email_id" id="sign_email_id" class="form-control"/>
+                                <input type="text" name="sign_email_id" id="sign_email_id" value="{if $action=='edit'}{$centre_data['email_id']}{/if}" class="form-control"/>
                                 <label for="sign_email_id" id="sign_email_id_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="sign_password_box">
@@ -107,44 +107,45 @@
                             </div>
                             <div class="col-md-4 form-group" id="contact_no_box">
                                 <label>Contact No <i style="font-size:10px">(Printed on fee receipt)</i> <span class="text-red">*</span></label>
-                                <input type="text" name="contact_no" id="contact_no" class="form-control"/>
+                                <input type="text" name="contact_no" id="contact_no" value="{if $action=='edit'}{$centre_data['contact_no']}{/if}"class="form-control"/>
                                 <label for="contact_no" id="contact_no_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="alt_contact_no_box">
                                 <label>Alt Contact No</label>
-                                <input type="text" name="alt_contact_no" id="alt_contact_no" class="form-control"/>
+                                <input type="text" name="alt_contact_no" id="alt_contact_no" value="{if $action=='edit'}{$centre_data['alt_contact_no']}{/if}" class="form-control"/>
                                 <label for="alt_contact_no" id="alt_contact_no_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="username_box">
                                 <label>Username <span class="text-red">*</span></label>
-                                <input type="text" name="username" id="username" class="form-control"/>
+                                <input type="text" name="username" id="username" value="{if $action=='edit'}{$centre_data['concat_person_name']}{/if}" class="form-control"/>
                                 <label for="username" id="username_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="alt_email_id_box">
                                 <label>Alt Email Id</label>
-                                <input type="text" name="alt_email_id" id="alt_email_id" class="form-control"/>
+                                <input type="text" name="alt_email_id" id="alt_email_id"  class="form-control"/>
                                 <label for="alt_email_id" id="alt_email_id_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="location_box">
                                 <label>Location</label>
-                                <input type="text" name="location" id="location" class="form-control"/>
+                                <input type="text" name="location" id="location" value="{if $action=='edit'}{$centre_data['branch_location']}{/if}" class="form-control"/>
                                 <label for="location" id="location_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="centre_start_day_box">
                                 <label>Centre Start Date <span class="text-red">*</span></label>
-                                <input type="text" name="centre_start_day" id="centre_start_day" class="form-control"/>
+                                <input type="text" name="centre_start_day" id="centre_start_day" value="{if $action=='edit'}{$centre_data['start_date']}{/if}" class="form-control"/>
                                 <label for="centre_start_day" id="centre_start_day_error_msg"></label>
                             </div>
                             <div class="col-md-12 form-group" id="roylity_case_box">
                                 <label>Roylity Calculation Case <span class="text-red">*</span></label><br/>
                                 <input type="radio" name="roylity_case" id="case_1" value="case1"/> <label for="case_1" style="font-size:12px">Case 1 (10% of their gross callection - which is already there in the software and the royalty is calculated properly )</label><br/>
+
                                 <input type="radio" name="roylity_case" id="case_2" value="case2" checked/> <label for="case_2" style="font-size:12px">Case 2 (Fixed Royalty)</label>
                                 <br/>
                                 <label id="roylity_case_error_msg"></label>
                             </div>
                             <div class="col-md-12 form-group" id="comment_box">
                                 <label>Comment</label>
-                                <textarea class="form-control" name="comments" id="comments" rows="7"></textarea>
+                                <textarea class="form-control" name="comments" id="comments" value="{if $action=='edit'}{$centre_data['comments']}{/if}" rows="7"></textarea>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -252,8 +253,17 @@ $(document).ready(function(){
             $('#api_error').html('');
             $('#state_id').children().remove();
             $('#state_id').append("<option value='0'>--Select State--</option>");
+            var selected_state_id = "{$centre_data['state_id']}";
+            var action = "{$action}";
             $.each(response.data,function(k,v){
-                $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");    
+                if(action == 'edit')
+                    if (selected_state_id == v.state_id)
+                        $('#state_id').append("<option value='"+v.state_id+"' selected data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
+                   else
+                        $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
+                    
+                else
+                    $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
             });
         }).fail(function(response) {
             $("#animatedLoader").hide();
