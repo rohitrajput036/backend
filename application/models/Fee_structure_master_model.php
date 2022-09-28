@@ -105,4 +105,27 @@ class Fee_structure_master_model extends CI_Model {
         }
         return $output;
     }
+
+    function get_branch_fee_structure($branch_id=0) {
+        $where = [
+            $this->table_name.'.is_active' => 1
+        ];
+        $joins = [
+            'branch_fee_structure'  => ['('.$this->table_name.'.fee_structure_master_id=branch_fee_structure.fee_structure_master_id AND branch_fee_structure.branch_id='.$branch_id.' AND branch_fee_structure.is_active=1)','LEFT']
+        ];
+        $results = $this->global_model->select($this->table_name, $where,'branch_fee_structure.branch_id, branch_fee_structure.branch_fee_structure_id, branch_fee_structure.fee_amount, branch_fee_structure.fee_type,fee_structure_master.fee_structure_master_id, fee_structure_master.structure_name, fee_structure_master.is_required',$joins, NULL,NULL, ['fee_structure_master.fee_structure_master_id'=>'ASC']);
+        if(isset($results) && $results->num_rows() > 0);
+        foreach($results->result() as $result){
+            $output [] = [
+                'branch_fee_structure_id'   => $result->branch_fee_structure_id,
+                'branch_id'                 => $result->branch_id,
+                'fee_structure_master_id'   => $result->fee_structure_master_id,
+                'structure_name'            => $result->structure_name,
+                'is_required'               => $result->is_required,
+                'fee_amount'                => $result->fee_amount,
+                'fee_type'                  => $result->fee_type
+            ];
+        }
+        return $output;
+    }
 }

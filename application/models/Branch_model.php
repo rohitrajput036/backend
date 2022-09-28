@@ -108,6 +108,7 @@ class Branch_model extends CI_Model {
         $this->load->model('city_model');
         $this->load->model('user_department_model');
         $this->load->model('branch_fee_structure_model');
+        $this->load->model('fee_structure_master_model');
         if($this->branch_id > 0){
             $where['b.branch_id'] = $this->branch_id;
         }
@@ -163,11 +164,7 @@ class Branch_model extends CI_Model {
                     $this->branch_fee_structure_model->branch_id = $result->branch_id;
                     $this->branch_fee_structure_model->is_active = 1;
                     //$this->branch_fee_structure_model->branch_fee_structure_id = $result->fee_structure_master_id;
-                    $branch_fee_structures = $this->branch_fee_structure_model->get();
-                    $fee_structure_master_id = [];
-                    foreach($branch_fee_structures as $bfs){
-                        $fee_structure_master_id[] = $bfs['branch_fee_structure_id'];
-                    }
+                    $branch_fee_structures = $this->fee_structure_master_model->get_branch_fee_structure($result->branch_id);
                     $output[] = [
                         'sno'               => $i,
                         'branch_id'         => $result->branch_id,
@@ -192,8 +189,8 @@ class Branch_model extends CI_Model {
                         'middel_name'       =>$result->middel_name,
                         'last_name'         =>$result->last_name,
                         'gender'            =>$result->gender,
-                        'departments'       => $departments,
-                        'fee_structure_master_id' => $fee_structure_master_id                   
+                        'branch_departments'       => $departments,
+                        'fee_structure'     => $branch_fee_structures                   
                     ];
                 }
             }

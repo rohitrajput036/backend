@@ -155,7 +155,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="hidden" name="centre_id" id="centre_id" value="0"/>
+                                    <input type="hidden" name="centre_id" id="centre_id" value="{($action=='edit') ? $centre_data['branch_id'] : 0}"/>
                                     <button id="save" class="btn btn-success">Create Centre</button>
                                     <button id="cancel" class="btn btn-danger">Cancel</button>
                                 </div>
@@ -168,7 +168,7 @@
                                     <ul style="list-style-type:none;">
                                         {foreach $departments as $dd}
                                             <li>
-                                                <input type="checkbox" name="centre_departments" id="centre_departments_{$dd['department_id']}" value="{$dd['department_id']}"/>
+                                                <input type="checkbox" name="centre_departments" id="centre_departments_{$dd['department_id']}" value="{$dd['department_id']}" {($action == 'edit' && in_array($dd['department_id'],$centre_data['branch_departments'])) ? 'checked' : ''}/>
                                                 <label for="centre_departments_{$dd['department_id']}">{$dd['department']}</label>
                                             </li>
                                         {/foreach}
@@ -177,24 +177,48 @@
                             </div>
                             <div class="col-md-12" style="border-radius:10px; border:1px solid blue; margin-top:10px; padding-bottom:10px;">
                                 <h3 style="margin-top:6px;">Center Default Fee</h3>
-                                {if isset($fee_headers) && !empty($fee_headers)}
-                                    {foreach $fee_headers as $fee_header}
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                {$fee_header['sno']}. {$fee_header['structure_name']} {if $fee_header['is_required'] == '1'}<span class="text-red">*</span>{/if}
+                                {if $action == 'edit'}
+                                    {if isset($centre_data['fee_structure']) && !empty($centre_data['fee_structure'])}
+                                        {$sn=1}
+                                        {foreach $centre_data['fee_structure'] as $fee_header}
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    {$sn}. {$fee_header['structure_name']} {if $fee_header['is_required'] == '1'}<span class="text-red">*</span>{/if}
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" value="{$fee_header['fee_amount']}" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_master_id']}" style="width:100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select class="default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" style="width:100%">
+                                                        <option value="Annual" {if $fee_header['fee_type']=='Annual'} selected {/if}>Annual</option>
+                                                        <option value="Monthly" {if $fee_header['fee_type']=='Monthly'} selected {/if}>Monthly</option>
+                                                        <option value="Quarterly" {if $fee_header['fee_type']=='Quarterly'} selected {/if}>Quarterly</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <input type="text" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_id']}" style="width:100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
+                                            {$sn = $sn+1}
+                                        {/foreach}
+                                    {/if}
+                                {else}
+                                    {if isset($fee_headers) && !empty($fee_headers)}
+                                        {foreach $fee_headers as $fee_header}
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    {$fee_header['sno']}. {$fee_header['structure_name']} {if $fee_header['is_required'] == '1'}<span class="text-red">*</span>{/if}
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}" class="default_fees" placeholder="{$fee_header['structure_name']} {if $fee_header['is_required'] == 'Y'}*{/if}" data-fsid="{$fee_header['fee_structure_id']}" style="width:100%" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select class="default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" style="width:100%">
+                                                        <option value="Annual">Annual</option>
+                                                        <option value="Monthly">Monthly</option>
+                                                        <option value="Quarterly">Quarterly</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <select class="default_fees_type" name="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" id="{strtolower(str_replace(' ','_',$fee_header['structure_name']))}_type" style="width:100%">
-                                                    <option value="Annual">Annual</option>
-                                                    <option value="Monthly">Monthly</option>
-                                                    <option value="Quarterly">Quarterly</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    {/foreach}
+                                        {/foreach}
+                                    {/if}
                                 {/if}
                             </div>
                         </div>
@@ -262,15 +286,19 @@ $(document).ready(function(){
             var selected_state_id = "{$centre_data['state_id']}";
             var action = "{$action}";
             $.each(response.data,function(k,v){
-                if(action == 'edit')
-                    if (selected_state_id == v.state_id)
-                        $('#state_id').append("<option value='"+v.state_id+"' selected data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
-                   else
-                        $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
-                    
-                else
-                    $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>"); 
+                if(action == 'edit'){
+                    if (selected_state_id == v.state_id){
+                        $('#state_id').append("<option value='"+v.state_id+"' selected data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                    }else{
+                        $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                    }
+                }else{
+                    $('#state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                }    
             });
+            if(action == 'edit'){
+                $('#state_id').trigger('change');
+            }
         }).fail(function(response) {
             $("#animatedLoader").hide();
             if (response.responseJSON.control) {
@@ -318,8 +346,19 @@ $(document).ready(function(){
             $('#api_error').html('');
             $('#city_id').children().remove();
             $('#city_id').append("<option value='0'>--Select City--</option>");
+            var action = "{$action}";
+            var selected_city_id = "{$centre_data['city_id']}";
             $.each(response.data,function(k,v){
-                $('#city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");    
+                if(action == 'edit'){
+                    if (selected_city_id == v.city_id){
+                        $('#city_id').append("<option value='"+v.city_id+"' selected>"+v.city_name+"</option>");
+                    }else{
+                        $('#city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");   
+                    }
+                }else{
+                    $('#city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");
+                }
+                    
             });
             $('#city_id').trigger('change');
         }).fail(function(response) {
@@ -455,8 +494,8 @@ $(document).ready(function(){
             roylity_case : roylity_case,
             comments : comments,
             departments : departments,
-            default_fees : default_fees
-            
+            default_fees : default_fees,
+            login_id : '{userdata('UserId')}'
         };
         var request = {
             control : control,
@@ -480,14 +519,14 @@ $(document).ready(function(){
             }
         }).done(function(response) {
             $("#animatedLoader").hide();
-            $('#api_error').html('<span class="text-green">'+response.control.message+'</span>');
+            $('#api_error').html('<span class="text-green">'+response.control.Message+'</span>');
             setTimeout(function(){
                 location.reload();
             }, 2000);
         }).fail(function(response) {
             $("#animatedLoader").hide();
             if (response.responseJSON.control) {
-                $('#api_error').text(response.responseJSON.control.message);
+                $('#api_error').text(response.responseJSON.control.Message);
             }
         }).always(function() {
             

@@ -64,26 +64,33 @@ class Branch_fee_structure_model extends CI_Model {
 
     }
     function get(){
+        $this->load->model('fee_structure_master_model');
         $where = [];
         if(!empty($this->is_active)){
-            $where['is_active'] = $this->is_active;
+            $where['bfs.is_active'] = $this->is_active;
         }
         if($this->branch_fee_structure_id > 0){
-            $where['branch_fee_structure_id'] = $this->branch_fee_structure_id;
+            $where['bfs.branch_fee_structure_id'] = $this->branch_fee_structure_id;
         }
         if($this->fee_structure_master_id > 0){
-            $where['fee_structure_master_id'] = $this->fee_structure_master_id;
+            $where['bfs.fee_structure_master_id'] = $this->fee_structure_master_id;
         }
         if($this->branch_id > 0){
-            $where['branch_id'] = $this->branch_id;
+            $where['bfs.branch_id'] = $this->branch_id;
         }
-        $results = $this->global_model->select($this->table_name,$where);
+        $joins = [
+            $this->fee_structure_master_model->table_name.' fsm' => ['(bfs.fee_structure_master_id = fsm.fee_structure_master_id AND fsm.is_active=1)','INNER']
+        ];
+        $results = $this->global_model->select($this->table_name.' bfs',$where,'*',$joins);
         if(isset($results) && $results->num_rows() > 0);
         foreach($results->result() as $result){
             $output [] = [
-                'branch_fee_structure_id' => $result->branch_fee_structure_id,
-                'fee_structure_master_id' => $result->fee_structure_master_id,
-                'branch_id'                 => $result->branch_id
+                'branch_fee_structure_id'   => $result->branch_fee_structure_id,
+                'branch_id'                 => $result->branch_id,
+                'fee_structure_master_id'   => $result->fee_structure_master_id,
+                'structure_name'            => $result->structure_name,
+                'fee_amount'                => $result->fee_amount,
+                'fee_type'                  => $result->fee_type
             ];
         }
         return $output;
