@@ -64,6 +64,23 @@ class User_department_model extends CI_Model {
     }
 
     function get(){
-
+        $output = [];
+        if(!empty($this->is_active)){
+            $where['is_active'] = $this->is_active;
+        }
+        if($this->user_id > 0){
+            $where['user_id'] = $this->user_id;
+        }
+        $results = $this->global_model->select($this->table_name,$where);
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $result){
+                $output[] = [
+                    'user_department_id' => $result->user_department_id,
+                    'user_id' => $result->user_id,
+                    'department_id' => $result->department_id
+                ];
+            }
+        }
+        return $output; 
     }
 }

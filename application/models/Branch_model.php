@@ -106,6 +106,8 @@ class Branch_model extends CI_Model {
         $this->load->model('user_branch_model');
         $this->load->model('user_role_model');
         $this->load->model('city_model');
+        $this->load->model('user_department_model');
+        $this->load->model('branch_fee_structure_model');
         if($this->branch_id > 0){
             $where['b.branch_id'] = $this->branch_id;
         }
@@ -120,13 +122,14 @@ class Branch_model extends CI_Model {
             $this->user_model->table_name.' u' => ['(ub.user_id = u.user_id AND u.is_active = 1)','INNER'],
             $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER']
         ];
-        $fields = "b.*,c.city_name,u.email_id,u.display_password";
+        $fields = "b.*,c.city_name,u.email_id,u.display_password,u.alt_email_id,u.first_name,u.middel_name,u.last_name,u.gender,u.user_id";
         $order_by= ['b.branch_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' b',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
             $i=0;
             foreach($results->result() as $result){
+                //print_r($result);exit;
                 ++$i;
                 if($this->for_table){
                     if($result->is_active == 1){
@@ -148,8 +151,23 @@ class Branch_model extends CI_Model {
                         $result->email_id,
                         $result->display_password,
                         $btns
-                    ];
+                    ];    
                 }else{
+                    $this->user_department_model->user_id = $result->user_id;
+                    $this->user_department_model->is_active = 1;
+                    $user_department = $this->user_department_model->get();
+                    $departments = [];
+                    foreach($user_department as $d){
+                        $departments[] = $d['department_id'];
+                    }
+                    $this->branch_fee_structure_model->branch_id = $result->branch_id;
+                    $this->branch_fee_structure_model->is_active = 1;
+                    //$this->branch_fee_structure_model->branch_fee_structure_id = $result->fee_structure_master_id;
+                    $branch_fee_structures = $this->branch_fee_structure_model->get();
+                    $fee_structure_master_id = [];
+                    foreach($branch_fee_structures as $bfs){
+                        $fee_structure_master_id[] = $bfs['branch_fee_structure_id'];
+                    }
                     $output[] = [
                         'sno'               => $i,
                         'branch_id'         => $result->branch_id,
@@ -158,6 +176,7 @@ class Branch_model extends CI_Model {
                         'gst_no'            => $result->gst_no,
                         'state_id'          => $result->state_id,
                         'state_code'        => $result->state_code,
+                        'city_id'           =>$result->city_id,
                         'concat_person_name'=>$result->concat_person_name,
                         'add_line_1'        => $result->add_line_1, 
                         'add_line_2'        => $result->add_line_2, 
@@ -168,6 +187,13 @@ class Branch_model extends CI_Model {
                         'comments'          => $result->comments,
                         'contact_no'        => $result->contact_no,
                         'alt_contact_no'    => $result->alt_contact_no,
+                        'alt_email_id'      => $result->alt_email_id,
+                        'first_name'        =>$result->first_name,
+                        'middel_name'       =>$result->middel_name,
+                        'last_name'         =>$result->last_name,
+                        'gender'            =>$result->gender,
+                        'departments'       => $departments,
+                        'fee_structure_master_id' => $fee_structure_master_id                   
                     ];
                 }
             }

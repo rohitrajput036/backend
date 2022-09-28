@@ -88,6 +88,7 @@ class Branch extends REST_Controller {
                             $this->branch_fee_structure_model->fee_structure_master_id = $fee->fsid;
                             $this->branch_fee_structure_model->fee_amount = $fee->fee_amt;
                             $this->branch_fee_structure_model->fee_type = $fee->fee_type;
+                            $this->branch_fee_structure_model->is_active = 1;
                             $this->branch_fee_structure_model->add();
                         }
                         // add in user

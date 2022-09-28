@@ -73,25 +73,31 @@
                             </div>
                             <div class="col-md-4 form-group" id="first_name_box">
                                 <label>First Name <span class="text-red">*</span></label>
-                                <input type="text" name="first_name" id="first_name" class="form-control"/>
+                                <input type="text" name="first_name" id="first_name" value="{if $action=='edit'}{$centre_data['first_name']}{/if}" class="form-control"/>
                                 <label for="first_name" id="first_name_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="middle_name_box">
-                                <label>Middle Name</label>
-                                <input type="text" name="middle_name" id="middle_name" class="form-control"/>
+                                <label>Middel Name</label>
+                                <input type="text" name="middle_name" id="middle_name" value="{if $action=='edit'}{$centre_data['middel_name']}{/if}"class="form-control"/>
                                 <label for="middle_name" id="middle_name_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="last_name_box">
                                 <label>Last Name</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control"/>
+                                <input type="text" name="last_name" id="last_name" value="{if $action=='edit'}{$centre_data['last_name']}{/if}" class="form-control"/>
                                 <label for="last_name" id="last_name_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="gender_box">
                                 <label>Gender <span class="text-red">*</span></label>
                                 <select class="form-control" name="gender" id="gender">
                                     <option value="0">--Select--</option>
-                                    <option value="M" selected>Male</option>
-                                    <option value="F">Female</option>
+                                    {if $action=='edit'}
+                                        <option value="M" {($centre_data['gender'] == 'M') ? 'selected' : ''}>Male</option>
+                                        <option value="F" {($centre_data['gender'] == 'F') ? 'selected' : ''}>Female</option>
+                                    {else}
+                                        <option value="M" selected>Male</option>
+                                        <option value="F">Female</option>
+                                    {/if}
+                                    
                                 </select>
                                 <label for="gender" id="gender_error_msg"></label>
                             </div>
@@ -122,7 +128,7 @@
                             </div>
                             <div class="col-md-4 form-group" id="alt_email_id_box">
                                 <label>Alt Email Id</label>
-                                <input type="text" name="alt_email_id" id="alt_email_id"  class="form-control"/>
+                                <input type="text" name="alt_email_id" id="alt_email_id" value="{if $action=='edit'}{$centre_data['alt_email_id']}{/if}" class="form-control"/>
                                 <label for="alt_email_id" id="alt_email_id_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="location_box">
@@ -145,7 +151,7 @@
                             </div>
                             <div class="col-md-12 form-group" id="comment_box">
                                 <label>Comment</label>
-                                <textarea class="form-control" name="comments" id="comments" value="{if $action=='edit'}{$centre_data['comments']}{/if}" rows="7"></textarea>
+                                <textarea class="form-control" name="comments" id="comments" rows="7">{if $action=='edit'}{$centre_data['comments']}{/if}</textarea>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
