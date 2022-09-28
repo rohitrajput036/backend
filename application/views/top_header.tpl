@@ -35,22 +35,14 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     <!-- {image('dist/user2-160x160.jpg',['class'=>'user-image', 'alt'=>'user image'])} -->
                   <span>
-                  Rohit Rajput
-                  {* {userdata('UserName')} *}
+                  {userdata('UserName')}
                   </span>
                 </a>
                 <ul class="dropdown-menu">
                   <!-- User image -->
                   <li class="user-header">
                       {image('dist/avatar.png',['class'=>'img-circle', 'alt'=>'user image'])}
-                    <p>
-                    Rohit Rajput
-                      {* {userdata('UserName')} *}
-                      <small>
-                      rohit.rajput@bsa.co.in
-                      {* {userdata('Email')} *}
-                      </small>
-                    </p>
+                    <p>{userdata('UserName')} <small>{userdata('Email')}</small></p>
                   </li>
                   <li class="user-footer">
                     <div class="pull-left">

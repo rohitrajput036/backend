@@ -94,7 +94,7 @@ if (!function_exists('callAPI')) {
                 break;
         }
         $response = curl_exec($ch);
-//        echo 'd'. print_r($response); die;
+        //   echo 'd'. print_r($response); die;
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         return json_decode($response, true);
     }

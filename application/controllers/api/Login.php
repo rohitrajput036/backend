@@ -51,27 +51,21 @@ class Login extends REST_Controller {
                 $this->load->model('Login_model');
                 $this->Login_model->UserName = $Request->UserName;
                 $this->Login_model->UserPassword = $Request->Password;
-                $this->Login_model->IsActive = 'Y';
+                $this->Login_model->IsActive = '1';
                 $UserInfo = $this->Login_model->ValidateLogin();
                 if (count($UserInfo) > 0) {
-                    $salt = '3x%%$bf83#dls2qgdf';
-                    $hashed_password = md5($salt . $Request->Password);
-                    if (password_verify($Request->Password, $UserInfo['Password'])) {
-                        if ($UserInfo['Role'] == "Super Admin" || $UserInfo['Role'] == "Center Admin") {
-                            $HeaderHeading = $UserInfo['Role'] . " <span style='font-size:10px;'>(Online Management System)</span>";
-                        } else {
-                            $HeaderHeading = $UserInfo['BranchName'] . " User ID-[" . $UserInfo['EmpId'] . "]";
-                        }
+                    if (password_verify($Request->Password, $UserInfo['password'])) {
+                        $BranchId = $UserInfo['branch_id'];
                         $DefaultImg = "images/icons/male.png";
-                        if ($UserInfo['Gender'] == "F") {
+                        if(in_array($UserInfo['role'],['Super Admin','Center Admin'])){
+                            $HeaderHeading = $UserInfo['role'] . " <span style='font-size:10px;'>(Online Management System)</span>";
+                        }else{
+                            $HeaderHeading = $UserInfo['brnach_name'] . " User ID- [" . $UserInfo['unique_no'] . "]";
+                        }
+                        if ($UserInfo['gender'] == "F") {
                             $DefaultImg = "images/icons/female.png";
                         }
-                        if ($UserInfo['Role'] == "Super Admin") {
-                            $BranchId = 0;
-                        } else {
-                            $BranchId = $UserInfo['BranchId'];
-                        }
-                        setSession($UserInfo['UserId'], $UserInfo['EmpId'], $UserInfo['UserName'], $UserInfo['Gender'], $UserInfo['Role'], $BranchId, $UserInfo['BranchName'], $HeaderHeading, $DefaultImg, '');
+                        setSession($UserInfo['user_id'], $UserInfo['unique_no'], $UserInfo['user_name'], $UserInfo['gender'], $UserInfo['role'], $BranchId, $UserInfo['brnach_name'], $HeaderHeading, $DefaultImg, $UserInfo['email_id']);
                         $Data = $UserInfo;
                     } else {
                         throw new Exception("Invalid Password! Please Try Again!", REST_Controller::HTTP_BAD_REQUEST);

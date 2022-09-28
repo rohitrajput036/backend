@@ -12,36 +12,43 @@ class Login_model extends CI_Model {
     }
 
     function ValidateLogin() {
-        $Output = [];
-        $this->load->model('User_model');
-        $this->load->model('Role_model');
-        $this->load->model('User_branch_model');
-        $this->load->model('Branch_model');
-        $Where[$this->User_model->TableName . '.email_id'] = $this->UserName;
-        $Where[$this->User_model->TableName . '.is_active'] = $this->IsActive;
-        $Fields = $this->User_model->TableName . ".user_id,emp_id,first_name as user_name,password,gender,role,
-        ifnull(" . $this->Branch_model->TableName . ".branch_id,0) as branch_id," . $this->Branch_model->TableName . ".branch_name";
-        $Joins = [
-            $this->Role_model->TableName => [$this->User_model->TableName . '.role_id=' . $this->Role_model->TableName . '.role_id', 'INNER'],
-            $this->User_branch_model->TableName => [$this->User_model->TableName . '.user_id=' . $this->User_branch_model->TableName . '.user_id', 'LEFT'],
-            $this->Branch_model->TableName => [$this->User_branch_model->TableName . '.branch_id=' . $this->Branch_model->TableName . '.branch_id', 'LEFT']
+        $this->load->model('user_role_model');
+        $this->load->model('role_model');
+        $this->load->model('user_branch_model');
+        $this->load->model('branch_model');
+        $this->load->model('user_student_model');
+        $this->load->model('user_model');
+        $output = [];
+        $where['u.email_id'] = $this->UserName;
+        $where['u.is_active'] = 1;
+        $joins = [
+            $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER'],
+            $this->role_model->table_name.' r' => ['(ur.role_id = r.role_id AND r.is_active = 1)','INNER'],
+            $this->user_branch_model->table_name.' ub' => ['(u.user_id = ub.user_id AND ub.is_active = 1)','LEFT'],
+            $this->branch_model->table_name.' b' => ['(ub.branch_id = b.branch_id AND b.is_active = 1)','LEFT'],
+            $this->user_student_model->table_name.' us' => ['(u.user_id = us.user_id AND us.is_active = 1)','LEFT']
         ];
-        $Results = $this->global_model->select($this->User_model->TableName, $Where, $Fields, $Joins, NULL, NULL, NULL, [$this->User_model->TableName . '.user_id']);
-        if (isset($Results) && $Results->num_rows() > 0) {
-            foreach ($Results->result() as $Result) {
-                $Output = [
-                    'UserId' => $Result->user_id,
-                    'EmpId' => $Result->emp_id,
-                    'UserName' => $Result->user_name,
-                    'Password' => $Result->password,
-                    'Gender' => $Result->gender,
-                    'Role' => $Result->role,
-                    'BranchId' => $Result->branch_id,
-                    'BranchName' => $Result->branch_name
-                ];
-            }
+        $fileds = 'u.user_id,u.unique_no,u.display_name,u.first_name,u.middel_name,u.last_name,u.gender,u.password,r.role_id,r.role,b.branch_id,b.branch_name,b.branch_code,u.email_id';
+        $results = $this->global_model->select($this->user_model->table_name.' u',$where,$fileds,$joins);
+        if(isset($results) && $results->num_rows() > 0){
+            $result = $results->row();
+            $output = [
+                'user_id'       => $result->user_id,
+                'unique_no'     => $result->unique_no,
+                'user_name'     => (!empty($result->display_name)) ? $result->display_name : $result->first_name.' '.$result->last_name,
+                'gender'        => $result->gender,
+                'password'      => $result->password,
+                'role_id'       => $result->role_id,
+                'role'          => $result->role,
+                'email_id'      => $result->email_id,
+                'branch_id'     => (int) $result->branch_id,
+                'brnach_name'   => $result->branch_name,
+                'branch_code'   => $result->branch_code
+            ];
+        }else{
+            throw new Exception('invalid user!',400);
         }
-        return $Output;
+        return $output;
     }
 
 }
