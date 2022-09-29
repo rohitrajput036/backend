@@ -37,6 +37,7 @@ class Role extends REST_Controller {
         ];
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
+
     function add_post(){
         $start_time = microtime(true);
         try {
@@ -94,6 +95,7 @@ class Role extends REST_Controller {
             $this->response($response, $E->getCode());
         }
     }
+
     function get_post(){
         $start_time = microtime(true);
         try {
@@ -140,6 +142,7 @@ class Role extends REST_Controller {
             $this->response($response, $E->getCode());
         }
     }
+    
     function delete_post(){
         $start_time = microtime(true);
         try {
