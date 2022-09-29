@@ -24,7 +24,7 @@ class User extends CI_Controller {
             ],
             'data' => [
                 'is_active' => '1',
-                'is_ho' => '0'
+                'is_ho' => (userdata('Role') == 'Super Admin') ? '1' : '0'
             ]
         ];
         $response = callAPI($url,'POST',json_encode($request));

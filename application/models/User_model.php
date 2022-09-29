@@ -4,11 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_model extends CI_Model {
 
-    public $user_id, $unique_no, $first_name, $middel_name, $last_name, $display_name, $email_id, $alt_email_id, $display_password, $password, $dob, $doj, $gender, $contact_no, $alt_contact_no, $address_line_1, $address_line_2, $city_id, $state_id, $pincode, $country_id, $comment, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
+    public $user_id, $school_id, $unique_no, $first_name, $middel_name, $last_name, $display_name, $email_id, $alt_email_id, $display_password, $password, $dob, $doj, $gender, $contact_no, $alt_contact_no, $address_line_1, $address_line_2, $city_id, $state_id, $pincode, $country_id, $comment, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
 
     function __construct() {
         parent::__construct();
         $this->user_id          = 0;
+        $this->school_id        = 0;
         $this->unique_no        = ''; 
         $this->first_name       = '';
         $this->middel_name      = ''; 
@@ -40,6 +41,7 @@ class User_model extends CI_Model {
 
     function add(){
         $insert_data = [
+            'school_id'         => $this->school_id,
             'unique_no'         => $this->unique_no,
             'first_name'        => $this->first_name,
             'middel_name'       => $this->middel_name,

@@ -95,3 +95,5 @@ switch (ENVIRONMENT) {
     break;
 }
 defined('PROJECT_NAME') OR define('PROJECT_NAME', 'School');
+defined('WEB_VERSION') OR define('WEB_VERSION', '1.0');
+defined('APP_VERSION') OR define('APP_VERSION', '1.0');

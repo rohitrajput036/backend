@@ -134,12 +134,12 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="form-group">
+                                <div class="form-group" hidden>
                                     <label>Select Role<span class="text-red">*</span></label>
                                     <ul style="list-style-type:none">
                                         {foreach $role_list as $role}
                                             <li>
-                                                <input type="radio" name="role_type" id="role_type_{$role['role_id']}" value="{$role['role_id']}"/> 
+                                                <input type="radio" name="role_type" id="role_type_{$role['role_id']}" value="{$role['role_id']}" {($role['role'] == 'Normal') ? 'checked':''}/> 
                                                 <label for="role_type_{$role['role_id']}">{$role['role']}</label>
                                             </li>    
                                         {/foreach}
@@ -159,6 +159,10 @@
                                         {/if}
                                         
                                     </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label>Upload Document</label>
+                                    <input type="file" name="user_document" id="user_document" clas="form-control"/>
                                 </div>
                                 
                             </div>
