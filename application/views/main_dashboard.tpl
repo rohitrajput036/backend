@@ -26,7 +26,12 @@
                         <h3 class="box-title">{getGreetings()}</h3>
                     </div>
                     <div class="box-body">
-                        
+                        <h3>session values</h3>
+                        <ol>
+                            {foreach $smarty.const.US_DATA as $sess}
+                                <li><b>{$sess} : </b>{(is_array(userdata($sess))) ? print_r(userdata($sess)) : userdata($sess)}</li>
+                            {/foreach}
+                        </ol>
                     </div>
                 </div>
             </div>

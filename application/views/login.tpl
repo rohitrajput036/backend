@@ -102,7 +102,7 @@
             console.log(Request);
             $.ajax({
               method: "POST",
-              url: "{base_url('/api/Login/validate')}",
+              url: "{base_url('/api/login/validate')}",
               async: false,
               crossDomain: true,
               processData: false,
