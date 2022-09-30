@@ -114,6 +114,9 @@ class Class_managment extends REST_Controller {
                 if(isset( $request->data->class_id)){
                     $this->class_model->class_id = $request->data->class_id;
                 }
+                if(isset($request->data->school_id)){
+                    $this->class_model->school_id = $request->data->school_id;
+                }
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;
                 }

@@ -17,7 +17,7 @@ class Class_model extends CI_Model {
         $this->created_on    = date('Y-m-d H:i:s');
         $this->updated_by    = 0;
         $this->updated_on    = date('Y-m-d H:i:s');
-        $this->table_name    = DB_NAME.' class';
+        $this->table_name    = DB_NAME.'class';
     }
 
     function add(){
@@ -68,6 +68,7 @@ class Class_model extends CI_Model {
             'updated_on' => $this->updated_on
         ];
         $results = $this->global_model->update($this->table_name, $update_data, $where);
+        echo $this->db->last_query();exit;
         return $results;
     }
 
@@ -82,10 +83,11 @@ class Class_model extends CI_Model {
             $where['s.is_active IN ("1","2")'] = NULL;
         }
         $joins=[
-            $this->school_model->table_name. 's'=> ['s.school_id = c.school_id AND is_active = 1','LEFT']
+            $this->school_model->table_name.' s'=> ['s.school_id = c.school_id AND s.is_active = 1','LEFT']
         ];
-        $fildes = 'c.* s.school_id';
+        $fildes = 'c.*,s.school_id';
         $oder_by = ['c.class_id => ASC'];
+        $results = $this->global_model->select($this->table_name.' c',$where,$fildes,$joins,NULL,NULL,$oder_by);
         $output =[];
         if(isset($results) &&  $results->num_rows() > 0){
             $i = 0;
@@ -102,10 +104,9 @@ class Class_model extends CI_Model {
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output [] = [
                         $i, 
-                        'class_id' => $result->class_id,
-                        'class_name' => $result->class_name,
-                        'section' =>$result->section_name,
-                        'with_subject' => $result->with_subject,
+                        $result->class_name,
+                        $result->section_name,
+                        ($result->with_subject == 1) ? 'Yes' : 'No',
                         $btns
                     ];
                 }else{

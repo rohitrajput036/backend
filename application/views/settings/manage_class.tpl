@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="cancel" class="btn btn-primary">Cancel</button>
+                    <button id="cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                     <button id="save" class="btn btn-success">save</button>
                     <input type="hidden" name="class_id" id="class_id" value="0"/>
                 </div>
@@ -104,6 +104,7 @@
                 request_time : Math.round(+new Date()/1000)
             }
             var data = {
+                school_id : '{userdata('SchoolId')}',
                 for_table : true
             }
             var request = {
@@ -111,7 +112,7 @@
                 data : data
             }
             request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}Class_managment/get";
+            var url = "{$smarty.const.API_URL}class_managment/get";
             $.ajax({
                 method: "POST",
                 url: url,
@@ -167,7 +168,7 @@
                 class_name   :  class_name,
                 section_name :  section_name,
                 with_subject :  with_subject,
-                school_id    :  'school_id',
+                school_id    :  '{userdata('SchoolId')}',
                 login_id     : '{userdata('UserId')}'
             }
             var request = {
@@ -175,7 +176,7 @@
                 data : data
             }
             request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}Class_managment/add";
+            var url = "{$smarty.const.API_URL}class_managment/add";
             $.ajax({
                 method: "POST",
                 url: url,
@@ -202,7 +203,7 @@
             }).always(function() {
             });
         });
-        $(document).on('click', '.active_deactive', function(){
+        $(document).on('click','.active_deactive',function(){
             var class_id = $(this).data('class_id');
             var is_active = $(this).data('at');
             var control  = {
@@ -220,7 +221,7 @@
                 data : data
             }
             request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}Class_managment/delete";
+            var url = "{$smarty.const.API_URL}class_managment/delete";
             $.ajax({
                 method: "POST",
                 url: url,
@@ -250,5 +251,7 @@
         $(document).on('click','#cancel',function(){
 
         });
+       
     });
+
 </script>
