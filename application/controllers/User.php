@@ -15,6 +15,7 @@ class User extends CI_Controller {
         $this->parser->parse("user/list.tpl", $this->outputData);
     }
     public function add() {
+        $this->outputData['role'] = userdata('Role'); 
         $url = API_URL.'role/get';
         $request = [
             'control' => [
@@ -24,7 +25,7 @@ class User extends CI_Controller {
             ],
             'data' => [
                 'is_active' => '1',
-                'is_ho' => (userdata('Role') == 'Super Admin') ? '1' : '0'
+                'is_ho' => (userdata('Role') == 'Admin') ? '1' : '0'
             ]
         ];
         $response = callAPI($url,'POST',json_encode($request));
@@ -32,6 +33,7 @@ class User extends CI_Controller {
         $url = API_URL.'department/get';
         $response = callAPI($url,'POST',json_encode($request));
         $this->outputData['department_list'] = $response['data'];
+        $this->outputData['action'] = 'add';
         $this->parser->parse("user/add_update.tpl", $this->outputData);
     }
 }

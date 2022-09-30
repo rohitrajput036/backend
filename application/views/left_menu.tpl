@@ -3,7 +3,7 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">MAIN NAVIGATION (V{$smarty.const.WEB_VERSION})</li>
             <li {if uriseg(1)=='welcome'}class="active"{/if}>
                 <a href="{site_url('welcome')}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>

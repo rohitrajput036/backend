@@ -47,10 +47,11 @@ class Branch extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['centre_id','centre_name','centre_gst','add_line_1','add_line_2','state_id','city_id','pincode','state_code','first_name','middle_name','last_name','gender','sign_email_id','sign_password','contact_no','alt_contact_no','username','alt_email_id','location','centre_start_day','roylity_case','comments','departments','default_fees'],$request->data);
+                keyExist(['centre_id','school_id','centre_name','centre_gst','add_line_1','add_line_2','state_id','city_id','pincode','state_code','first_name','middle_name','last_name','gender','sign_email_id','sign_password','contact_no','alt_contact_no','username','alt_email_id','location','centre_start_day','roylity_case','comments','departments','default_fees'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['centre_name' => $request->data->centre_name,'add_line_1' => $request->data->add_line_1, 'state_id' => $request->data->state_id,'city_id' => $request->data->city_id, 'pincode' => $request->data->pincode, 'state_code' => $request->data->state_code, 'first_name',$request->data->first_name,'gender' => $request->data->gender, 'sign_email_id' => $request->data->sign_email_id, 'sign_password' => $request->data->sign_password, 'contact_no' => $request->data->contact_no,'username' => $request->data->username, 'centre_start_day' => $request->data->centre_start_day]);
+                checkBlank(['school_id' => $request->data->school_id,'centre_name' => $request->data->centre_name,'add_line_1' => $request->data->add_line_1, 'state_id' => $request->data->state_id,'city_id' => $request->data->city_id, 'pincode' => $request->data->pincode, 'state_code' => $request->data->state_code, 'first_name',$request->data->first_name,'gender' => $request->data->gender, 'sign_email_id' => $request->data->sign_email_id, 'sign_password' => $request->data->sign_password, 'contact_no' => $request->data->contact_no,'username' => $request->data->username, 'centre_start_day' => $request->data->centre_start_day]);
                 $this->branch_model->branch_id            = (!empty($request->data->centre_id)) ? $request->data->centre_id : 0;
+                $this->branch_model->school_id            = $request->data->school_id;
                 $this->branch_model->branch_code          = $this->branch_model->get_branch_code();
                 $this->branch_model->branch_name          = $request->data->centre_name;
                 $this->branch_model->gst_no               = $request->data->centre_gst;
@@ -82,6 +83,7 @@ class Branch extends REST_Controller {
                         $this->load->model('user_department_model');
                         $this->load->model('user_branch_model');
                         $this->load->model('user_role_model');
+                        $this->load->model('user_school_model');
                         // add in fee_stru
                         foreach($request->data->default_fees as $fee){
                             $this->branch_fee_structure_model->branch_id = $this->branch_model->branch_id;
@@ -103,7 +105,7 @@ class Branch extends REST_Controller {
                         $this->user_model->alt_email_id = $request->data->alt_email_id;
                         $this->user_model->display_password = $request->data->sign_password;
                         $this->user_model->password = password_hash($request->data->sign_password, PASSWORD_BCRYPT, $options);
-                        $this->user_model->dob = NULL;
+                        $this->user_model->dob = date('Y-m-d',strtotime($request->data->centre_start_day));
                         $this->user_model->doj = date('Y-m-d',strtotime($request->data->centre_start_day));
                         $this->user_model->gender = $request->data->gender;
                         $this->user_model->contact_no = $request->data->contact_no;
@@ -122,7 +124,6 @@ class Branch extends REST_Controller {
                         }else{
                             if(!$this->user_model->check()){
                                 $this->user_model->add();
-                                
                                 $this->user_branch_model->branch_id = $this->branch_model->branch_id;
                                 $this->user_branch_model->user_id = $this->user_model->user_id;
                                 $this->user_branch_model->is_active = "1";
@@ -143,6 +144,16 @@ class Branch extends REST_Controller {
                                 if(!$this->user_role_model->check()){
                                     $this->user_role_model->add();
                                 }
+                                // add in user school
+                                $this->user_school_model->user_id = $this->user_model->user_id;
+                                $this->user_school_model->school_id = $request->data->school_id;
+                                $this->user_school_model->is_active = 1;
+                                if($this->user_school_model->check()){
+                                    $this->user_school_model->is_active = 2;
+                                    $this->user_school_model->delete();
+                                }
+                                $this->user_school_model->is_active = 1;
+                                $this->user_school_model->add();
                             }else{
                                 throw new Exception('User already exists!');
                             }
@@ -247,6 +258,9 @@ class Branch extends REST_Controller {
                 }
                 if(isset( $request->data->centre_id)){
                     $this->branch_model->branch_id = $request->data->centre_id;
+                }
+                if(isset( $request->data->school_id)){
+                    $this->branch_model->school_id = $request->data->school_id;
                 }
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;

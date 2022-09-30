@@ -82,7 +82,7 @@ class Fee_structure_master_model extends CI_Model {
                         $active_deactive_btn = '<btn class="btn active_deactive" data-fee_structure_id="'.$result->fee_structure_master_id.'" data-at="1"><i class="fa fa-times text-red"></i></btn>';
                     }
                     $delete_btn = '<btn class="btn active_deactive" data-fee_structure_id="'.$result->fee_structure_master_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
-                    $edit_btn = '<btn class="btn edit" data-fee_structure_id="'.$result->fee_structure_master_id.'" data-is_required="'.$result->is_required.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $edit_btn = '<btn class="btn edit" data-fee_structure_id="'.$result->fee_structure_master_id.'" data-is_required="'.$result->is_required.'" data-sname="'.$result->structure_name.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
                     $btns = $active_deactive_btn.$delete_btn.$edit_btn;
                     $output[] = [
                         $i,

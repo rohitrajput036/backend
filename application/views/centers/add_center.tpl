@@ -11,12 +11,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Centre
-            <small>Add Centre</small>
+            Branch
+            <small>Add Branch</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Centre</a></li>
-            <li class="active">{if $action=='edit'}Edit{else}Add{/if} Centre</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Branch</a></li>
+            <li class="active">{if $action=='edit'}Edit{else}Add{/if} Branch</li>
         </ol>
     </section>
 
@@ -27,13 +27,22 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="col-md-8">
-                            <div class="col-md-6 form-group" id="centre_name_box">
-                                <label>Centre Name <span class="text-red">*</span></label>
+                            {if $role == 'Super Admin'}
+                                <div class="col-md-4 form-group" id="school_id_box">
+                                    <label>Select School</label>
+                                    <select name="school_id" id="school_id" class="form-control">
+                                        <option value="0">--Select School--</option>
+                                    </select>
+                                    <label id="school_id_error_msg"></label>
+                                </div>
+                            {/if}
+                            <div class="col-md-{($role == 'Super Admin') ? 4 : 6 } form-group" id="centre_name_box">
+                                <label>Branch Name <span class="text-red">*</span></label>
                                 <input type="text" name="centre_name" id="centre_name" value="{if $action=='edit'}{$centre_data['branch_name']}{/if}" class="form-control"/>
                                 <label for="centre_name" id="centre_name_error_msg"></label>
                             </div>
-                            <div class="col-md-6 form-group" id="centre_gst_box">
-                                <label>Centre GST</label>
+                            <div class="col-md-{($role == 'Super Admin') ? 4 : 6 } form-group" id="centre_gst_box">
+                                <label>Branch GST</label>
                                 <input type="text" name="centre_gst" id="centre_gst" value="{if $action=='edit'}{$centre_data['gst_no']}{/if}" class="form-control"/>
                                 <label for="centre_gst" id="centre_gst_error_msg"></label>
                             </div>
@@ -137,7 +146,7 @@
                                 <label for="location" id="location_error_msg"></label>
                             </div>
                             <div class="col-md-4 form-group" id="centre_start_day_box">
-                                <label>Centre Start Date <span class="text-red">*</span></label>
+                                <label>Branch Start Date <span class="text-red">*</span></label>
                                 <input type="text" name="centre_start_day" id="centre_start_day" value="{if $action=='edit'}{$centre_data['start_date']}{/if}" class="form-control"/>
                                 <label for="centre_start_day" id="centre_start_day_error_msg"></label>
                             </div>
@@ -156,7 +165,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <input type="hidden" name="centre_id" id="centre_id" value="{($action=='edit') ? $centre_data['branch_id'] : 0}"/>
-                                    <button id="save" class="btn btn-success">Create Centre</button>
+                                    <button id="save" class="btn btn-success">Create Branch</button>
                                     <button id="cancel" class="btn btn-danger">Cancel</button>
                                 </div>
                             </div>
@@ -176,7 +185,7 @@
                                 {/if} 
                             </div>
                             <div class="col-md-12" style="border-radius:10px; border:1px solid blue; margin-top:10px; padding-bottom:10px;">
-                                <h3 style="margin-top:6px;">Center Default Fee</h3>
+                                <h3 style="margin-top:6px;">Branch Default Fee</h3>
                                 {if $action == 'edit'}
                                     {if isset($centre_data['fee_structure']) && !empty($centre_data['fee_structure'])}
                                         {$sn=1}
@@ -235,8 +244,50 @@
 {include file='footer.tpl'}
 {js('common.js')}
 <script>
-function get_state(fieldsId){
-    
+function get_school_list(){
+    var control  = {
+        request_id : generateUUId(),
+        source : 1,
+        request_time : Math.round(+new Date()/1000),
+        version : {$smarty.const.API_VERSION}
+    }
+    var data = {
+        is_active : 1
+    }
+    var request = {
+        control : control,
+        data : data
+    }
+    request = JSON.stringify(request);
+    var url = "{$smarty.const.API_URL}school/get";
+    $.ajax({
+        method: "POST",
+        url: url,
+        async: true,
+        crossDomain: true,
+        processData: false,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: request,
+        beforeSend: function(xhr) {
+            $("#animatedLoader").show();
+        }
+    }).done(function(response) {
+        $("#animatedLoader").hide();
+        $('#api_error').html('');
+        $('#school_id').children().remove();
+        $('#school_id').append("<option value='0'>--Select School--</option>");
+        $.each(response.data,function(k,v){
+            $('#school_id').append("<option value='"+v.school_id+"'>"+v.school_name+"</option>");
+        });
+    }).fail(function(response) {
+        $("#animatedLoader").hide();
+        if (response.responseJSON.control) {
+            $('#api_error').text(response.responseJSON.control.message);
+        }
+    }).always(function() {
+    });
 }
 $(document).ready(function(){
     var city_id = $('#city_id').select2({
@@ -245,11 +296,19 @@ $(document).ready(function(){
     var state_id = $('#state_id').select2({
         width:'100%'
     });
+    {if $role == 'Super Admin'}
+        var school_id = $('#school_id').select2({
+            width:'100%'
+        });
+    {/if}
     var centre_start_day = $('#centre_start_day').datepicker({
         format: 'mm/dd/yyyy',
         todayHighlight : true
     });
     $(window).load(function(){
+        {if $role == 'Super Admin'}
+            get_school_list();
+        {/if}
         var control = {
             request_id : generateUUId(),
             source : 1,
@@ -283,8 +342,8 @@ $(document).ready(function(){
             $('#api_error').html('');
             $('#state_id').children().remove();
             $('#state_id').append("<option value='0'>--Select State--</option>");
-            var selected_state_id = "{$centre_data['state_id']}";
             var action = "{$action}";
+            var selected_state_id = "{($action == 'edit') ? $centre_data['state_id'] : 0}";
             $.each(response.data,function(k,v){
                 if(action == 'edit'){
                     if (selected_state_id == v.state_id){
@@ -347,7 +406,7 @@ $(document).ready(function(){
             $('#city_id').children().remove();
             $('#city_id').append("<option value='0'>--Select City--</option>");
             var action = "{$action}";
-            var selected_city_id = "{$centre_data['city_id']}";
+            var selected_city_id = "{($action == 'edit') ? $centre_data['city_id'] : 0}";
             $.each(response.data,function(k,v){
                 if(action == 'edit'){
                     if (selected_city_id == v.city_id){
@@ -372,6 +431,12 @@ $(document).ready(function(){
     });
     $(document).on('click','#save',function(){
         var centre_id = $.trim($('#centre_id').val());
+        {if $role == 'Super Admin'}
+            var school_id = $('#school_id').val();
+        {else}
+            var school_id = "{userdata('SchoolId')}";
+        {/if}
+        
         var centre_name = $.trim($('#centre_name').val());
         var centre_gst = $.trim($('#centre_gst').val());
         var add_line_1 = $.trim($('#add_line_1').val());
@@ -410,6 +475,11 @@ $(document).ready(function(){
                 default_fees.push(innerJson);
             }
         }).get();
+        {if $role == 'Super Admin'}
+            if(checkBlank('school_id_box','school_id_error_msg','Required!', school_id, 'school_id', '0')){
+                return false;
+            }
+        {/if}
         if(checkBlank('centre_name_box','centre_name_error_msg','Required!', centre_name, 'centre_name', '')){
             return false;
         }
@@ -467,10 +537,11 @@ $(document).ready(function(){
             request_id : generateUUId(),
             source : 1,
             request_time : Math.round(+new Date() / 1000),
-            version : 1.0
+            version : {$smarty.const.API_VERSION}
         };
         var data = {
             centre_id : centre_id,
+            school_id : school_id,
             centre_name : centre_name,
             centre_gst : centre_gst,
             add_line_1 : add_line_1,

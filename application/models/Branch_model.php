@@ -4,11 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Branch_model extends CI_Model {
 
-    public $branch_id, $branch_code, $branch_name, $gst_no, $add_line_1, $add_line_2, $state_id, $state_code, $city_id, $pincode, $branch_location, $start_date, $concat_person_name, $contact_no, $alt_contact_no, $email_id, $royality_case, $comments, $user_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name,$for_table;
+    public $branch_id, $school_id, $branch_code, $branch_name, $gst_no, $add_line_1, $add_line_2, $state_id, $state_code, $city_id, $pincode, $branch_location, $start_date, $concat_person_name, $contact_no, $alt_contact_no, $email_id, $royality_case, $comments, $user_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name,$for_table;
 
     function __construct() {
         parent::__construct();
         $this->branch_id            = 0;
+        $this->school_id            = 0;
         $this->branch_code          = '';
         $this->branch_name          = '';
         $this->gst_no               = '';
@@ -38,6 +39,7 @@ class Branch_model extends CI_Model {
 
     function add() {
         $insert_data = [
+            'school_id'             => $this->school_id,
             'branch_code'           => $this->branch_code,  
             'branch_name'           => $this->branch_name, 
             'gst_no'                => $this->gst_no, 
@@ -111,6 +113,9 @@ class Branch_model extends CI_Model {
         $this->load->model('fee_structure_master_model');
         if($this->branch_id > 0){
             $where['b.branch_id'] = $this->branch_id;
+        }
+        if($this->school_id > 0){
+            $where['b.school_id'] = $this->school_id;
         }
         if(!empty($this->is_active)){
             $where['b.is_active'] = $this->is_active;

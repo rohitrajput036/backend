@@ -31,7 +31,7 @@
                                 <div class="form-group" id="fee_structure_box">
                                     <label>Fee Structure Name <span class="text-red">*</span></label>
                                     <input type="text" name="structure_name" id="structure_name" class="form-control" placeholder=""/>
-                                    <input type="hidden" name="fee_structure_id" id="fee_structure_id" value="1"/>
+                                    <input type="hidden" name="fee_structure_id" id="fee_structure_id" value="0"/>
                                     <label id="fee_structure_error_msg"></label>
                                 </div>
                                 
@@ -222,8 +222,9 @@
         $(document).on('click','.edit',function(){
             var fee_structure_id = $(this).data('fee_structure_id');
             var is_required = $(this).data('is_required');
+            var structure_name = $(this).data('sname');
             $('#fee_structure_id').val(fee_structure_id);
-            $('#structure_name').val($('#structure_name'+fee_structure_id).text());
+            $('#structure_name').val(structure_name);
             $('#is_required').prop('checked',false);
             if(is_required == 1){
                 $('#is_required').prop('checked',true);
