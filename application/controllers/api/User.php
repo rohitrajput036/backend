@@ -49,13 +49,13 @@ class User extends REST_Controller {
                 keyExist(['request_id','source','request_time','version'],$request->control);
                 keyExist(['user_id','school_id','first_name','middel_name','last_name','display_name','dob','gender','mobile_no','alt_mobile_no','email_id','password','alt_email_id','address_line_1','address_line_2','state_id','city_id','pincode','doj','comment','role_id','department'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time,'version' => $request->control->version]);
-                checkBlank(['school_id' => $request->data->school_id, 'first_name' => $request->data->first_name,'display_name' => $request->data->display_name,'dob' => $request->data->dob,'gender' => $request->data->gender,'mobile_no' => $request->data->mobile_no,'email_id' => $request->data->email_id,'password' => $request->data->password,'address_line_1'=> $request->data->address_line_1,'state_id' => $request->data->state_id,'city_id' => $request->data->city_id,'pincode' => $request->data->pincode,'doj' => $request->doj]);
+                checkBlank(['school_id' => $request->data->school_id, 'first_name' => $request->data->first_name,'display_name' => $request->data->display_name,'dob' => $request->data->dob,'gender' => $request->data->gender,'mobile_no' => $request->data->mobile_no,'email_id' => $request->data->email_id,'password' => $request->data->password,'address_line_1'=> $request->data->address_line_1,'state_id' => $request->data->state_id,'city_id' => $request->data->city_id,'pincode' => $request->data->pincode,'doj' => $request->data->doj]);
                 $this->load->model('user_model');
                 $this->load->model('user_role_model');
                 $this->load->model('user_department_model');
                 $this->load->model('user_branch_model');
+                $this->load->model('user_school_model');
                 $this->user_model->user_id          = (!empty($request->data->user_id)) ? $request->data->user_id : 0;
-                $this->user_model->school_id        = $request->data->school_id;
                 $this->user_model->unique_no        = $this->user_model->get_unique_id(); 
                 $this->user_model->first_name       = $request->data->first_name;
                 $this->user_model->middel_name      = $request->data->middel_name; 

@@ -18,6 +18,7 @@ class Branch extends CI_Controller {
     }
 
     public function add_branch() {
+        $this->outputData['role'] = userdata('Role'); 
         $this->outputData['action'] = 'add';
         $api_url = API_URL."department/get";
         $request = [
