@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Class_managment extends CI_Controller {
+class Manage_class extends CI_Controller {
     public $outputData;
     function __construct() {
         parent::__construct();
