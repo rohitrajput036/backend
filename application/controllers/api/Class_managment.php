@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 
-class Classmanagment extends REST_Controller {
+class Class_managment extends REST_Controller {
     
     function __construct() {
         parent::__construct();
@@ -48,16 +48,17 @@ class Classmanagment extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['class_id','school_id','class_name','section_name'],$request->data);
+                keyExist(['class_id','school_id','class_name','section_name','with_subject'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['class_id' => $request->data->class_id,'school_id' => $request->data->school_id,'class_name' => $request->data->class_name,'section_name' => $request->data->section_name]);
+                checkBlank(['school_id' => $request->data->school_id, 'class_name' => $request->data->class_name, 'section_name' => $request->data->section_name, 'with_subject' => $request->data->with_subject]);
                 $this->class_model->class_id = $request->data->class_id;
                 $this->class_model->school_id = $request->data->school_id;
                 $this->class_model->class_name = $request->data->class_name;
                 $this->class_model->section_name = $request->data->section_name;
+                $this->class_model->with_subject = $request->data->with_subject;
                 $this->class_model->is_active = 1;
                 $this->class_model->created_by = $this->class_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
-                $message = 'Class name add successfully!';
+                $message = 'Class add successfully!';
                 if(isset($request->data->class_id) && $request->data->class_id > 0){
                     $this->class_model->class_id = $request->data->class_id;
                     $this->class_model->update();
@@ -112,6 +113,9 @@ class Classmanagment extends REST_Controller {
                 }
                 if(isset( $request->data->class_id)){
                     $this->class_model->class_id = $request->data->class_id;
+                }
+                if(isset($request->data->school_id)){
+                    $this->class_model->school_id = $request->data->school_id;
                 }
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;
