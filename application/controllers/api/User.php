@@ -182,10 +182,10 @@ class User extends REST_Controller {
                 keyExist(['school_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time,'version' => $request->control->version]);
                 if(isset($request->data->login_role) && $request->data->login_role != 'Super Admin'){
-                    checkBlank(['school_id' => $request->control->school_id]);
+                    checkBlank(['school_id' => $request->data->school_id]);
                 }
-                if(!isset($request->data->login_role)){
-                    checkBlank(['school_id' => $request->control->school_id]);
+                if(!isset($request->data->login_role) || !in_array($request->data->login_role,['Super Admin'])){
+                    checkBlank(['school_id' => $request->data->school_id]);
                 }
                 $this->load->model('user_model');
                 if(isset($request->data->school_id) && $request->data->school_id > 0){
@@ -200,7 +200,10 @@ class User extends REST_Controller {
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;
                 }
-                $data = $this->user_model->get($request->data->for_table);
+                if(!isset($request->data->login_role)){
+                    $request->data->login_role = '';
+                }
+                $data = $this->user_model->get($request->data->for_table,$request->data->login_role);
             }else{
                 throw new Exception('Invalid Request',400); 
             }

@@ -127,7 +127,7 @@ class User_model extends CI_Model {
         return sum_in_string('UR000'.$result->num_rows());
     }
 
-    function get($for_table = false){
+    function get($for_table = false,$role = ''){
         $output = [];
         $this->load->model('user_role_model');
         $this->load->model('role_model');
@@ -135,6 +135,7 @@ class User_model extends CI_Model {
         $this->load->model('branch_model');
         $this->load->model('user_school_model');
         $this->load->model('school_model');
+        $this->load->model('user_department_model');
         if(!empty($this->is_active)){
             $where['u.is_active'] = $this->is_active;
         }else{
@@ -149,7 +150,7 @@ class User_model extends CI_Model {
         if($this->role_id > 0){
             $where['r.role_id'] = $this->role_id;
         }
-        $fields = "u.user_id,unique_no,u.first_name,u.middel_name,u.last_name,u.display_name,u.email_id, u.display_password,u.contact_no,r.role_id,r.role,s.school_id,s.school_name,b.branch_id,b.branch_code,b.branch_name";
+        $fields = "u.user_id,unique_no,u.first_name,u.middel_name,u.last_name,u.display_name,u.email_id, u.display_password,u.contact_no,r.role_id,r.role,s.school_id,s.school_name,b.branch_id,b.branch_code,b.branch_name,u.is_active";
         $joins = [
             $this->user_role_model->table_name.' ur' => ['(u.user_id = ur.user_id AND ur.is_active = 1)','INNER'],
             $this->role_model->table_name.' r' => ['(ur.role_id = r.role_id AND r.is_active = 1)','INNER'],
@@ -166,21 +167,52 @@ class User_model extends CI_Model {
             $i = 0;
             foreach($results->result() as $result){
                 $i++;
+                $this->user_department_model->user_id = $result->user_id;
+                $this->user_department_model->is_active = 1;
+                $user_department_list = $this->user_department_model->get();
                 if($for_table){
                     $user_info = '';
-                    if(!empty($result->school_name)){
-                        $user_info .= '<b>School : </b>'.$result->school_name.'<br/>';
+                    if($role == 'Super Admin'){
+                        if(!empty($result->school_name)){
+                            $user_info .= '<b>School : </b>'.$result->school_name.'<br/>';
+                        }
+                        if(!empty($result->school_name)){
+                            $user_info .= '<b>Branch : </b>'.$result->branch_name.' ('.$result->branch_code.')<br/>';
+                        }
+                        if(!empty($result->display_name)){
+                            $user_info .= '<b>Name : </b>'.$result->display_name.'<br/>';
+                        }else{
+                            $user_info .= '<b>Name : </b>'.$result->first_name.' '.$result->middel_name.' '.$result->last_name.'<br/>';
+                        }
+                    }else{
+                        $user_info = '';
+                        if(!empty($result->display_name)){
+                            $user_info = $result->display_name;
+                        }else{
+                            $user_info = $result->first_name.' '.$result->middel_name.' '.$result->last_name;
+                        }
                     }
-                    if(!empty($result->school_name)){
-                        $user_info .= '<b>Branch : </b>'.$result->branch_name.' ('.$result->branch_code.')';
+                    $departments = [];
+                    foreach($user_department_list as $d){
+                        $departments[] = $d['department'];
                     }
-                    $btns = '';
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
+                    }else{
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                    }
+                    $delete_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    $edit_btn = '<a class="btn edit btn-xs" href="'.base_url('user/edit/'.$result->user_id).'" style="background:none"><i class="fa fa-pencil-square-o text-primary"></i></a>';
+                    $enter_btn = '<button class="btn btn-success enter btn-xs" data-user_id="'.$result->user_id.'">Enter</button>';
+                    $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.' '.$enter_btn;
                     $output[] = [
                         $i,
                         $user_info,
+                        $result->role,
+                        (!empty($departments)) ? implode(', ',$departments) : 'NA',
                         $result->contact_no,
                         $result->email_id,
-                        $result->display_password,
+                        ($role == 'Super Admin') ? $result->display_password : '****',
                         $btns
                     ];
                 }else{

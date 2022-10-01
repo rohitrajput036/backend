@@ -30,8 +30,10 @@
                         <table class="table table-bordered" id="DataTable">
                             <thead>
                                 <tr>
-                                    <th style="width:10%">S NO</th>
-                                    <th>Name</th>
+                                    <th style="width:5%">S NO</th>
+                                    <th style="width:20%">Name</th>
+                                    <th style="width:10%">Role</th>
+                                    <th>Department</th>
                                     <th>Contact No</th>
                                     <th>Email Id</th>
                                     <th>Password</th>
@@ -77,6 +79,31 @@
             var url = "{$smarty.const.API_URL}user/get";
             console.log(url);
             console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {  
+            });
         });
     });
 </script>
