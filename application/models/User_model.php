@@ -196,14 +196,18 @@ class User_model extends CI_Model {
                     foreach($user_department_list as $d){
                         $departments[] = $d['department'];
                     }
-                    if($result->is_active == 1){
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
-                    }else{
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                    $btn_disabled = '';
+                    if($this->user_id == $result->user_id){
+                        $btn_disabled = 'disabled';
                     }
-                    $delete_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="2" style="background:none" '.$btn_disabled.'><i class="fa fa-check text-green"></i></button>';
+                    }else{
+                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="1" style="background:none" '.$btn_disabled.'><i class="fa fa-times text-red"></i></button>';
+                    }
+                    $delete_btn = '<button class="btn active_deactive btn-xs" data-user_id="'.$result->user_id.'" data-at="3" style="background:none" '.$btn_disabled.'><i class="fa fa-trash text-red"></i></button>';
                     $edit_btn = '<a class="btn edit btn-xs" href="'.base_url('user/edit/'.$result->user_id).'" style="background:none"><i class="fa fa-pencil-square-o text-primary"></i></a>';
-                    $enter_btn = '<button class="btn btn-success enter btn-xs" data-user_id="'.$result->user_id.'">Enter</button>';
+                    $enter_btn = '<button class="btn btn-success enter btn-xs" data-user_id="'.$result->user_id.'" '.$btn_disabled.'>Enter</button>';
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.' '.$enter_btn;
                     $output[] = [
                         $i,

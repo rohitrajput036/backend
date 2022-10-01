@@ -203,6 +203,10 @@ class User extends REST_Controller {
                 if(!isset($request->data->login_role)){
                     $request->data->login_role = '';
                 }
+                if(!isset($request->data->login_id)){
+                    $request->data->login_id = 0;
+                }
+                $this->user_model->user_id = $request->data->login_id;
                 $data = $this->user_model->get($request->data->for_table,$request->data->login_role);
             }else{
                 throw new Exception('Invalid Request',400); 
