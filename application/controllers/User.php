@@ -12,6 +12,7 @@ class User extends CI_Controller {
     }
 
     public function index() {
+        $this->outputData['role'] = userdata('Role'); 
         $this->parser->parse("user/list.tpl", $this->outputData);
     }
     public function add() {

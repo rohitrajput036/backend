@@ -181,6 +181,9 @@
                             </div>
                         </div>
                         <div class="col-md-12 text-center">
+                            <p class="form-group has-error">
+                                <label id="api_error"></label>
+                            </p>
                             <input type="hidden" name="user_id" id="user_id" value="0"/> 
                             <button class="btn btn-primary" id="save">Save</button>
                             <button class="btn btn-danger" id="reset">Reset</button>
@@ -536,7 +539,8 @@
                 doj : doj,
                 comment : comment,
                 role_id : role_id,
-                department : departments
+                department : departments,
+                login_id : "{userdata('UserId')}"
             };
             var request = {
                 control : control,
@@ -546,6 +550,32 @@
             var url = "{$smarty.const.API_URL}user/add";
             console.log(url);
             console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('<span class="text-success">'+response.control.message+'</span>');
+                setTimeout(function(){
+                    location.realod();
+                }, 2000);
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
         });
     });
 </script>

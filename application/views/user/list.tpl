@@ -10,13 +10,11 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>
-            User
-            {* <small>All Branch</small> *}
-        </h1>
+        <h1>User Management <small>List</small></h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">User</li>
+            <li>User Management</li>
+            <li class="active">List</li>
         </ol>
     </section>
 
@@ -57,6 +55,28 @@
         var DataTable = $('#DataTable').DataTable({
             searching:true,
             ordering:false
+        });
+        $(window).load(function(){
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                login_role : "{$role}",
+                school_id : "{userdata('SchoolId')}",
+                for_table : true,
+                login_id : "{userdata('UserId')}"
+            };
+            var request = {
+                control : control,
+                data : data
+            };
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}user/get";
+            console.log(url);
+            console.log(request);
         });
     });
 </script>

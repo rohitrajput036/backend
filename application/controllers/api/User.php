@@ -47,14 +47,15 @@ class User extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time','version'],$request->control);
-                keyExist(['user_id','school_id','first_name','middel_name','last_name','display_name','dob','gender','mobile_no','alt_mobile_no','email_id','password','alt_email_id','address_line_1','address_line_2','state_id','city_id','pincode','doj','comment','role_id','department'],$request->data);
+                keyExist(['user_id','school_id','branch_id','first_name','middel_name','last_name','display_name','dob','gender','mobile_no','alt_mobile_no','email_id','password','alt_email_id','address_line_1','address_line_2','state_id','city_id','pincode','doj','comment','role_id','department'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time,'version' => $request->control->version]);
-                checkBlank(['school_id' => $request->data->school_id, 'first_name' => $request->data->first_name,'display_name' => $request->data->display_name,'dob' => $request->data->dob,'gender' => $request->data->gender,'mobile_no' => $request->data->mobile_no,'email_id' => $request->data->email_id,'password' => $request->data->password,'address_line_1'=> $request->data->address_line_1,'state_id' => $request->data->state_id,'city_id' => $request->data->city_id,'pincode' => $request->data->pincode,'doj' => $request->data->doj]);
+                checkBlank(['school_id' => $request->data->school_id, 'branch_id' => $request->data->branch_id ,'first_name' => $request->data->first_name,'display_name' => $request->data->display_name,'dob' => $request->data->dob,'gender' => $request->data->gender,'mobile_no' => $request->data->mobile_no,'email_id' => $request->data->email_id,'password' => $request->data->password,'address_line_1'=> $request->data->address_line_1,'state_id' => $request->data->state_id,'city_id' => $request->data->city_id,'pincode' => $request->data->pincode,'doj' => $request->data->doj]);
                 $this->load->model('user_model');
                 $this->load->model('user_role_model');
                 $this->load->model('user_department_model');
                 $this->load->model('user_branch_model');
                 $this->load->model('user_school_model');
+                $options = ['cost' => 11];
                 $this->user_model->user_id          = (!empty($request->data->user_id)) ? $request->data->user_id : 0;
                 $this->user_model->unique_no        = $this->user_model->get_unique_id(); 
                 $this->user_model->first_name       = $request->data->first_name;
@@ -64,7 +65,7 @@ class User extends REST_Controller {
                 $this->user_model->email_id         = $request->data->email_id; 
                 $this->user_model->alt_email_id     = $request->data->alt_email_id; 
                 $this->user_model->display_password = $request->data->password;  
-                $this->user_model->password         = $request->data->password; 
+                $this->user_model->password         = password_hash($request->data->password, PASSWORD_BCRYPT, $options);
                 $this->user_model->dob              = $request->data->dob; 
                 $this->user_model->doj              = $request->data->doj;  
                 $this->user_model->gender           = strtoupper($request->data->gender);  
@@ -116,6 +117,27 @@ class User extends REST_Controller {
                             $this->user_department_model->add();
                         }
                     }
+                    // code for add and edit in user school
+                    $this->user_school_model->user_id = $this->user_model->user_id;
+                    $this->user_school_model->school_id = $request->data->school_id;
+                    $this->user_school_model->is_active = 1;
+                    if($this->user_school_model->check()){
+                        $this->user_school_model->is_active = 2;
+                        $this->user_school_model->delete();
+                    }
+                    $this->user_school_model->is_active = 1;
+                    $this->user_school_model->add();
+
+                    // code for add and edit user branch
+                    $this->user_branch_model->user_id = $this->user_model->user_id;
+                    $this->user_branch_model->branch_id = $request->data->branch_id;
+                    $this->user_branch_model->is_active = 1;
+                    if($this->user_branch_model->check()){
+                        $this->user_branch_model->is_active = 2;
+                        $this->user_branch_model->delete();
+                    }
+                    $this->user_branch_model->is_active = 1;
+                    $this->user_branch_model->add();
                 }
             }else{
                 throw new Exception('Invalid Request',400);
@@ -128,6 +150,68 @@ class User extends REST_Controller {
                     'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
                 'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, REST_Controller::HTTP_OK);
+        }catch (Exception $E) {
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, $E->getCode());
+        }
+    }
+
+    function get_post(){
+        $start_time = microtime(true);
+        try {
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)) {
+                keyExist(['control','data'],$request);
+                keyExist(['request_id','source','request_time','version'],$request->control);
+                keyExist(['school_id'],$request->data);
+                checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time,'version' => $request->control->version]);
+                if(isset($request->data->login_role) && $request->data->login_role != 'Super Admin'){
+                    checkBlank(['school_id' => $request->control->school_id]);
+                }
+                if(!isset($request->data->login_role)){
+                    checkBlank(['school_id' => $request->control->school_id]);
+                }
+                $this->load->model('user_model');
+                if(isset($request->data->school_id) && $request->data->school_id > 0){
+                    $this->user_model->school_id = $request->data->school_id;
+                }
+                if(isset($request->data->is_active)){
+                    $this->user_model->is_active = $request->data->is_active;
+                }
+                if(isset($request->data->branch_id)){
+                    $this->user_model->branch_id = $request->data->branch_id;
+                }
+                if(!isset($request->data->for_table)){
+                    $request->data->for_table = false;
+                }
+                $data = $this->user_model->get($request->data->for_table);
+            }else{
+                throw new Exception('Invalid Request',400); 
+            }
+            $response = [
+                'control' => [
+                    'status' => 1,
+                    'message' => 'User list!',
+                    'message_code' => REST_Controller::HTTP_OK,
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => $data
             ];
             $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
             $this->response($response, REST_Controller::HTTP_OK);
