@@ -47,9 +47,10 @@ class Enquiry extends REST_Controller {
             if (!empty($request)){
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time','version'],$request->control);
-                // keyExist(['department_id','department','is_ho'],$request->data);
+                keyExist(['enquiry_id','enquiry_date','branch_id','form_id','student_id','class_id','first_name','middel_name','last_name','gender','date_of_birth','age','sibling','sibling_dob','add_line_1','add_line_2','state_id','city_id','pincode','father_first_name','father_middel_name','father_last_name','father_mobile_no','father_email_id','father_education_id','father_occupation_id','mother_first_name','mother_middel_name','mother_last_name','mother_mobile_no','mother_email_id','mother_education_id','mother_occupation_id','follow_up_status_id','remarks','follow_up_date'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
-                // checkBlank(['department' => $request->data->department]);
+                checkBlank(['enquiry_date' => $request->data->enquiry_date, 'branch_id' => $request->data->branch_id, 'first_name' => $request->data->first_name, 'father_first_name' => $request->data->father_first_name, 'father_mobile_no' => $request->data->father_mobile_no]);
+                
                 $message = 'Enquiry add successfully!';
             }else{
                 throw new Exception('Invalid request!',400);
