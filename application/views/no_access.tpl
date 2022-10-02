@@ -10,7 +10,7 @@
             NO PERMISSION
         </h1>
         <ol class="breadcrumb">
-            <li><a href="{base_url('dashboard')}"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="{base_url('')}"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">NO PERMISSION</li>
         </ol>
     </section>
@@ -29,7 +29,7 @@
                                 <p>You does not have the permission to view this section.</p>
                             </div>
                             <div class="col-xs-12 col-md-2">
-                                <a href="{base_url('dashboard')}"><button class="btn btn-block btn-success">Click here Go to Dashbaord</button></a>
+                                <a href="{base_url('')}"><button class="btn btn-block btn-success">Click here Go to Dashbaord</button></a>
                             </div>
                        </div>
                     </div>
