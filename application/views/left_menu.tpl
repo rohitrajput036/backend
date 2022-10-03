@@ -63,7 +63,7 @@
                         <a href= "{site_url('subject')}"><i class="fa fa-circle-o"></i>Manage Subject</a>
                     </li>
                     <li {if uriseg(1)=='manage_chapter'}class="active"{/if}>
-                        <a href= "{site_url('chapter')}"><i class="fa fa-circle-o"></i>Manage Subject</a>
+                        <a href= "{site_url('chapter')}"><i class="fa fa-circle-o"></i>Manage chapter</a>
                     </li>
                 </ul>
             </li>
