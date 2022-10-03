@@ -20,7 +20,7 @@ class Department_model extends CI_Model {
     function add(){
         $insert_data = [
             'department_id' => $this->department_id,
-            'department'    => $this->department,
+            'department'    => strtoupper($this->department),
             'is_ho'         => $this->is_ho,
             'is_active'     => $this->is_active,
             'created_by'    => $this->created_by,
@@ -45,10 +45,10 @@ class Department_model extends CI_Model {
     function update(){
        $where['department_id'] = $this->department_id;
        $update_data = [
-        'department'  => $this->department,
-        'is_ho' => $this->is_ho,
-        'updated_by' => $this->updated_by,
-        'updated_on' => $this->updated_on
+        'department'    => strtoupper($this->department),
+        'is_ho'         => $this->is_ho,
+        'updated_by'    => $this->updated_by,
+        'updated_on'    => $this->updated_on
        ];
        return $this->global_model->update($this->table_name,$update_data,$where); 
     }

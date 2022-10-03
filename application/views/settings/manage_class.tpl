@@ -67,7 +67,7 @@
                             <input type="text" name="section_name" id="section_name" class="form-control"/>
                             <label for="section_name" id="section_name_error_msg"></label>
                         </div>
-                            <div class="col-md-4 form-group" id="with_subject_box">
+                        <div class="col-md-4 form-group" id="with_subject_box">
                             <label>Subject <span class="text-red">*</span></label>
                             <Select name="with_subject" id="with_subject" class="form-control">
                                 <option value="select">Select</option>
@@ -106,7 +106,7 @@
             var data = {
                 school_id : '{userdata('SchoolId')}',
                 for_table : true
-            }
+            
             var request = {
                 control : control,
                 data : data
