@@ -23,8 +23,8 @@ class Class_model extends CI_Model {
     function add(){
         $insert_data = [
             'school_id'   => $this->school_id,
-            'class_name'  => $this->class_name,
-            'section_name'=> $this->section_name,
+            'class_name'  => strtoupper($this->class_name),
+            'section_name'=> strtoupper($this->section_name),
             'with_subject'  => $this->with_subject,
             'is_active'   => $this->is_active,
             'created_by'  => $this->created_by,
@@ -51,8 +51,8 @@ class Class_model extends CI_Model {
         $where['class_id'] = $this->class_id;
         $update_data = [
             'school_id'   => $this->school_id,
-            'class_name'  => $this->class_name,
-            'section_name'=> $this->section_name,
+            'class_name'  => strtoupper($this->class_name),
+            'section_name'=> strtoupper($this->section_name),
             'with_subject' => $this->with_subject,
             'updated_by'  => $this->updated_by,
             'updated_on'  => $this->updated_on 
@@ -75,24 +75,24 @@ class Class_model extends CI_Model {
     function get($for_table = false){
         $this->load->model('school_model');
         if($this->school_id > 0){
-            $where['s.school_id'] = $this->school_id;
+            $where['c.school_id'] = $this->school_id;
         }
         if(!empty($this->is_active)){
-            $where['s.is_active'] = $this->is_active;
+            $where['c.is_active'] = $this->is_active;
         }else{
-            $where['s.is_active IN ("1","2")'] = NULL;
+            $where['c.is_active IN (1,2)'] = NULL;
         }
         $joins=[
-            $this->school_model->table_name.' s'=> ['s.school_id = c.school_id AND s.is_active = 1','LEFT']
+            $this->school_model->table_name.' s'=> ['c.school_id = s.school_id AND s.is_active = 1','LEFT']
         ];
-        $fildes = 'c.*,s.school_id';
+        $fildes = 'c.*,s.school_name';
         $oder_by = ['c.class_id => ASC'];
         $results = $this->global_model->select($this->table_name.' c',$where,$fildes,$joins,NULL,NULL,$oder_by);
         $output =[];
         if(isset($results) &&  $results->num_rows() > 0){
             $i = 0;
             foreach($results->result() as $result){
-               ++$i;
+                $i++;
                 if($this->for_table){
                     if($result->is_active == 1){
                         $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-class_id="'.$result->class_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
@@ -116,7 +116,11 @@ class Class_model extends CI_Model {
                         'school_id'=> $result->school_id,
                         'class_name' => $result->class_name,
                         'section' =>$result->section_name,
+<<<<<<< HEAD
                         'with_subject' => $result->with_subject,
+=======
+                        'with_subject' => $result->with_subject
+>>>>>>> b849c26e22fd474b7db4ad6fee451fa3bae860ed
                     ];
                 }
             }

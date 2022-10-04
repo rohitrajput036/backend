@@ -20,7 +20,7 @@ class Role_model extends CI_Model {
 
     function add(){
         $insert_data = [
-            'role' => $this->role,
+            'role' =>  strtoupper($this->role),
             'is_dev_op' => $this->is_dev_op,
             'is_active' => $this->is_active,
             'created_by' => $this->created_by,
@@ -46,7 +46,7 @@ class Role_model extends CI_Model {
     function update(){
         $where['role_id'] = $this->role_id;
         $update_data = [
-            'role' => $this->role,
+            'role' => strtoupper($this->role),
             'is_dev_op' => $this->is_dev_op,
             'updated_by' => $this->updated_by,
             'updated_on' => $this->updated_on

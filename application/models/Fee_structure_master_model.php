@@ -20,7 +20,7 @@ class Fee_structure_master_model extends CI_Model {
     function add(){
         $insert_data = [
             'fee_structure_master_id' => $this->fee_structure_master_id,
-            'structure_name'=> $this->structure_name,
+            'structure_name'=> strtoupper($this->structure_name),
             'is_required'   => $this->is_required,
             'is_active'     => $this->is_active,
             'created_by'    => $this->created_by,
@@ -33,7 +33,7 @@ class Fee_structure_master_model extends CI_Model {
     function update(){
         $where['fee_structure_master_id'] = $this->fee_structure_master_id;
         $update_data = [
-            'structure_name'=> $this->structure_name,
+            'structure_name'=> strtoupper($this->structure_name),
             'is_required'   => $this->is_required,
             'is_active'     => $this->is_active,
             'updated_by'    => $this->updated_by,

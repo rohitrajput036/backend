@@ -38,7 +38,7 @@
                     </li>
                 </ul>
             </li>
-                <li {if uriseg(1)=='enquiry'} class="treeview active" {else} class="treeview" {/if}>
+            <li {if uriseg(1)=='enquiry'} class="treeview active" {else} class="treeview" {/if}>
                 <a href="#">
                     <i class="fa fa-tty"></i> <span>Enquiry</span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -55,7 +55,7 @@
                     </li>
                 </ul>
             </li>
-            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' ||  uriseg(1)=='school' ||  uriseg(1)=='manage_class' ||  uriseg(1)=='manage_subject' || uriseg(1)=='manage_chapter'} class="treeview active"{else}class="treeview"{/if}>
+            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
                     <i class="fa fa-cogs"></i> <span>Setting</span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -76,11 +76,11 @@
                     <li {if uriseg(1)=='manage_class'}class="active"{/if}>
                         <a href= "{site_url('manage_class')}"><i class="fa fa-circle-o"></i>Manage Class</a>
                     </li>
-                    <li {if uriseg(1)=='manage_subject'}class="active"{/if}>
+                    <li {if uriseg(1)=='subject'}class="active"{/if}>
                         <a href= "{site_url('subject')}"><i class="fa fa-circle-o"></i>Manage Subject</a>
                     </li>
-                    <li {if uriseg(1)=='manage_chapter'}class="active"{/if}>
-                        <a href= "{site_url('chapter')}"><i class="fa fa-circle-o"></i>Manage chapter</a>
+                    <li {if uriseg(1)=='chapter'}class="active"{/if}>
+                        <a href= "{site_url('chapter')}"><i class="fa fa-circle-o"></i>Manage Chapter</a>
                     </li>
                 </ul>
             </li>

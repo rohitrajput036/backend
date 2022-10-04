@@ -41,7 +41,7 @@ class Branch_model extends CI_Model {
         $insert_data = [
             'school_id'             => $this->school_id,
             'branch_code'           => $this->branch_code,  
-            'branch_name'           => $this->branch_name, 
+            'branch_name'           => strtoupper($this->branch_name), 
             'gst_no'                => $this->gst_no, 
             'add_line_1'            => $this->add_line_1, 
             'add_line_2'            => $this->add_line_2, 
@@ -72,7 +72,7 @@ class Branch_model extends CI_Model {
         $where['branch_id'] = $this->branch_id;
         $update_data = [
             'branch_code'           => $this->branch_code,  
-            'branch_name'           => $this->branch_name, 
+            'branch_name'           => strtoupper($this->branch_name),
             'gst_no'                => $this->gst_no, 
             'add_line_1'            => $this->add_line_1, 
             'add_line_2'            => $this->add_line_2, 

@@ -19,7 +19,7 @@ class School_model extends CI_Model {
 
     function add(){
         $insert_data = [
-            'school_name'   => $this->school_name,
+            'school_name'   => strtoupper($this->school_name),
             'is_active'     => $this->is_active,
             'created_by'    => $this->created_by,
             'created_on'    => $this->created_on
@@ -45,7 +45,7 @@ class School_model extends CI_Model {
     function update(){
         $where['school_id'] = $this->school_id;
         $update_data = [
-            'school_name' => $this->school_name,
+            'school_name' =>strtoupper($this->school_name),
             'updated_by' => $this->updated_by,
             'updated_on' => $this->updated_on
         ];
