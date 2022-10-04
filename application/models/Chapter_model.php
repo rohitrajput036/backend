@@ -103,6 +103,7 @@ class Chapter_model extends CI_Model {
                 $i++;
                 if($this->for_table){
                     if($result->is_active == 1){
+                        
                         $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-chapter_id="'.$result->chapter_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
                     }else{
                         $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-chapter_id="'.$result->chapter_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
