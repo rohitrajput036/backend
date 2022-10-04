@@ -27,7 +27,10 @@
     <!-- daterangepicker -->
     {js('plugins/daterangepicker/daterangepicker.js')}
     <!-- datepicker -->
+    {js('plugins/datetimepicker/moment-with-locales.js')}
     {js('plugins/datepicker/bootstrap-datepicker.js')}
+    {js('plugins/datetimepicker/bootstrap-datetimepicker.js')}
+    
     
    
     <!-- iCheck -->

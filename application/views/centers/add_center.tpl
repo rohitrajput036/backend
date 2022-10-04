@@ -313,7 +313,7 @@ $(document).ready(function(){
             request_id : generateUUId(),
             source : 1,
             request_time : Math.round(+new Date() / 1000),
-            cersion : 1.0
+            cersion : {$smarty.const.API_VERSION}
         };
         var data = {
             is_active : 1

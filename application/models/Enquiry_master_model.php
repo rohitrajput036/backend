@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Enquiry_master_model extends CI_Model {
-    public $enquiry_id, $enquiry_date, $branch_id, $form_id, $student_id, $class_id, $follow_up_status_id, $follow_up_date, $first_name, $middel_name, $last_name, $gender, $date_of_birth, $age, $sibling, $sibling_dob, $add_line_1, $add_line_2, $state_id, $city_id, $pincode, $father_first_name, $father_middel_name, $father_last_name, $father_mobile_no, $father_email_id, $father_education_type_id, $father_occupation_type_id, $mother_first_name, $mother_middel_name, $mother_last_name, $mother_mobile_no, $mother_email_id, $mother_education_type_id, $mother_occupation_type_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
+    public $enquiry_id, $enquiry_date, $branch_id, $form_id, $student_id, $class_id, $follow_up_status_id, $follow_up_date, $first_name, $middel_name, $last_name, $gender, $date_of_birth, $age, $sibling, $sibling_dob, $add_line_1, $add_line_2, $state_id, $city_id, $pincode, $father_first_name, $father_middel_name, $father_last_name, $father_mobile_no, $father_email_id, $father_education_type_id, $father_occupation_type_id, $mother_first_name, $mother_middel_name, $mother_last_name, $mother_mobile_no, $mother_email_id, $mother_education_type_id, $mother_occupation_type_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $for_table, $school_id;
     function __construct() {
         parent::__construct();
         $this->enquiry_id = 0;
@@ -47,6 +47,8 @@ class Enquiry_master_model extends CI_Model {
         $this->updated_by = 0;
         $this->updated_on = date('Y-m-d H:i:s');
         $this->table_name = DB_NAME.'enquiry_master';
+        $this->for_table = false;
+        $this->school_id = 0;
     }
 
     function add(){
@@ -157,6 +159,86 @@ class Enquiry_master_model extends CI_Model {
     }
 
     function get(){
-        
+        $output = [];
+        if(!empty($this->is_active)){
+            $where['e.is_active'] = $this->is_active;
+        }else{
+            $where['e.is_active in (1,2)'] = NULL;
+        }
+        if(!empty($this->father_mobile_no)){
+            $where['e.father_mobile_no'] = $this->father_mobile_no;
+        }
+        if($this->enquiry_id > 0){
+            $where['e.enquiry_id'] = $this->enquiry_id;
+        }
+        if($this->branch_id > 0){
+            $where['e.branch_id'] = $this->branch_id;
+        }
+        if($this->class_id > 0){
+            $where['e.class_id'] = $this->class_id;
+        }
+        if($this->follow_up_status_id > 0){
+            $where['e.follow_up_status_id'] = $this->follow_up_status_id;
+        }
+        if($this->state_id > 0){
+            $where['e.state_id'] = $this->state_id;
+        }
+        if($this->city_id > 0){
+            $where['e.city_id'] = $this->city_id;
+        }
+        $results = $this->global_model->select($this->table_name.' e',$where);
+        if(isset($results) && $results->num_rows() > 0){
+            $i = 0;
+            foreach($results->result() as $result){
+                $i++;
+                $followup_history = [];
+                if($this->for_table){
+                    $output[] = [];
+                }else{
+                    $output[] = [
+                        'enquiry_id'                => $result->enquiry_id,
+                        'enquiry_date'              => $result->enquiry_date,
+                        'branch_id'                 => $result->branch_id,
+                        'form_id'                   => $result->form_id,
+                        'student_id'                => $result->student_id,
+                        'class_id'                  => $result->class_id,
+                        'follow_up_status_id'       => $result->follow_up_status_id,
+                        'follow_up_date'            => $result->follow_up_date,
+                        'first_name'                => $result->first_name,
+                        'middel_name'               => $result->middel_name,
+                        'last_name'                 => $result->last_name,
+                        'gender'                    => $result->gender,
+                        'date_of_birth'             => $result->date_of_birth,
+                        'age'                       => $result->age,
+                        'sibling'                   => $result->sibling,
+                        'sibling_dob'               => $result->sibling_dob,
+                        'add_line_1'                => $result->add_line_1,
+                        'add_line_2'                => $result->add_line_2,
+                        'state_id'                  => $result->state_id,
+                        'city_id'                   => $result->city_id,
+                        'pincode'                   => $result->pincode,
+                        'father_first_name'         => $result->father_first_name,
+                        'father_middel_name'        => $result->father_middel_name,
+                        'father_last_name'          => $result->father_last_name,
+                        'father_mobile_no'          => $result->father_mobile_no,
+                        'father_email_id'           => $result->father_email_id,
+                        'father_education_type_id'  => $result->father_education_type_id,
+                        'father_occupation_type_id' => $result->father_occupation_type_id,
+                        'mother_first_name'         => $result->mother_first_name,
+                        'mother_middel_name'        => $result->mother_middel_name,
+                        'mother_last_name'          => $result->mother_last_name,
+                        'mother_mobile_no'          => $result->mother_mobile_no,
+                        'mother_email_id'           => $result->mother_email_id,
+                        'mother_education_type_id'  => $result->mother_education_type_id,
+                        'mother_occupation_type_id' => $result->mother_occupation_type_id,
+                        'is_active'                 => $result->is_active,
+                        'created_by'                => $result->created_by,
+                        'created_on'                => $result->created_on,
+                        'follow_up_history'         => $followup_history
+                    ];
+                }
+            }
+        }
+        return $output;
     }
 }

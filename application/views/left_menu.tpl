@@ -38,6 +38,23 @@
                     </li>
                 </ul>
             </li>
+                <li {if uriseg(1)=='enquiry'} class="treeview active" {else} class="treeview" {/if}>
+                <a href="#">
+                    <i class="fa fa-tty"></i> <span>Enquiry</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li {if uriseg(2)=='add'}class="active"{/if}>
+                        <a href="{site_url('enquiry/add')}"><i class="fa fa-circle-o"></i> Add Enquiry</a>
+                    </li>
+                    <li {if uriseg(2)=='list'}class="active"{/if}>
+                        <a href="{site_url('enquiry/list')}"><i class="fa fa-circle-o"></i> All Enquiry</a>
+                    </li>
+                    <li {if uriseg(2)=='call_back'}class="active"{/if}>
+                        <a href="{site_url('enquiry/call_back')}"><i class="fa fa-circle-o"></i> Call Back</a>
+                    </li>
+                </ul>
+            </li>
             <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' ||  uriseg(1)=='school' ||  uriseg(1)=='manage_class' ||  uriseg(1)=='manage_subject' || uriseg(1)=='manage_chapter'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
                     <i class="fa fa-cogs"></i> <span>Setting</span>
