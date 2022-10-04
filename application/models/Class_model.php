@@ -117,8 +117,7 @@ class Class_model extends CI_Model {
                         'school_id'=> $result->school_id,
                         'class_name' => $result->class_name,
                         'section' =>$result->section_name,
-                        'with_subject' => $result->with_subject,
-                        $btns
+                        'with_subject' => $result->with_subject
                     ];
                 }
             }

@@ -106,7 +106,7 @@
             var data = {
                 school_id : '{userdata('SchoolId')}',
                 for_table : true
-            
+            };
             var request = {
                 control : control,
                 data : data

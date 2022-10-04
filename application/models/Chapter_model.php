@@ -113,9 +113,9 @@ class Chapter_model extends CI_Model {
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output[] = [
                         $i,
-                        $result->class_name.' ('.$result->class_name.')',
+                        $result->class_name,
+                        $result->subject_name,
                         $result->chapter_name,
-                        $result->subject_name.' ('.$result->subject_name.')',
                         $btns
                     ];    
                 }else{

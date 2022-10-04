@@ -65,15 +65,25 @@
                         </div>
                         <div class="col-md-4 form-group" id="subject_box">
                             <label>Subject <span class="text-red">*</span></label>
-                            <Select name="subject_name" id="subject_name" class="form-control">
+                            <Select name="subject_id" id="subject_id" class="form-control">
                                 <option value="0">Select</option>
+                                {if isset($subject_list) && count(subject_list)>0 }
+                                    {foreach $subject_list as $subject}
+                                        <option value="{$subject['subject_id']}">{$subject['subject_name']}</option>
+                                    {/foreach}
+                                {/if}
                             </select>
                             <label for="subject_id" id="subject_error_msg"></label>
                         </div>
                         <div class="col-md-4 form-group" id="class_box">
                             <label>Class <span class="text-red">*</span></label>
-                            <Select name="class_name" id="class_name" class="form-control">
+                            <Select name="class_id" id="class_id" class="form-control">
                                 <option value="0">Select</option>
+                                {if isset($class_list) && count(class_list)>0 }
+                                    {foreach $class_list as $class}
+                                        <option value="{$class['class_id']}">{$class['class_name']}</option>
+                                    {/foreach}
+                                {/if}
                             </select>
                             <label for="class_id" id="class_error_msg"></label>
                         </div>
@@ -104,8 +114,6 @@
                 request_time : Math.round(+new Date()/1000)
             }
             var data = {
-                subject_id : '{userdata('subject_id')}',
-                class_id : '{userdata('class_id')}',
                 for_table : true
             }
             var request = {
@@ -144,21 +152,21 @@
             });
         });
         $('#add_edit_chapter').modal('hide');
-            $(document).on('click','#add_chpater',function(){
-                $('#add_edit_chapter').modal('show');
-            });
+        $(document).on('click','#add_chpater',function(){
+            $('#add_edit_chapter').modal('show');
+        });
         $(document).on('click', '#save', function(){
             var chapter_id = $('#chapter_id').val();
             var chapter_name = $.trim($('#chapter_name').val());
-            var subject_name = $.trim($('#subject_name').val());
-            var class_name = $.trim($('#class_name').val());
+            var subject_id = $.trim($('#subject_id').val());
+            var class_id = $.trim($('#class_id').val());
             if(checkBlank('chapter_box','chapter_error_msg','Required..', chapter_name, 'chapter_name', '')){
                 return false;
             }
-            if(checkBlank('subject_box','subject_error_msg','Required..', subject_name, 'subject_name', '')){
+            if(checkBlank('subject_box','subject_error_msg','Required..', subject_id, 'subject_id', 0)){
                 return false;
             }
-            if(checkBlank('class_box','class_error_msg','Required..', class_name, 'class_name', '')){
+            if(checkBlank('class_box','class_error_msg','Required..', class_id, 'class_id', 0)){
                 return false;
             }
             var control  = {
@@ -169,15 +177,16 @@
             var data = {
                 chapter_id   :  chapter_id,
                 chapter_name :  chapter_name,
-                subject_id   :  '{userdata('subject_id')}',
-                class_id   :  '{userdata('class_id')}',
-                login_id     : '{userdata('UserId')}'
+                subject_id   :  subject_id,
+                class_id   :  class_id,
+                login_id     : "{userdata('UserId')}"
             }
             var request = {
                 control : control,
                 data : data
             }
             request = JSON.stringify(request);
+            
             var url = "{$smarty.const.API_URL}chapter/add";
             $.ajax({
                 method: "POST",
@@ -195,9 +204,11 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
+                $('#chapter_name').val('');
                 $('#chapter_id').val(0);
-                $('#subject_id').val('');
-                $('#class_id').val('');
+                $('#subject_id').val(0);
+                $('#class_id').val(0);
+                $('#add_edit_chapter').modal('hide');
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();

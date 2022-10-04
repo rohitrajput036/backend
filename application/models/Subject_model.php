@@ -105,8 +105,7 @@ class Subject_model extends CI_Model{
                         'sno' => $i,
                         'subject_id' => $result->subject_id,
                         'school_id' => $result->school_id,
-                        'subject_name' => $result->subjet_name,
-                        $btns
+                        'subject_name' => $result->subject_name
                     ];
                 }
             }
