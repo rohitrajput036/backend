@@ -57,12 +57,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-14">
-                        <div class="col-md-4 form-group" id="chapter_box">
-                            <label>Chapter Name <span class="text-red">*</span></label>
-                            <input type="text" name="chapter_name" id="chapter_name" class="form-control" placeholder="Enter the chapter name."/>
-                            <input type="hidden" name="chapter_id" id="chapter_id" value="0"/>
-                            <label id="chapter_error_msg"></label>
+                        <div class="col-md-4 form-group" id="class_box">
+                            <label>Class <span class="text-red">*</span></label>
+                            <Select name="class_id" id="class_id" class="form-control">
+                                <option value="0">Select</option>
+                                {if isset($class_list) && count(class_list)>0 }
+                                    {foreach $class_list as $class}
+                                        <option value="{$class['class_id']}">{$class['class_name']}</option>
+                                    {/foreach}
+                                {/if}
+                            </select>
+                            <label for="class_id" id="class_error_msg"></label>
                         </div>
+                        
                         <div class="col-md-4 form-group" id="subject_box">
                             <label>Subject <span class="text-red">*</span></label>
                             <Select name="subject_id" id="subject_id" class="form-control">
@@ -75,17 +82,11 @@
                             </select>
                             <label for="subject_id" id="subject_error_msg"></label>
                         </div>
-                        <div class="col-md-4 form-group" id="class_box">
-                            <label>Class <span class="text-red">*</span></label>
-                            <Select name="class_id" id="class_id" class="form-control">
-                                <option value="0">Select</option>
-                                {if isset($class_list) && count(class_list)>0 }
-                                    {foreach $class_list as $class}
-                                        <option value="{$class['class_id']}">{$class['class_name']}</option>
-                                    {/foreach}
-                                {/if}
-                            </select>
-                            <label for="class_id" id="class_error_msg"></label>
+                        <div class="col-md-4 form-group" id="chapter_box">
+                            <label>Chapter Name <span class="text-red">*</span></label>
+                            <input type="text" name="chapter_name" id="chapter_name" value="{if $action=='edit'}{$chapter_data['chapter_name']}{/if}"class="form-control" placeholder=""/>
+                            <input type="hidden" name="chapter_id" id="chapter_id" value="0"/>
+                            <label id="chapter_error_msg"></label>
                         </div>
                     </div>
                 </div>
@@ -138,9 +139,10 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
+                $('#chapter_name').val('');
                 $('#chapter_id').val(0);
-                $('#subject_id').val('');
-                $('#class_id').val('');
+                $('#subject_id').val(0);
+                $('#class_id').val(0);
                 DataTable.clear().draw();
                 DataTable.rows.add(response.data).draw();
             }).fail(function(response) {
@@ -153,6 +155,7 @@
         });
         $('#add_edit_chapter').modal('hide');
         $(document).on('click','#add_chpater',function(){
+
             $('#add_edit_chapter').modal('show');
         });
         $(document).on('click', '#save', function(){
@@ -178,7 +181,7 @@
                 chapter_id   :  chapter_id,
                 chapter_name :  chapter_name,
                 subject_id   :  subject_id,
-                class_id   :  class_id,
+                class_id     :  class_id,
                 login_id     : "{userdata('UserId')}"
             }
             var request = {
@@ -264,6 +267,16 @@
             });
         });
         $(document).on('click','#cancel',function(){
+        });
+        
+        $(document).on('click','.edit',function(){
+            var class_name = $(this).data('class_name');
+            var chapter_id = $(this).data('chapter_id');
+            var subject_name = $(this).data('subject_name');
+            $('#subject_id').val(subject_id);
+            $('#chapter_id').val(chapter_id);
+            $('#class_id').val(class_id);
+            $('#chapter_id').focus();
         });
     });
 </script>

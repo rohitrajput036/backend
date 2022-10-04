@@ -38,7 +38,7 @@
                                     <th style="width:10%">S NO</th>
                                     <th>Class</th>
                                     <th>Section</th>
-                                    <th>Subject</th>
+                                    <th>Link with Subject</th>
                                     <th style="width:15%">Action</th>
                                 </tr>
                             </thead>
@@ -68,7 +68,7 @@
                             <label for="section_name" id="section_name_error_msg"></label>
                         </div>
                         <div class="col-md-4 form-group" id="with_subject_box">
-                            <label>Subject <span class="text-red">*</span></label>
+                            <label> Link with Subject <span class="text-red">*</span></label>
                             <Select name="with_subject" id="with_subject" class="form-control">
                                 <option value="select">Select</option>
                                 <option value="yes">Yes</option>
