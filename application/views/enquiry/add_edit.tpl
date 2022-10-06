@@ -374,6 +374,103 @@ legend.custom-border {
         $('#follow_up_date_time').datetimepicker({
             useCurrent: false
         });
+        $(window).load(function(){
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                is_active : 1
+            };
+            var request = {
+                control : control,
+                data : data
+            };
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}state/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#child_state_id').children().remove();
+                $('#child_state_id').append("<option value='0'>--Select State--</option>");
+                $.each(response.data,function(k,v){
+                    $('#child_state_id').append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                });
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
+        });
+        $(document).on('change','#child_state_id',function(){
+            var state_id = $(this).val();
+            var state_code = $('#state_id option:selected').data('sc');
+            $("#state_code").val(state_code);
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                is_active : 1,
+                state_id : state_id
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}city/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#child_city_id').children().remove();
+                $('#child_city_id').append("<option value='0'>--Select City--</option>");
+                $.each(response.data,function(k,v){
+                    $('#child_city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");
+                });
+                $('#child_city_id').trigger('change');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
+        });
         $(document).on('keydown','#mobile_no',function(e){
             if (e.keyCode == 27) {
                 $('#mobile_no').val('');
@@ -474,7 +571,80 @@ legend.custom-border {
             var follow_up_date_time = $('#follow_up_date_time').val();
             var media_type = $('input[name=media_type]:checked').val();
             var comment = $('#comment').val();
-            
+            if(checkBlank('enquiry_date_box','enquiry_date_error_msg','Required!', enquiry_date, 'enquiry_date', '')){
+                return false;
+            }
+            if(checkBlank('child_first_name_box','child_first_name_error_msg','Required!', child_first_name, 'child_first_name', '')){
+                return false;
+            }
+            if(checkBlank('father_mobile_no_box','father_mobile_no_error_msg','Required!', father_mobile_no, 'father_mobile_no', '')){
+                return false;
+            }
+            if(checkBlank('class_id_box','class_id_error_msg','Required!',class_id,'class_id','0')){
+                return false;
+            }
+            if(checkBlank('follow_up_status_id_box','follow_up_status_id_error_msg','Required!',follow_up_status_id,'follow_up_status_id','0')){
+                return false;
+            }
+            if(follow_up_status_id != 6){
+                if(checkBlank('follow_up_date_time_box','follow_up_date_time_error_msg','Required!',follow_up_date_time,'follow_up_date_time','')){
+                    return false;
+                }
+            }
+            if (typeof media_type === "undefined") {
+                media_type = '';
+            }
+            if(checkBlank('media_type_id_box','media_type_id_error_msg','Required!',media_type,'media_type_1','')){
+                return false;
+            }
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                enquiry_id : enquiry_id,
+                enquiry_date : enquiry_date,
+                child_first_name : child_first_name,
+                child_middel_name : child_middel_name,
+                child_last_name : child_last_name,
+                gender : gender,
+                child_dob : child_dob,
+                child_age : child_age,
+                sibling : sibling,
+                sibling_dob : sibling_dob,
+                child_add_line_1 : child_add_line_1,
+                child_add_line_2 : child_add_line_2,
+                child_state_id : child_state_id,
+                child_city_id : child_city_id,
+                child_pincode : child_pincode,
+                father_first_name : father_first_name,
+                father_middel_name : father_middel_name,
+                father_last_name : father_last_name,
+                father_mobile_no : father_mobile_no,
+                father_email_id : father_email_id,
+                father_education_id : father_education_id,
+                father_occupation_id : father_occupation_id,
+                mother_first_name : mother_first_name,
+                mother_middel_name : mother_middel_name,
+                mother_last_name : mother_last_name,
+                mother_mobile_no : mother_mobile_no,
+                mother_email_id : mother_email_id,
+                mother_education_id : mother_education_id,
+                mother_occupation_id : mother_occupation_id,
+                class_id : class_id,
+                follow_up_status_id : follow_up_status_id,
+                follow_up_date_time : follow_up_date_time,
+                media_type : media_type,
+                comment : comment
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}enquiry/add";
         });
     });
 </script>

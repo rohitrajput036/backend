@@ -116,11 +116,7 @@ class Class_model extends CI_Model {
                         'school_id'=> $result->school_id,
                         'class_name' => $result->class_name,
                         'section' =>$result->section_name,
-<<<<<<< HEAD
-                        'with_subject' => $result->with_subject,
-=======
                         'with_subject' => $result->with_subject
->>>>>>> b849c26e22fd474b7db4ad6fee451fa3bae860ed
                     ];
                 }
             }
