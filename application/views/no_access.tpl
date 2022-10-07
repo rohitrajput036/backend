@@ -1,4 +1,3 @@
-
 {include file='header_fixed.tpl'}
 {include file='top_header.tpl'}
 

@@ -524,6 +524,7 @@ legend.custom-border {
                 $('#api_error').html('');
                 $('.when_enter_mobile_show').show();
                 $('.when_enter_mobile_success').hide();
+                $('#father_mobile_no').val(mobile_no);
             }).fail(function(response) {
                 $("#animatedLoader").hide();
                 if (response.responseJSON.control) {
@@ -604,6 +605,7 @@ legend.custom-border {
                 version : {$smarty.const.API_VERSION}
             };
             var data = {
+                branch_id : {userdata("BranchId")},
                 enquiry_id : enquiry_id,
                 enquiry_date : enquiry_date,
                 child_first_name : child_first_name,
@@ -645,6 +647,33 @@ legend.custom-border {
             }
             request = JSON.stringify(request);
             var url = "{$smarty.const.API_URL}enquiry/add";
+            console.log(url);
+            console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                location.reload(true);
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
         });
     });
 </script>

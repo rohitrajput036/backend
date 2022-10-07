@@ -62,7 +62,7 @@ class Enquiry extends CI_Controller {
         $this->parser->parse("enquiry/add_edit.tpl", $this->outputData);
     }
     public function list(){
-        $this->parser->parse("enquiry/add_edit.tpl", $this->outputData);
+        $this->parser->parse("enquiry/list.tpl", $this->outputData);
     }
     public function call_back(){
         $this->parser->parse("enquiry/add_edit.tpl", $this->outputData);

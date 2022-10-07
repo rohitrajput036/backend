@@ -47,32 +47,32 @@ class Enquiry extends REST_Controller {
             if (!empty($request)){
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time','version'],$request->control);
-                keyExist(['enquiry_id','enquiry_date','branch_id','form_id','student_id','class_id','first_name','middel_name','last_name','gender','date_of_birth','age','sibling','sibling_dob','add_line_1','add_line_2','state_id','city_id','pincode','father_first_name','father_middel_name','father_last_name','father_mobile_no','father_email_id','father_education_id','father_occupation_id','mother_first_name','mother_middel_name','mother_last_name','mother_mobile_no','mother_email_id','mother_education_id','mother_occupation_id','follow_up_status_id','remarks','follow_up_date'],$request->data);
+                keyExist(['enquiry_id','enquiry_date','branch_id','class_id','child_first_name','child_middel_name','child_last_name','gender','child_dob','child_age','sibling','sibling_dob','child_add_line_1','child_add_line_2','child_state_id','child_city_id','child_pincode','father_first_name','father_middel_name','father_last_name','father_mobile_no','father_email_id','father_education_id','father_occupation_id','mother_first_name','mother_middel_name','mother_last_name','mother_mobile_no','mother_email_id','mother_education_id','mother_occupation_id','follow_up_status_id','comment','follow_up_date_time'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
-                checkBlank(['enquiry_date' => $request->data->enquiry_date, 'branch_id' => $request->data->branch_id, 'first_name' => $request->data->first_name, 'father_first_name' => $request->data->father_first_name, 'father_mobile_no' => $request->data->father_mobile_no]);
+                checkBlank(['enquiry_date' => $request->data->enquiry_date, 'branch_id' => $request->data->branch_id, 'first_name' => $request->data->child_first_name, 'father_first_name' => $request->data->father_first_name, 'father_mobile_no' => $request->data->father_mobile_no]);
                 $this->load->model('enquiry_master_model');
                 $this->load->model('enquiry_follow_up_model');
                 $this->enquiry_master_model->enquiry_id = $request->data->enquiry_id;
-                $this->enquiry_master_model->enquiry_date = $request->data->enquiry_date;
+                $this->enquiry_master_model->enquiry_date = date('Y-m-d',strtotime($request->data->enquiry_date));
                 $this->enquiry_master_model->branch_id = $request->data->branch_id;
-                $this->enquiry_master_model->form_id = $request->data->form_id;
-                $this->enquiry_master_model->student_id = $request->data->student_id;
+                $this->enquiry_master_model->form_id = 0;
+                $this->enquiry_master_model->student_id = 0;
                 $this->enquiry_master_model->class_id = $request->data->class_id;
                 $this->enquiry_master_model->follow_up_status_id = $request->data->follow_up_status_id;
-                $this->enquiry_master_model->follow_up_date = (!empty($request->data->follow_up_date)) ? $request->data->follow_up_date : NULL;
-                $this->enquiry_master_model->first_name = $request->data->first_name;
-                $this->enquiry_master_model->middel_name = $request->data->middel_name;
-                $this->enquiry_master_model->last_name = $request->data->last_name;
+                $this->enquiry_master_model->follow_up_date = (!empty($request->data->follow_up_date_time)) ? date('Y-m-d H:i:s',strtotime($request->data->follow_up_date_time)) : NULL;
+                $this->enquiry_master_model->first_name = $request->data->child_first_name;
+                $this->enquiry_master_model->middel_name = $request->data->child_middel_name;
+                $this->enquiry_master_model->last_name = $request->data->child_last_name;
                 $this->enquiry_master_model->gender = $request->data->gender;
-                $this->enquiry_master_model->date_of_birth = $request->data->date_of_birth;
-                $this->enquiry_master_model->age = $request->data->age;
+                $this->enquiry_master_model->date_of_birth = (!empty($request->data->child_dob)) ? date('Y-m-d',strtotime($request->data->child_dob)) : NULL;
+                $this->enquiry_master_model->age = $request->data->child_age;
                 $this->enquiry_master_model->sibling = $request->data->sibling;
                 $this->enquiry_master_model->sibling_dob = $request->data->sibling_dob;
-                $this->enquiry_master_model->add_line_1 = $request->data->add_line_1;
-                $this->enquiry_master_model->add_line_2 = $request->data->add_line_2;
-                $this->enquiry_master_model->state_id = $request->data->state_id;
-                $this->enquiry_master_model->city_id = $request->data->city_id;
-                $this->enquiry_master_model->pincode = $request->data->pincode;
+                $this->enquiry_master_model->add_line_1 = $request->data->child_add_line_1;
+                $this->enquiry_master_model->add_line_2 = $request->data->child_add_line_2;
+                $this->enquiry_master_model->state_id = $request->data->child_state_id;
+                $this->enquiry_master_model->city_id = $request->data->child_city_id;
+                $this->enquiry_master_model->pincode = $request->data->child_pincode;
                 $this->enquiry_master_model->father_first_name = $request->data->father_first_name;
                 $this->enquiry_master_model->father_middel_name = $request->data->father_middel_name;
                 $this->enquiry_master_model->father_last_name = $request->data->father_last_name;
@@ -104,8 +104,8 @@ class Enquiry extends REST_Controller {
                     if($this->enquiry_master_model->enquiry_id > 0){
                         $this->enquiry_follow_up_model->enquiry_id = $this->enquiry_master_model->enquiry_id;
                         $this->enquiry_follow_up_model->follow_up_status_id = $request->data->follow_up_status_id;
-                        $this->enquiry_follow_up_model->remarks = $request->data->remarks;
-                        $this->enquiry_follow_up_model->follow_up_date = (!empty($request->data->follow_up_date)) ? $request->data->follow_up_date : NULL;
+                        $this->enquiry_follow_up_model->remarks = $request->data->comment;
+                        $this->enquiry_follow_up_model->follow_up_date = (!empty($request->data->follow_up_date_time)) ? date('Y-m-d H:i:s',strtotime($request->data->follow_up_date_time)) : NULL;
                         $this->enquiry_follow_up_model->is_active = 1;
                         $this->enquiry_follow_up_model->created_by = $this->enquiry_follow_up_model->updated_by = (isset($request->data->login_id) && !empty($request->data->login_id)) ? $request->data->login_id : 0;
                         if(!$this->enquiry_follow_up_model->check()){
@@ -156,7 +156,7 @@ class Enquiry extends REST_Controller {
                 keyExist(['branch_id','school_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
                 $this->load->model('enquiry_master_model');
-                $this->enquiry_master_model->father_mobile_no = $request->data->branch_id;
+                $this->enquiry_master_model->branch_id = $request->data->branch_id;
                 $this->enquiry_master_model->school_id = $request->data->school_id;
                 if(isset($request->data->mobile_no)){
                     $this->enquiry_master_model->father_mobile_no = $request->data->mobile_no;
@@ -164,6 +164,7 @@ class Enquiry extends REST_Controller {
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;
                 }
+                $this->enquiry_master_model->for_table =  $request->data->for_table;
                 $data = $this->enquiry_master_model->get();
             }else{
                 throw new Exception('Invalid request!',400);

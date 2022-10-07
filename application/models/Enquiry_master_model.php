@@ -186,14 +186,35 @@ class Enquiry_master_model extends CI_Model {
         if($this->city_id > 0){
             $where['e.city_id'] = $this->city_id;
         }
-        $results = $this->global_model->select($this->table_name.' e',$where);
+        $this->load->model('city_model');
+        $this->load->model('state_model');
+        $this->load->model('follow_up_status_model');
+        $joins = [
+            $this->state_model->table_name.' s' => ['(e.state_id = s.state_id AND s.status=1)','LEFT'],
+            $this->city_model->table_name.' c' => ['(e.city_id = c.city_id AND c.is_active=1)','LEFT'],
+            $this->follow_up_status_model->table_name.' fs' => ['(e.follow_up_status_id = fs.follow_up_status_id AND fs.is_active=1)','LEFT']
+        ];
+        $results = $this->global_model->select($this->table_name.' e',$where,'*',$joins);
         if(isset($results) && $results->num_rows() > 0){
             $i = 0;
             foreach($results->result() as $result){
                 $i++;
                 $followup_history = [];
                 if($this->for_table){
-                    $output[] = [];
+                    $delete_btn = '<btn class="btn active_deactive" data-enquiry_id="'.$result->enquiry_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
+                    $view_btn = '<btn class="btn btn-xs view_enquiry" data=enquiry_id="'.$result->enquiry_id.'" title="view & update status"><i class="fa fa-eye text-primary"></i></btn>';
+                    $btns = $delete_btn.' '.$view_btn;
+                    $output[] = [
+                        $i,
+                        date('d/m/Y',strtotime($result->enquiry_date)),
+                        $result->form_id,
+                        $result->first_name.' '.$result->middel_name.' '.$result->last_name,
+                        $result->father_email_id,
+                        (string) $result->city_name,
+                        $result->follow_up_status,
+                        (!empty($result->follow_up_date) && $result->follow_up_date != '0000-00-00 00:00:00') ? date('d/m/Y h:i A',strtotime($result->follow_up_date)) : '',
+                        $btns
+                    ];
                 }else{
                     $output[] = [
                         'enquiry_id'                => $result->enquiry_id,
