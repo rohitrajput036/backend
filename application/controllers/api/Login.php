@@ -65,7 +65,7 @@ class Login extends REST_Controller {
                         if ($UserInfo['gender'] == "F") {
                             $DefaultImg = "images/icons/female.png";
                         }
-                        setSession($UserInfo['user_id'], $UserInfo['unique_no'], $UserInfo['user_name'], $UserInfo['gender'], $UserInfo['role'], $BranchId, $UserInfo['brnach_name'], $HeaderHeading, $DefaultImg, $UserInfo['email_id'],$UserInfo['school_id'],$UserInfo['school_name']);
+                        setSession($UserInfo['user_id'], $UserInfo['unique_no'], $UserInfo['user_name'], $UserInfo['gender'], $UserInfo['role'], $BranchId, $UserInfo['brnach_name'], $HeaderHeading, $DefaultImg, $UserInfo['email_id'],$UserInfo['school_id'],$UserInfo['school_name'],$UserInfo['department_list']);
                         $Data = $UserInfo;
                     } else {
                         throw new Exception("Invalid Password! Please Try Again!", REST_Controller::HTTP_BAD_REQUEST);

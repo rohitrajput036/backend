@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 if (!function_exists('setSession')) {
 
-    function setSession($UserId = 0, $EmpId = 0, $UserName = "", $Gender = 'M', $Role = '', $BranchId = 0, $BranchName = '', $HeaderHeading = '', $DefaultImg = '', $Email = "", $school_id = 0, $school_name = '') {
+    function setSession($UserId = 0, $EmpId = 0, $UserName = "", $Gender = 'M', $Role = '', $BranchId = 0, $BranchName = '', $HeaderHeading = '', $DefaultImg = '', $Email = "", $school_id = 0, $school_name = '', $Departments = []) {
         $CI = & get_instance();
         $CI->session->set_userdata('UserId', $UserId);
         $CI->session->set_userdata('EmpId', $EmpId);
@@ -19,6 +19,7 @@ if (!function_exists('setSession')) {
         $CI->session->set_userdata('Email', $Email);
         $CI->session->set_userdata('SchoolId', $school_id);
         $CI->session->set_userdata('SchoolName', $school_name);
+        $CI->session->set_userdata('Departments', $Departments);
         $CI->session->set_userdata('ValidateLogin', 1);
     }
 

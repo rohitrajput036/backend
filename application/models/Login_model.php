@@ -38,6 +38,13 @@ class Login_model extends CI_Model {
         $results = $this->global_model->select($this->user_model->table_name.' u',$where,$fileds,$joins);
         if(isset($results) && $results->num_rows() > 0){
             $result = $results->row();
+            $this->user_department_model->user_id = $result->user_id;
+            $this->user_department_model->is_active = 1;
+            $department_list = $this->user_department_model->get();
+            $departmentlist = [];
+            foreach($department_list as $d){
+                $departmentlist[] = $d['department'];
+            }
             $output = [
                 'user_id'       => $result->user_id,
                 'unique_no'     => $result->unique_no,
@@ -51,7 +58,8 @@ class Login_model extends CI_Model {
                 'brnach_name'   => (string) $result->branch_name,
                 'branch_code'   => (string) $result->branch_code,
                 'school_id'     => (int) $result->school_id,
-                'school_name'   => (string) $result->school_name
+                'school_name'   => (string) $result->school_name,
+                'department_list' => $departmentlist
             ];
         }else{
             throw new Exception('invalid user!',400);
