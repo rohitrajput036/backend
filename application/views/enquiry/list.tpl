@@ -160,7 +160,6 @@
             ordering:false
         });
         $(window).load(function(){
-            $('#view_update_enquiry').modal('show');
             var control = {
                 request_id : generateUUId(),
                 source : 1,
@@ -205,6 +204,71 @@
             }).always(function() {
                 
             });
+        });
+        $(document).on('click','.view_enquiry',function(){
+            $('#view_update_enquiry').modal('show');
+            var enquiry_id = $(this).data('enquiry_id');
+
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+
+            var data ={
+                enquiry_id :enquiry_id,
+                branch_id : {userdata('BranchId')},
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}enquiry/get";
+            //console.log(url);
+            //console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $('#enquiry_id').val(0);
+                $('#enquiry_date').val('');
+                $('#form_id').val('');
+                $('#child_first_name').val('');
+                $('#child_middel_name').val('');
+                $('#child_last_name').val('');
+                $('#father_name').val('');
+                $('#father_email_id').val('');
+                $('#father_mobile_no').val('');
+                $('#mother_name').val('');
+                $('#mother_email_id').val('');
+                $('#mother_mobile_no').val('');
+                $('#address').val('');
+                $('#city_state').val('');
+                $('#pincode').val('');
+                $('#follow_up_status').val('');
+                $('#next_follow_up_date').val('');
+                $("#animatedLoader").hide();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
+
         });
     });
 </script>

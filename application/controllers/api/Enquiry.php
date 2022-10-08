@@ -153,18 +153,22 @@ class Enquiry extends REST_Controller {
             if (!empty($request)){
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time','version'],$request->control);
-                keyExist(['branch_id','school_id'],$request->data);
+                keyExist(['branch_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
                 $this->load->model('enquiry_master_model');
                 $this->enquiry_master_model->branch_id = $request->data->branch_id;
-                $this->enquiry_master_model->school_id = $request->data->school_id;
                 if(isset($request->data->mobile_no)){
                     $this->enquiry_master_model->father_mobile_no = $request->data->mobile_no;
                 }
+                if(isset($request->data->enquiry_id)){
+                    $this->enquiry_master_model->enquiry_id = $request->data->enquiry_id;
+                }
                 if(!isset($request->data->for_table)){
                     $request->data->for_table = false;
+                } else {
+                    $this->enquiry_master_model->for_table =  $request->data->for_table;
                 }
-                $this->enquiry_master_model->for_table =  $request->data->for_table;
+                
                 $data = $this->enquiry_master_model->get();
             }else{
                 throw new Exception('Invalid request!',400);

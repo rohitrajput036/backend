@@ -202,7 +202,7 @@ class Enquiry_master_model extends CI_Model {
                 $followup_history = [];
                 if($this->for_table){
                     $delete_btn = '<btn class="btn active_deactive" data-enquiry_id="'.$result->enquiry_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
-                    $view_btn = '<btn class="btn btn-xs view_enquiry" data=enquiry_id="'.$result->enquiry_id.'" title="view & update status"><i class="fa fa-eye text-primary"></i></btn>';
+                    $view_btn = '<btn class="btn btn-xs view_enquiry" data-enquiry_id="'.$result->enquiry_id.'" title="view & update status"><i class="fa fa-eye text-primary"></i></btn>';
                     $btns = $delete_btn.' '.$view_btn;
                     $output[] = [
                         $i,
