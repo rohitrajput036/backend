@@ -189,6 +189,7 @@ class Enquiry_master_model extends CI_Model {
         $this->load->model('city_model');
         $this->load->model('state_model');
         $this->load->model('follow_up_status_model');
+        $this->load->model('enquiry_follow_up_model');
         $joins = [
             $this->state_model->table_name.' s' => ['(e.state_id = s.state_id AND s.status=1)','LEFT'],
             $this->city_model->table_name.' c' => ['(e.city_id = c.city_id AND c.is_active=1)','LEFT'],
@@ -199,10 +200,12 @@ class Enquiry_master_model extends CI_Model {
             $i = 0;
             foreach($results->result() as $result){
                 $i++;
-                $followup_history = [];
+                $this->enquiry_follow_up_model->is_active = 1;
+                $this->enquiry_follow_up_model->enquiry_id = $result->enquiry_id;
+                $followup_history = $this->enquiry_follow_up_model->get();
                 if($this->for_table){
                     $delete_btn = '<btn class="btn active_deactive" data-enquiry_id="'.$result->enquiry_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
-                    $view_btn = '<btn class="btn btn-xs view_enquiry" data-enquiry_id="'.$result->enquiry_id.'" title="view & update status"><i class="fa fa-eye text-primary"></i></btn>';
+                    $view_btn = '<btn class="btn btn-xs view_enquiry" id="view_enquiry_'.$result->enquiry_id.'" data-enquiry_id="'.$result->enquiry_id.'" title="view & update status"><i class="fa fa-eye text-primary"></i></btn>';
                     $btns = $delete_btn.' '.$view_btn;
                     $output[] = [
                         $i,
@@ -219,12 +222,15 @@ class Enquiry_master_model extends CI_Model {
                     $output[] = [
                         'enquiry_id'                => $result->enquiry_id,
                         'enquiry_date'              => $result->enquiry_date,
+                        'display_enquiry_date'      => date('d/m/Y',strtotime($result->enquiry_date)),
                         'branch_id'                 => $result->branch_id,
                         'form_id'                   => $result->form_id,
                         'student_id'                => $result->student_id,
                         'class_id'                  => $result->class_id,
                         'follow_up_status_id'       => $result->follow_up_status_id,
+                        'follow_up_status'          => $result->follow_up_status,
                         'follow_up_date'            => $result->follow_up_date,
+                        'display_follow_up_date'    => (!empty($result->follow_up_date) && $result->follow_up_date != '0000-00-00 00:00:00') ? date('d/m/Y h:i A',strtotime($result->follow_up_date)) : '',
                         'first_name'                => $result->first_name,
                         'middel_name'               => $result->middel_name,
                         'last_name'                 => $result->last_name,
@@ -236,7 +242,9 @@ class Enquiry_master_model extends CI_Model {
                         'add_line_1'                => $result->add_line_1,
                         'add_line_2'                => $result->add_line_2,
                         'state_id'                  => $result->state_id,
+                        'state_name'                => $result->state_name,
                         'city_id'                   => $result->city_id,
+                        'city_name'                 => $result->city_name,
                         'pincode'                   => $result->pincode,
                         'father_first_name'         => $result->father_first_name,
                         'father_middel_name'        => $result->father_middel_name,
@@ -261,5 +269,16 @@ class Enquiry_master_model extends CI_Model {
             }
         }
         return $output;
+    }
+
+    function update_follow_up_status(){
+        $where['enquiry_id'] = $this->enquiry_id;
+        $update_data = [
+            'follow_up_status_id'   => $this->follow_up_status_id,
+            'follow_up_date'        => $this->follow_up_date,
+            'updated_by'            => $this->updated_by,
+            'updated_on'            => $this->updated_on
+        ];
+        return $this->global_model->update($this->enquiry_master_model->table_name,$update_data,$where);
     }
 }

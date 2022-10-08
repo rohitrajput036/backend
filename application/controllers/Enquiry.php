@@ -62,9 +62,65 @@ class Enquiry extends CI_Controller {
         $this->parser->parse("enquiry/add_edit.tpl", $this->outputData);
     }
     public function list(){
+        $followup_status_url = API_URL.'common/get_follow_up_status';
+        $request = [
+            'control' => [
+                'request_id' => generateUUId(),
+                'source' => 1,
+                'request_time' => time(),
+                'version' => API_VERSION
+            ],
+            'data' => [
+                'is_active' => 1
+            ]
+        ];
+        $followup_status_response = callAPI($followup_status_url,'POST',json_encode($request));
+        if(isset($followup_status_response['data'])){
+            $this->outputData['followup_status_list'] = $followup_status_response['data'];
+        }
+        $this->outputData['enquiry_type'] = 'All Enquiry';
         $this->parser->parse("enquiry/list.tpl", $this->outputData);
     }
     public function call_back(){
-        $this->parser->parse("enquiry/add_edit.tpl", $this->outputData);
+        $followup_status_url = API_URL.'common/get_follow_up_status';
+        $request = [
+            'control' => [
+                'request_id' => generateUUId(),
+                'source' => 1,
+                'request_time' => time(),
+                'version' => API_VERSION
+            ],
+            'data' => [
+                'is_active' => 1
+            ]
+        ];
+        $followup_status_response = callAPI($followup_status_url,'POST',json_encode($request));
+        if(isset($followup_status_response['data'])){
+            $this->outputData['followup_status_list'] = $followup_status_response['data'];
+        }
+        $this->outputData['enquiry_type'] = 'Call Back Enquiry';
+        $this->outputData['follow_up_status_id'] = 4;
+        $this->parser->parse("enquiry/list.tpl", $this->outputData);
+    }
+    public function call_back_hot(){
+        $followup_status_url = API_URL.'common/get_follow_up_status';
+        $request = [
+            'control' => [
+                'request_id' => generateUUId(),
+                'source' => 1,
+                'request_time' => time(),
+                'version' => API_VERSION
+            ],
+            'data' => [
+                'is_active' => 1
+            ]
+        ];
+        $followup_status_response = callAPI($followup_status_url,'POST',json_encode($request));
+        if(isset($followup_status_response['data'])){
+            $this->outputData['followup_status_list'] = $followup_status_response['data'];
+        }
+        $this->outputData['enquiry_type'] = 'Call Back Hot Enquiry';
+        $this->outputData['follow_up_status_id'] = 3;
+        $this->parser->parse("enquiry/list.tpl", $this->outputData);
     }
 }

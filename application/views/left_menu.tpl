@@ -53,6 +53,9 @@
                     <li {if uriseg(2)=='call_back'}class="active"{/if}>
                         <a href="{site_url('enquiry/call_back')}"><i class="fa fa-circle-o"></i> Call Back</a>
                     </li>
+                    <li {if uriseg(2)=='call_back_hot'}class="active"{/if}>
+                        <a href="{site_url('enquiry/call_back_hot')}"><i class="fa fa-circle-o"></i> Call Back Hot</a>
+                    </li>
                 </ul>
             </li>
             <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter'} class="treeview active"{else}class="treeview"{/if}>

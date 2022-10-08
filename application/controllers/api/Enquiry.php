@@ -168,7 +168,9 @@ class Enquiry extends REST_Controller {
                 } else {
                     $this->enquiry_master_model->for_table =  $request->data->for_table;
                 }
-                
+                if(isset($request->data->follow_up_status_id)){
+                    $this->enquiry_master_model->follow_up_status_id = $request->data->follow_up_status_id;
+                }
                 $data = $this->enquiry_master_model->get();
             }else{
                 throw new Exception('Invalid request!',400);
@@ -184,6 +186,66 @@ class Enquiry extends REST_Controller {
             ];
             $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
             $this->response($response, REST_Controller::HTTP_OK);
+        }catch (Exception $E) {
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, $E->getCode());
+        }
+    }
+
+    function add_followup_post(){
+        $start_time = microtime(true);
+        try {
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)){
+                keyExist(['control','data'],$request);
+                keyExist(['request_id','source','request_time','version'],$request->control);
+                keyExist(['enquiry_id','follow_up_status_id','remarks','follow_up_date'],$request->data);
+                checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
+                checkBlank(['enquiry_id' => $request->data->enquiry_id,'follow_up_status_id' => $request->data->follow_up_status_id]);
+                if($request->data->follow_up_status_id != 6){
+                    checkBlank(['remarks' => $request->data->remarks, 'follow_up_date' => $request->data->follow_up_date]);
+                }
+                $this->load->model('enquiry_follow_up_model');
+                $this->enquiry_follow_up_model->enquiry_id = $request->data->enquiry_id;
+                $this->enquiry_follow_up_model->follow_up_status_id = $request->data->follow_up_status_id;
+                $this->enquiry_follow_up_model->remarks = $request->data->remarks;
+                $this->enquiry_follow_up_model->follow_up_date = (!empty($request->data->follow_up_date)) ? date('Y-m-d H:i:s',strtotime($request->data->follow_up_date)) : NULL;
+                $this->enquiry_follow_up_model->is_active = 1;
+                $this->enquiry_follow_up_model->created_by = $this->enquiry_follow_up_model->updated_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
+                $this->enquiry_follow_up_model->add();
+                $this->load->model('enquiry_master_model');
+                $this->enquiry_master_model->enquiry_id             = $request->data->enquiry_id;
+                $this->enquiry_master_model->follow_up_status_id    = $request->data->follow_up_status_id;
+                $this->enquiry_master_model->follow_up_date         = (!empty($request->data->follow_up_date)) ? date('Y-m-d H:i:s',strtotime($request->data->follow_up_date)) : NULL;
+                $this->enquiry_master_model->created_by             = $this->enquiry_master_model->updated_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
+                $this->enquiry_master_model->update_follow_up_status();
+                $response = [
+                    'control' => [
+                        'status' => 1,
+                        'message' => 'Follow up add successfully!',
+                        'message_code' => REST_Controller::HTTP_OK,
+                        'time_taken' => (microtime(true) - $start_time) . ' Second'
+                    ],
+                    'data' => (object) []
+                ];
+                $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+                $this->response($response, REST_Controller::HTTP_OK);
+            }else{
+                throw new Exception('Invalid request!',REST_Controller::HTTP_BAD_REQUEST);
+            }
         }catch (Exception $E) {
             $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
             $response = [

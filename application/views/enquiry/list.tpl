@@ -6,12 +6,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            All enquiry
+            {$enquiry_type}
             {* <small>All Branch</small> *}
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Enquiry list</li>
+            <li class="active">{$enquiry_type}</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -91,49 +91,36 @@
             <!-- /.box-header -->
             <div class="box-body">
               <!-- Conversations are loaded here -->
-              <div class="direct-chat-messages">
-                {for $sn=1 to 5}
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                    <div class="direct-chat-info clearfix">
-                        <span class="direct-chat-name pull-left">{userdata('UserName')}</span>
-                        <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                    </div>
-                    <!-- /.direct-chat-info -->
-                    <div class="direct-chat-img" style="border:1px solid #ccc; font-weight: bold; text-align:center; vertical-align: middle; background-color:#3c8dbc; color:white">
-                        <h4>{strtoupper(substr(userdata('UserName'),0,1))}</h4>
-                    </div>
-                    {* {image('dist/avatar.png',['class'=>'direct-chat-img', 'alt'=>'user image'])} *}
-                    <div class="direct-chat-text">
-                        <span style="font-weight: bold;">Followup status</span><br/>
-                        Is this template really for free? That's unbelievable!
-                    </div>
-                    <!-- /.direct-chat-text -->
-                    </div>
-                <!-- /.direct-chat-msg -->
-                {/for}
-                
-
+              <div class="direct-chat-messages" id="follow_up_history_view">
               </div>
               <!-- /.direct-chat-pane -->
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <div class="col-md-3">
-                    <select class="form-control">
+                <div class="col-md-2 form-group" id="current_follow_up_status_id_box">
+                    <select id="current_follow_up_status_id" class="form-control">
                         <option value="0">--Select--</option>
+                        {if isset($followup_status_list) && !empty($followup_status_list)}
+                            {foreach $followup_status_list as $fsl}
+                                <option value="{$fsl['follow_up_status_id']}">{$fsl['follow_up_status']}</option>
+                            {/foreach}
+                        {/if}
                     </select>
+                    <label id="current_follow_up_status_id_error_msg"></label>
                 </div>
-                <div class="col-md-6">
-                    <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
+                <div class="col-md-6 form-group" id="message_box">
+                    <input type="text" name="message" id="message" placeholder="Type Message ..." class="form-control"/>
+                    <label id="message_error_msg"></label>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4 form-group" id="next_followup_date_box">
                     <div class="input-group">
                         <input type="text" name="next_followup_date" id="next_followup_date" placeholder="Next Followup Date" class="form-control"/>
                         <span class="input-group-btn">
-                            <button type="submit" class="btn btn-primary btn-flat">Send</button>
+                            <input type="hidden" name="followup_enquiry_id" id="followup_enquiry_id" value="0"/>
+                            <button id="save_follow_up" class="btn btn-primary btn-flat">Save</button>
                         </span>
                     </div>
+                    <label id="next_followup_date_error_msg"></label>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -154,7 +141,17 @@
 {js('common.js')}
 <script>
     $(document).ready(function(){
+        $('#view_update_enquiry').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
         $('#view_update_enquiry').modal('hide');
+        $('#next_followup_date').datetimepicker({
+            useCurrent: false
+        });
+        var follow_up_status_id = $('#current_follow_up_status_id').select2({
+            width:'100%'
+        });
         var DataTable = $('#DataTable').DataTable({
             searching:true,
             ordering:false
@@ -166,11 +163,22 @@
                 request_time : Math.round(+new Date() / 1000),
                 version : {$smarty.const.API_VERSION}
             };
-            var data = {
-                branch_id : {userdata('BranchId')},
-                school_id : {userdata('SchoolId')},
-                for_table : true
-            };
+            //follow_up_status_id
+            {if $enquiry_type == 'All Enquiry'}
+                var data = {
+                    branch_id : {userdata('BranchId')},
+                    school_id : {userdata('SchoolId')},
+                    for_table : true
+                };
+            {else}
+                var data = {
+                    branch_id : {userdata('BranchId')},
+                    school_id : {userdata('SchoolId')},
+                    follow_up_status_id : {$follow_up_status_id},
+                    for_table : true
+                };
+            {/if}
+            
             var request = {
                 control : control,
                 data : data
@@ -206,9 +214,7 @@
             });
         });
         $(document).on('click','.view_enquiry',function(){
-            $('#view_update_enquiry').modal('show');
             var enquiry_id = $(this).data('enquiry_id');
-
             var control = {
                 request_id : generateUUId(),
                 source : 1,
@@ -226,8 +232,6 @@
             }
             request = JSON.stringify(request);
             var url = "{$smarty.const.API_URL}enquiry/get";
-            //console.log(url);
-            //console.log(request);
             $.ajax({
                 method: "POST",
                 url: url,
@@ -242,7 +246,8 @@
                     $("#animatedLoader").show();
                 }
             }).done(function(response) {
-                $("#enquiry_date").html(response.data[0].enquiry_date);
+                $('#followup_enquiry_id').val(response.data[0].enquiry_id);
+                $("#enquiry_date").html(response.data[0].display_enquiry_date);
                 $("#form_id").html(response.data[0].form_id);
                 $("#child_first_name").html(response.data[0].first_name);
                 $("#child_middel_name").html(response.data[0].middel_name);
@@ -254,10 +259,38 @@
                 $("#mother_email_id").html(response.data[0].mother_email_id);
                 $("#mother_mobile_no").html(response.data[0].mother_mobile_no);
                 $("#address").html(response.data[0].add_line_2);
-                $("#city_state").html(response.data[0].state_id);
+                $("#city_state").html(response.data[0].city_name+' / '+response.data[0].state_name);
                 $("#pincode").html(response.data[0].pincode);
-                $("#follow_up_status").html(response.data[0].follow_up_status_id);
-                $("#next_follow_up_date").html(response.data[0].follow_up_date);
+                $("#follow_up_status").html(response.data[0].follow_up_status);
+                $("#next_follow_up_date").html(response.data[0].display_follow_up_date);
+                var follow_up_history_html = '';
+                var i=0;
+                $.each(response.data[0].follow_up_history,function(k,v){
+                    i++;
+                    if(v.called_user_id == {userdata('UserId')}){
+                        follow_up_history_html += '<div class="direct-chat-msg right" id="last_follow_up_remark_'+i+'">';
+                    }else{
+                        follow_up_history_html += '<div class="direct-chat-msg" id="last_follow_up_remark_'+i+'">';
+                    }
+                    follow_up_history_html += '<div class="direct-chat-info clearfix">';
+                    follow_up_history_html += '<span class="direct-chat-name pull-left">'+v.called_user_name+'</span>';
+                    follow_up_history_html += '<span class="direct-chat-timestamp pull-right">'+v.display_called_time+'</span>';
+                    follow_up_history_html += '</div>';
+                    follow_up_history_html += '<div class="direct-chat-img" style="border:1px solid #ccc; font-weight: bold; text-align:center; vertical-align: middle; background-color:#3c8dbc; color:white">';
+                    follow_up_history_html += '<h4>'+v.first_later+'</h4>';
+                    follow_up_history_html += '</div>';
+                    follow_up_history_html += '<div class="direct-chat-text">';
+                    follow_up_history_html += '<span style="font-weight: bold;">'+v.follow_up_status+'</span><br/>';
+                    follow_up_history_html += v.remarks;
+                    follow_up_history_html +='</div>';
+                    follow_up_history_html +='</div>';
+                });
+                $('#follow_up_history_view').html(follow_up_history_html);
+                $('#last_follow_up_remark_'+i).focus();
+                $('#current_follow_up_status_id').val(0).trigger('change');
+                $('#message').val('');
+                $('#next_followup_date').val('');
+                $('#view_update_enquiry').modal('show');
                 $("#animatedLoader").hide();
             }).fail(function(response) {
                 $("#animatedLoader").hide();
@@ -267,7 +300,72 @@
             }).always(function() {
                 
             });
-
+        });
+        $(document).on('click','#save_follow_up',function(){
+            var enquiry_id = $('#followup_enquiry_id').val();
+            var follow_up_status_id = $('#current_follow_up_status_id').val();
+            var follow_up_remarks = $('#message').val();
+            var follow_up_date = $('#next_followup_date').val();
+            if(checkBlank('current_follow_up_status_id_box','current_follow_up_status_id_error_msg','Required!', follow_up_status_id, 'current_follow_up_status_id', '0')){
+                return false;
+            }
+            if(checkBlank('message_box','message_error_msg','Required!', follow_up_remarks, 'message', '')){
+                return false;
+            }
+            if(follow_up_status_id != 6){
+                if(checkBlank('next_followup_date_box','next_followup_date_error_msg','Required!', follow_up_date, 'next_followup_date', '')){
+                    return false;
+                }   
+            }
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                enquiry_id : enquiry_id,
+                follow_up_status_id : follow_up_status_id,
+                remarks : follow_up_remarks,
+                follow_up_date : follow_up_date,
+                login_id : {userdata('UserId')}
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}enquiry/add_followup";
+            console.log(url);
+            console.log(request);
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                    $('#save_follow_up').prop('disabled',true);
+                }
+            }).done(function(response) {
+                $('#save_follow_up').prop('disabled',false);
+                $(window).trigger('load');
+                $('#view_update_enquiry').modal('hide');
+                $('#view_enquiry_'+enquiry_id).click();
+            }).fail(function(response) {
+                $('#save_follow_up').prop('disabled',true);
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
         });
     });
 </script>

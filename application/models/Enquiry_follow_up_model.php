@@ -95,7 +95,7 @@ class Enquiry_follow_up_model extends CI_Model {
         ];
         $fields = 'ef.enquiry_follow_up_id, ef.enquiry_id, ef.follow_up_status_id, fs.follow_up_status, ef.remarks, ef.follow_up_date, ef.is_active, ef.created_by called_user_id,u.first_name,u.middel_name,u.last_name,u.display_name,u.unique_no, ef.created_on';
         $order_by = ['ef.created_on' => 'ASC'];
-        $results = $this->global_model->select($this->table_name.' ef', $where, $fields, $joins);
+        $results = $this->global_model->select($this->table_name.' ef', $where, $fields, $joins,NULL,NULL,$order_by);
         if(isset($results) && $results->num_rows() > 0){
             foreach($results->result() as $result){
                 $called_user_name = $result->display_name;
@@ -112,10 +112,15 @@ class Enquiry_follow_up_model extends CI_Model {
                     'follow_up_status'      => $result->follow_up_status,
                     'remarks'               => $result->remarks,
                     'follow_up_date'        => $result->follow_up_date,
-                    'called_user_id'        => $result->called_user_id,
-                    'called_user_name'      => $called_user_name
+                    'display_follow_up_date' => (!empty($result->follow_up_date) && $result->follow_up_date != '0000-00-00 00:00:00') ? date('d/m/Y h:i A',strtotime($result->follow_up_date)) : '',
+                    'called_user_id'        => (int) $result->called_user_id,
+                    'called_user_name'      => (!empty($called_user_name)) ? $called_user_name : 'NA', 
+                    'first_later'           => (!empty($called_user_name)) ? strtoupper(substr($called_user_name,0,1)) : 'N',
+                    'called_time'           => $result->created_on,
+                    'display_called_time'   => date('d/m/Y h:i A',strtotime($result->created_on))
                 ];
             }
         }
+        return $output;
     }
 }

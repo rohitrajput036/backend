@@ -639,7 +639,8 @@ legend.custom-border {
                 follow_up_status_id : follow_up_status_id,
                 follow_up_date_time : follow_up_date_time,
                 media_type : media_type,
-                comment : comment
+                comment : comment,
+                login_id : {userdata('UserId')}
             };
             var request = {
                 control : control,
