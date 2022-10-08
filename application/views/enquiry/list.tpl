@@ -242,23 +242,22 @@
                     $("#animatedLoader").show();
                 }
             }).done(function(response) {
-                $('#enquiry_id').val(0);
-                $('#enquiry_date').val('');
-                $('#form_id').val('');
-                $('#child_first_name').val('');
-                $('#child_middel_name').val('');
-                $('#child_last_name').val('');
-                $('#father_name').val('');
-                $('#father_email_id').val('');
-                $('#father_mobile_no').val('');
-                $('#mother_name').val('');
-                $('#mother_email_id').val('');
-                $('#mother_mobile_no').val('');
-                $('#address').val('');
-                $('#city_state').val('');
-                $('#pincode').val('');
-                $('#follow_up_status').val('');
-                $('#next_follow_up_date').val('');
+                $("#enquiry_date").html(response.data[0].enquiry_date);
+                $("#form_id").html(response.data[0].form_id);
+                $("#child_first_name").html(response.data[0].first_name);
+                $("#child_middel_name").html(response.data[0].middel_name);
+                $("#child_last_name").html(response.data[0].last_name);
+                $("#father_name").html(response.data[0].father_first_name);
+                $("#father_email_id").html(response.data[0].father_email_id);
+                $("#father_mobile_no").html(response.data[0].father_mobile_no);
+                $("#mother_name").html(response.data[0].mother_first_name);
+                $("#mother_email_id").html(response.data[0].mother_email_id);
+                $("#mother_mobile_no").html(response.data[0].mother_mobile_no);
+                $("#address").html(response.data[0].add_line_2);
+                $("#city_state").html(response.data[0].state_id);
+                $("#pincode").html(response.data[0].pincode);
+                $("#follow_up_status").html(response.data[0].follow_up_status_id);
+                $("#next_follow_up_date").html(response.data[0].follow_up_date);
                 $("#animatedLoader").hide();
             }).fail(function(response) {
                 $("#animatedLoader").hide();
