@@ -100,8 +100,12 @@
                         <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
                     </div>
                     <!-- /.direct-chat-info -->
-                    {image('dist/avatar.png',['class'=>'direct-chat-img', 'alt'=>'user image'])}
+                    <div class="direct-chat-img" style="border:1px solid #ccc; font-weight: bold; text-align:center; vertical-align: middle; background-color:#3c8dbc; color:white">
+                        <h4>{strtoupper(substr(userdata('UserName'),0,1))}</h4>
+                    </div>
+                    {* {image('dist/avatar.png',['class'=>'direct-chat-img', 'alt'=>'user image'])} *}
                     <div class="direct-chat-text">
+                        <span style="font-weight: bold;">Followup status</span><br/>
                         Is this template really for free? That's unbelievable!
                     </div>
                     <!-- /.direct-chat-text -->
@@ -121,16 +125,11 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-primary btn-flat">Send</button>
-                        </span>
-                    </div>
+                    <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control"/>
+                        <input type="text" name="next_followup_date" id="next_followup_date" placeholder="Next Followup Date" class="form-control"/>
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-primary btn-flat">Send</button>
                         </span>
