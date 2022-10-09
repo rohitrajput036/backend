@@ -58,6 +58,17 @@
                     </li>
                 </ul>
             </li>
+            <li {if uriseg(1)=='admission'} class="treeview active" {else} class="treeview" {/if}>
+                <a href="#">
+                    <i class="fa fa-th"></i> <span>Admission</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li {if uriseg(1)=='admission' && uriseg(2) == ''}class="active"{/if}>
+                        <a href="{site_url('admission')}"><i class="fa fa fa-users"></i> List</a>
+                    </li>
+                </ul>
+            </li>
             <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
                     <i class="fa fa-cogs"></i> <span>Setting</span>
