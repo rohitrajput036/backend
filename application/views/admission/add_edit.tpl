@@ -166,6 +166,7 @@
                             </select>
                             <label for="alumni_student_id_error_msg"></label>
                         </div>
+                        <legend class="custom-border">Father Information</legend>
                         <div class="col-md-3 form-group" id="father_first_name_box">
                             <label>First Name<span class="text-red">*</span></label>
                             <input type="text" name="father_first_name" id="father_first_name" class="form-control"/>
@@ -185,6 +186,203 @@
                             <label>Date of birth</label>
                             <input type="text" name="father_date_of_birth" id="father_date_of_birth" class="form-control" readonly/>
                             <label for="father_date_of_birth_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_contact_number_box">
+                             <label>Contact Number 1<span class="text-red">*</span></label>
+                            <input type="text" name="father_contact_number" id="father_contact_number" class="form-control"/>
+                            <label for="father_contact_number_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_contact_number2_box">
+                            <label>Contact Number 2</label>
+                            <input type="text" name="father_contact_number2" id="father_contact_number2" class="form-control"/>
+                            <label for="father_contact_number2_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_qualification_box">
+                            <label>Father Qualification<span class="text-red">*</span></label>
+                            <select name="father_qualification" id="father_qualification" class="form-control">
+                                <option value="0">--Select Qualification--</option>
+                            </select>
+                            <label id="father_qualification_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_Occupation_box">
+                            <label>Father Occupation<span class="text-red">*</span></label>
+                            <select name="father_occupation" id="father_occupation" class="form-control">
+                                <option value="0">--Select Occupation--</option>
+                            </select>
+                            <label id="father_occupation_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_address_line_1_box">
+                            <label>Address Line 1<span class="text-red">*</span></label>
+                            <input type="text" name="father_address_line_1" id="father_address_line_1" class="form-control"/>
+                            <label id="father_address_line_1_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="father_address_line_2_box">
+                            <label>Address Line 2</label>
+                            <input type="text" name="father_address_line_2" id="father_address_line_2" class="form-control"/>
+                            <label id="father_address_line_2_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="state_id_box">
+                            <label>State<span class="text-red">*</span></label>
+                            <select name="state_id" id="state_id" class="form-control">
+                                <option value="0">--Select State--</option>
+                            </select>
+                            <label id="state_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="city_id_box">
+                            <label>City<span class="text-red">*</span></label>
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="0">--Select City--</option>
+                            </select>
+                            <label id="city_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="pincode_box">
+                            <label>Pincode<span class="text-red">*</span></label>
+                            <input type="text" name="pincode" id="pincode" class="form-control"/>
+                            <label id="pincode_error_msg"></label>
+                        </div>
+                        <legend class="custom-border">Office Information</legend>
+                        <div class="col-md-4 form-group" id="father_email_id_box">
+                            <label>Email ID<span class="text-red">*</span></label>
+                            <input type="text" name="father_email_id" id="father_email_id" class="form-control"/>
+                            <label id="father_email_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="office_address_box">
+                            <label> Office Address<span class="text-red">*</span></label>
+                            <input type="text" name="office_address" id="office_address" class="form-control"/>
+                            <label id="office_address_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="office_address_2_box">
+                            <label>Office Address 2</label>
+                            <input type="text" name="office_address_2" id="office_address_2" class="form-control"/>
+                            <label id="office_address_2_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="state_id_box">
+                            <label>State<span class="text-red">*</span></label>
+                            <select name="state_id" id="state_id" class="form-control">
+                                <option value="0">--Select State--</option>
+                            </select>
+                            <label id="state_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="city_id_box">
+                            <label>City<span class="text-red">*</span></label>
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="0">--Select City--</option>
+                            </select>
+                            <label id="city_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="pincode_box">
+                            <label>Pincode<span class="text-red">*</span></label>
+                            <input type="text" name="pincode" id="pincode" class="form-control"/>
+                            <label id="pincode_error_msg"></label>
+                        </div>
+                        <legend class="custom-border">Mother Information</legend>
+                        <div class="col-md-3 form-group" id="mother_first_name_box">
+                            <label>First Name<span class="text-red">*</span></label>
+                            <input type="text" name="mother_first_name" id="mother_first_name" class="form-control"/>
+                            <label for="mother_first_name_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_middle_name_box">
+                            <label>Middle Name</label>
+                            <input type="text" name="mother_middle_name" id="mother_middle_name" class="form-control"/>
+                            <label for="mother_middle_name_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_last_name_box">
+                            <label>Last Name</label>
+                            <input type="text" name="mother_last_name" id="mother_last_name" class="form-control"/>
+                            <label for="mother_last_name_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_date_of_birth_box">
+                            <label>Date of birth</label>
+                            <input type="text" name="mother_date_of_birth" id="mother_date_of_birth" class="form-control" readonly/>
+                            <label for="mother_date_of_birth_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_contact_number_box">
+                             <label>Contact Number 1<span class="text-red">*</span></label>
+                            <input type="text" name="mother_contact_number" id="mother_contact_number" class="form-control"/>
+                            <label for="mother_contact_number_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_contact_number2_box">
+                            <label>Contact Number 2</label>
+                            <input type="text" name="mother_contact_number2" id="mother_contact_number2" class="form-control"/>
+                            <label for="mother_contact_number2_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_qualification_box">
+                            <label>Mother Qualification<span class="text-red">*</span></label>
+                            <select name="mother_qualification" id="mother_qualification" class="form-control">
+                                <option value="0">--Select Qualification--</option>
+                            </select>
+                            <label id="mother_qualification_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_Occupation_box">
+                            <label>Mother Occupation<span class="text-red">*</span></label>
+                            <select name="mother_occupation" id="mother_occupation" class="form-control">
+                                <option value="0">--Select Occupation--</option>
+                            </select>
+                            <label id="mother_occupation_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_address_line_1_box">
+                            <label>Address Line 1<span class="text-red">*</span></label>
+                            <input type="text" name="mother_address_line_1" id="mother_address_line_1" class="form-control"/>
+                            <label id="mother_address_line_1_error_msg"></label>
+                        </div>
+                        <div class="col-md-3 form-group" id="mother_address_line_2_box">
+                            <label>Address Line 2</label>
+                            <input type="text" name="mother_address_line_2" id="mother_address_line_2" class="form-control"/>
+                            <label id="mother_address_line_2_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="state_id_box">
+                            <label>State<span class="text-red">*</span></label>
+                            <select name="state_id" id="state_id" class="form-control">
+                                <option value="0">--Select State--</option>
+                            </select>
+                            <label id="state_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="city_id_box">
+                            <label>City<span class="text-red">*</span></label>
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="0">--Select City--</option>
+                            </select>
+                            <label id="city_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-2 form-group" id="pincode_box">
+                            <label>Pincode<span class="text-red">*</span></label>
+                            <input type="text" name="pincode" id="pincode" class="form-control"/>
+                            <label id="pincode_error_msg"></label>
+                        </div>
+                        <legend class="custom-border">Office Information</legend>
+                        <div class="col-md-4 form-group" id="mother_email_id_box">
+                            <label>Email ID<span class="text-red">*</span></label>
+                            <input type="text" name="mother_email_id" id="mother_email_id" class="form-control"/>
+                            <label id="mother_email_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="office_address_box">
+                            <label> Office Address<span class="text-red">*</span></label>
+                            <input type="text" name="office_address" id="office_address" class="form-control"/>
+                            <label id="office_address_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="office_address_2_box">
+                            <label>Office Address 2</label>
+                            <input type="text" name="office_address_2" id="office_address_2" class="form-control"/>
+                            <label id="office_address_2_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="state_id_box">
+                            <label>State<span class="text-red">*</span></label>
+                            <select name="state_id" id="state_id" class="form-control">
+                                <option value="0">--Select State--</option>
+                            </select>
+                            <label id="state_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="city_id_box">
+                            <label>City<span class="text-red">*</span></label>
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="0">--Select City--</option>
+                            </select>
+                            <label id="city_id_error_msg"></label>
+                        </div>
+                        <div class="col-md-4 form-group" id="pincode_box">
+                            <label>Pincode<span class="text-red">*</span></label>
+                            <input type="text" name="pincode" id="pincode" class="form-control"/>
+                            <label id="pincode_error_msg"></label>
                         </div>
                         <div class="clearfix"></div>
                     </div>
