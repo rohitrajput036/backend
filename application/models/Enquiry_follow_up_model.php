@@ -94,7 +94,7 @@ class Enquiry_follow_up_model extends CI_Model {
 
         ];
         $fields = 'ef.enquiry_follow_up_id, ef.enquiry_id, ef.follow_up_status_id, fs.follow_up_status, ef.remarks, ef.follow_up_date, ef.is_active, ef.created_by called_user_id,u.first_name,u.middel_name,u.last_name,u.display_name,u.unique_no, ef.created_on';
-        $order_by = ['ef.created_on' => 'ASC'];
+        $order_by = ['ef.created_on' => 'DESC'];
         $results = $this->global_model->select($this->table_name.' ef', $where, $fields, $joins,NULL,NULL,$order_by);
         if(isset($results) && $results->num_rows() > 0){
             foreach($results->result() as $result){
