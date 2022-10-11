@@ -4,24 +4,21 @@
 {include file='left_menu.tpl'}
 <!-- Right side column. Contains the navbar and content of the page -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+   <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
             Admission
-            <small>Add</small>
+            {* <small>All Branch</small> *}
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Admission</a></li>
-            <li class="active">Add</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">add</li>
         </ol>
     </section>
     <section class="content">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-xs-12">
                 <div class="card card-default">
-                    <div class="card-header">
-                        <h3 class="card-title">Add Admission</h3>
-                    </div>
                     <div class="card-body p-0">
                         <div class="bs-stepper">
                             <div class="bs-stepper-header" role="tablist">
@@ -63,19 +60,19 @@
                             </div>
                             <div class="bs-stepper-content">
                                 <div id="child-information-part" class="content" role="tabpanel" aria-labelledby="child-information-part-trigger">
-                                    <div class="col-md-3 form-group" id="acadmic_session_id_box">
+                                    <div class="col-md-4 form-group" id="acadmic_session_id_box">
                                         <label>Acadmic Session<span class="text-red">*</span></label>
                                         <select name="acadmic_session_id" id="acadmic_session_id" class="form-control">
                                             <option value="0">--Select--</option>
                                         </select>
                                         <label id="acadmic_session_id_error_msg"></label>
                                     </div>
-                                    <div class="col-md-3 form-group" id="enquiry_form_no_box">
+                                    <div class="col-md-4 form-group" id="enquiry_form_no_box">
                                         <label>Enquiry Form Id<span class="text-red">*</span></label>
                                         <input type="text" name="enquiry_form_no" id="enquiry_form_no" class="form-control"/>
                                         <label id="enquiry_form_no_error_msg"></label>
                                     </div>
-                                    <div class="col-md-3 form-group" id="enquiry_date_box">
+                                    <div class="col-md-4 form-group" id="enquiry_date_box">
                                         <label>Date of Enquiry<span class="text-red">*</span></label>
                                         <input type="text" name="enquiry_date" id="enquiry_date" class="form-control"/>
                                         <label id="enquiry_date_error_msg"></label>
@@ -96,12 +93,12 @@
                                         <input type="text" name="child_last_name" id="child_last_name" class="form-control"/>
                                         <label id="child_last_name_error_msg"></label>
                                     </div>
-                                    <div class="clearfix"></div>
                                     <div class="col-md-3 form-group" id="date_of_birth_box">
                                         <label>Date of Birth<span class="text-red">*</span></label>
-                                        <input type="text" name="date_of_birth" id="date_of_birth" class="form-control" readonly/>
+                                        <input type="date" name="date_of_birth" id="date_of_birth" class="form-control"/>
                                         <label id="date_of_birth_error_msg"></label>
                                     </div>
+                                    <div class="clearfix"></div>
                                     <div class="col-md-3 form-group" id="gender_box">
                                         <label>Gender<span class="text-red">*</span></label>
                                         <div class="form-control text-center">
@@ -111,17 +108,17 @@
                                         </div>
                                         <label id="gender_error_msg"></label>
                                     </div>
-                                    <div class="col-md-2 form-group" id="age_box">
+                                    <div class="col-md-3 form-group" id="age_box">
                                         <label>Age<span class="text-red">*</span></label>
                                         <input type="text" name="age" id="age" class="form-control"/>
                                         <label id="age_error_msg"></label>
                                     </div>
-                                    <div class="col-md-2 form-group" id="height_box">
+                                    <div class="col-md-3 form-group" id="height_box">
                                         <label>Height <i>(CM)</i></label>
                                         <input type="text" name="height" id="height" class="form-control"/>
                                         <label id="height_error_msg"></label>
                                     </div>
-                                    <div class="col-md-2 form-group" id="weight_box">
+                                    <div class="col-md-3 form-group" id="weight_box">
                                         <label>Weight <i>(KG)</i></label>
                                         <input type="text" name="weight" id="weight" class="form-control"/>
                                         <label id="weight_error_msg"></label>
@@ -176,19 +173,18 @@
                                         <input type="text" name="pincode" id="pincode" class="form-control"/>
                                         <label id="pincode_error_msg"></label>
                                     </div>
-                                    <legend class="custom-border">Sibling Information</legend>
                                     <div class="col-md-4 from-group">
                                         <input type="checkbox" name="is_any_siblings" id="is_any_siblings" value="1"/>
                                         <label for="is_any_siblings">Is any Siblings Child's ?</label>
                                     </div>
-                                    <div class="col-md-4 form-group" id="sibling_class_id_box">
+                                    <div class="col-md-4 form-group when_siblings" id="sibling_class_id_box">
                                         <label>Sibling's Class<span class="text-red">*</span></label>
                                         <select name="sibling_class_id" id="sibling_class_id" class="form-control">
                                             <option value="0">--Select Class--</option>
                                         </select>
                                         <label for="sibling_class_id_error_msg"></label>
                                     </div>
-                                    <div class="col-md-4 form-group" id="sibling_student_id_box">
+                                    <div class="col-md-4 form-group when_siblings" id="sibling_student_id_box">
                                         <label>Sibling<span class="text-red">*</span></label>
                                         <select name="sibling_student_id" id="sibling_student_id" class="form-control">
                                             <option value="0">--Select Sibling--</option>
@@ -199,14 +195,14 @@
                                         <input type="checkbox" name="is_any_alumni" id="is_any_alumni" value="1"/>
                                         <label for="is_any_alumni">Is any Alumni Child's ?</label>
                                     </div>
-                                    <div class="col-md-4 form-group" id="alumni_class_id_box">
+                                    <div class="col-md-4 form-group when_alumni" id="alumni_class_id_box">
                                         <label>Alumni's Class<span class="text-red">*</span></label>
                                         <select name="alumni_class_id" id="alumni_class_id" class="form-control">
                                             <option value="0">--Select Class--</option>
                                         </select>
                                         <label for="alumni_class_id_error_msg"></label>
                                     </div>
-                                    <div class="col-md-4 form-group" id="alumni_student_id_box">
+                                    <div class="col-md-4 form-group when_alumni" id="alumni_student_id_box">
                                         <label>Alumni<span class="text-red">*</span></label>
                                         <select name="alumni_student_id" id="alumni_student_id" class="form-control">
                                             <option value="0">--Select Sibling--</option>
@@ -233,7 +229,7 @@
                                     </div>
                                     <div class="col-md-3 form-group" id="father_date_of_birth_box">
                                         <label>Date of birth</label>
-                                        <input type="text" name="father_date_of_birth" id="father_date_of_birth" class="form-control" readonly/>
+                                        <input type="date" name="father_date_of_birth" id="father_date_of_birth" class="form-control"/>
                                         <label for="father_date_of_birth_error_msg"></label>
                                     </div>
                                     <div class="col-md-3 form-group" id="father_contact_number_box">
@@ -345,7 +341,7 @@
                                     </div>
                                     <div class="col-md-3 form-group" id="mother_date_of_birth_box">
                                         <label>Date of birth</label>
-                                        <input type="text" name="mother_date_of_birth" id="mother_date_of_birth" class="form-control" readonly/>
+                                        <input type="date" name="mother_date_of_birth" id="mother_date_of_birth" class="form-control"/>
                                         <label for="mother_date_of_birth_error_msg"></label>
                                     </div>
                                     <div class="col-md-3 form-group" id="mother_contact_number_box">
@@ -510,6 +506,24 @@
 {include file='footer.tpl'}
 {js('plugins/bs-stepper/js/bs-stepper.min.js')}
 {js('common.js')}
+<script>
+$(document).ready(function(){
+    $('.when_alumni').hide();
+    $('.when_siblings').hide();
+    $(document).on('click', '#is_any_siblings', function(){
+        $('.when_siblings').hide();
+        if($(this).is(':checked')){
+            $('.when_siblings').show();
+        }
+    });
+    $(document).on('click', '#is_any_alumni', function(){
+        $('.when_alumni').hide();
+        if($(this).is(':checked')){
+            $('.when_alumni').show();
+        }
+    });
+});
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
