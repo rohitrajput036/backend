@@ -69,7 +69,7 @@
                     </li>
                 </ul>
             </li>
-            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter'} class="treeview active"{else}class="treeview"{/if}>
+            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter' || uriseg(1)=='routes'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
                     <i class="fa fa-cogs"></i> <span>Setting</span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -95,6 +95,9 @@
                     </li>
                     <li {if uriseg(1)=='chapter'}class="active"{/if}>
                         <a href= "{site_url('chapter')}"><i class="fa fa-circle-o"></i>Manage Chapter</a>
+                    </li>
+                    <li {if uriseg(1)=='routes'}class="active"{/if}>
+                        <a href= "{site_url('routes')}"><i class="fa fa-circle-o"></i>Manage Routes</a>
                     </li>
                 </ul>
             </li>
