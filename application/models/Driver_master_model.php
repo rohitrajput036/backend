@@ -32,7 +32,6 @@ class Driver_master_model extends CI_Model {
 
     function add(){
         $insert_data =[
-            'driver_master_id'  => $this->driver_master_id,
             'branch_id'         => $this->branch_id,
             'first_name'        => $this->first_name,
             'middle_name'       => $this->middle_name,
@@ -59,7 +58,7 @@ class Driver_master_model extends CI_Model {
     }
 
     function check() {
-        $Results = $this->global_model->select($this->table_name, ['driver_type' => $this->driver_type]);
+        $Results = $this->global_model->select($this->table_name, ['contact_no' => $this->contact_no]);
         if ($Results->num_rows() > 0) {
             $this->driver_master_id = $Results->row()->driver_master_id;
             return true;
