@@ -47,9 +47,11 @@ class Admission extends REST_Controller {
             $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
-                keyExist(['request_id','source','request_time'],$request->control);
-            };
-
+                keyExist(['request_id','source','request_time','version'],$request->control);
+                
+            }else{
+                throw new Exception('Invalid request!',REST_Controller::HTTP_BAD_REQUEST);
+            }
         }catch (Exception $E) {
             $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
             $Response = [
