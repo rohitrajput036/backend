@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div id="manage_vehicle" class="tab-pane fade"><br>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="col-md-12 form-group has-error text-center">
                                         <label id="api_error"></label>
                                     </div>
@@ -87,30 +87,42 @@
                                             <input type="text" name="vehicle_no" id="vehicle_no" class="form-control" placeholder="Enter vehicle no."/>
                                             <label for="vehicle_no" id="vehicle_no_error_msg"></label>
                                         </div>
-                                        <div class="col-md-6 form-group" id="vehicle_name_box">
-                                            <label>Vehicle Name<span class="text-red">*</span></label>
-                                            <input type="text" name="vehicle_name" id="vehicle_name" class="form-control" placeholder="Write your vehicle model"/>
-                                            <label for="vehicle_name" id="vehicle_name_error_msg"></label>
-                                        </div>
                                         <div class="col-md-6 form-group" id="vehicle_color_box">
                                             <label>Vehicle Colour</label>
                                             <input type="text" name="vehicle_color" id="vehicle_color" class="form-control" placeholder="Vehicle colour name"/>
                                             <label for="vehicle_color" id="vehicle_color_error_msg"></label>
                                         </div>
-                                        <div class="col-md-6">
-                                            <button id="add_vehicle" class="btn btn-primary" style="margin-top:20px">Save</button>
+                                        <div class="col-md-6 form-group" id="manufacturing_year_box">
+                                            <label>Manufacturing Year<span class="text-red">*</span></label>
+                                            <input type="text" name="manufacturing_year" id="manufacturing_year" class="form-control" placeholder="Write your vehicle model"/>
+                                            <label for="manufacturing_year" id="manufacturing_year_error_msg"></label>
+                                        </div>
+                                        <div class="col-md-6 form-group" id="seating_capacity_box">
+                                            <label>Seating Capacity<span class="text-red">*</span></label>
+                                            <input type="text" name="seating_capacity" id="seating_capacity" class="form-control" placeholder="Write your vehicle seat capiblity"/>
+                                            <label for="seating_capacity" id="seating_capacity_error_msg"></label>
+                                        </div>
+                                        <div class="col-md-6 form-group" id="pre_reserved_seat_box">
+                                            <label>Pre Reserved Seat<span class="text-red">*</span></label>
+                                            <input type="text" name="pre_reserved_seat" id="pre_reserved_seat" class="form-control" placeholder="Is any seat book or not"/>
+                                            <label for="pre_reserved_seat" id="pre_reserved_seat_error_msg"></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button id="add_vehicle" class="btn btn-primary" style="margin-Ftop:20px">Save</button>
                                             <input type="hidden" name="vehicle_id" id="vehicle_id" value="0"/>
                                         </div>
                                     </div>   
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <table class="table table-bordered" id="DataTable">
                                         <thead>
                                             <tr>
                                                 <th>S. No.</th>
                                                 <th>vehicle No</th>
-                                                <th>vehicle Name</th>
                                                 <th>vehicle Colour</th>
+                                                <th>Manufacturing Year</th>
+                                                <th>Seating Capacity</th>
+                                                <th>Pre Reserved Seat</th>
                                                 <th>#</th>
                                             </tr>
                                         </thead>
@@ -143,9 +155,9 @@
                                     <div class="row">
                                         <div class="col-md-2 form-group" id="gender_box">
                                             <label>Gender</label>
-                                            <Select name="gender" id="gender" class="form-control">
+                                            <select name="gender" id="gender" class="form-control">
                                                 <option value="male">Male</option>
-                                                <option value="Female">Female</option>
+                                                <option value="female">Female</option>
                                             </select>
                                             <label for="gender" id="gender_error_msg"></label>
                                         </div>
@@ -200,7 +212,7 @@
                                         </div>
                                         <div class="col-md-4 form-group" id="driver_type_box">
                                             <label>Type</label>
-                                            <Select name="driver_type" id="driver_type" class="form-control">
+                                            <select name="driver_type" id="driver_type" class="form-control">
                                                 <option value="driver">Driver</option>
                                                 <option value="guard">Guard</option>
                                             </select>
