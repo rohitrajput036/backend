@@ -67,7 +67,7 @@ if(!function_exists('checkTime')) {
         $time_regex = '%\A([01]\d|2[0-3])[:]([0-5]\d)[:]([0-5]\d)\z%';
         foreach ($Variables as $key => $value)
             if($value !='')
-                if(preg_match($datetime_regex, $value) ==false) 
+                if(preg_match($time_regex, $value) ==false) 
                     throw new Exception("Invalid time on ".$key.", Please use HH:MM:SS(24 Hours) format",400);
     }
 }
@@ -86,6 +86,20 @@ if(!function_exists('checkArray')) {
     function checkArray($Variables=[]) {
         foreach ($Variables as $key => $value) {
             if(!is_array($value)) {
+                throw new Exception($key." must be an array",400);
+            } else {
+                if(empty($value)) {
+                    throw new Exception($key." array can not be empty",400);
+                }
+            }
+        }
+    }
+}
+
+if(!function_exists('checkObject')) {
+    function checkObject($Variables=[]) {
+        foreach ($Variables as $key => $value) {
+            if(!is_object($value)) {
                 throw new Exception($key." must be an array",400);
             } else {
                 if(empty($value)) {

@@ -13,26 +13,70 @@ class Student_previous_acadmic_records_model extends CI_Model {
         $this->achievements = '';
         $this->is_active = '';
         $this->created_by = '';
-        $this->created_on = '';
+        $this->created_on = date('Y-m-d H:i:s');
         $this->updated_by = '';
-        $this->updated_on = '';
+        $this->updated_on = date('Y-m-d H:i:s');
         $this->table_name = DB_NAME.'student_previous_acadmic_records';
     }
 
     function add(){
-
+        $insert_data = [
+            'student_id' => $this->student_id,
+            'school_name' => $this->school_name,
+            'class' => $this->class,
+            'acadmic_year' => $this->acadmic_year,
+            'grade' => $this->grade,
+            'achievements' => $this->achievements,
+            'is_active' => $this->is_active,
+            'created_by' => $this->created_by,
+            'created_on' => $this->created_on
+        ];
+        if ($this->global_model->insert($this->table_name, $insert_data)) {
+            $this->student_previous_acadmic_records_id = $this->db->insert_id();
+        } else {
+            throw new Exception("Issue in insertion", 500);
+        }
     }
 
     function check(){
-
+        $where['student_id'] = $this->student_id;
+        $where['school_name'] = $this->school_name;
+        $where['class'] = $this->class;
+        $results = $this->global_model->select($this->table_name,$where);
+        if(isset($results) && $results->num_rows() > 0){
+            $this->student_previous_acadmic_records_id = $results->row()->student_previous_acadmic_records_id;
+            return true;
+        }
+        return false;
     }
 
     function update(){
-
+        $where['student_previous_acadmic_records_id'] = $this->student_previous_acadmic_records_id;
+        $update_data = [
+            'school_name' => $this->school_name,
+            'class' => $this->class,
+            'acadmic_year' => $this->acadmic_year,
+            'grade' => $this->grade,
+            'achievements' => $this->achievements,
+            'updated_by' => $this->updated_by,
+            'updated_on' => $this->updated_on
+        ];
+        return $this->global_model->update($this->table_name, $update_data, $where);
     }
 
     function delete(){
-
+        $where = [];
+        if($this->student_previous_acadmic_records_id > 0){
+            $where['student_previous_acadmic_records_id'] = $this->student_previous_acadmic_records_id;
+        }elseif($this->student_id > 0){
+            $where['student_id'] = $this->student_id;
+        }
+        $update_data = [
+            'is_active' => $this->is_active,
+            'updated_by' => $this->updated_by,
+            'updated_on' => $this->updated_on
+        ];
+        return $this->global_model->update($this->table_name, $update_data, $where);
     }
 
     function get(){
