@@ -58,6 +58,11 @@
                     </li>
                 </ul>
             </li>
+            <li {if uriseg(1)=='registration'} class="active"{/if}>
+                <a href="{site_url('registration')}">
+                    <i class="fa fa-dot-circle-o"></i> Registration
+                </a>
+            </li>
             <li {if uriseg(1)=='admission'} class="treeview active" {else} class="treeview" {/if}>
                 <a href="#">
                     <i class="fa fa-th"></i> <span>Admission</span>
