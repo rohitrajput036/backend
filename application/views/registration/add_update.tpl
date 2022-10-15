@@ -299,6 +299,16 @@
                                             <input type="text" name="father_alt_email_id" id="father_alt_email_id" class="form-control" placeholder="Enter alternate email id"/>
                                             <label id="father_alt_email_id_error_smsg"></label>
                                         </div>
+                                        <div class="col-md-2 form-group" id="father_contact_no_box">
+                                            <label>Contact No</label>
+                                            <input type="text" name="father_contact_no" id="father_contact_no" class="form-control" placeholder="Enter contact no"/>
+                                            <label id="father_contact_no_error_smsg"></label>
+                                        </div>
+                                        <div class="col-md-2 form-group" id="father_alt_contact_no_box">
+                                            <label>Alt. Contact No</label>
+                                            <input type="text" name="father_alt_contact_no" id="father_alt_contact_no" class="form-control" placeholder="Enter alternate contact no"/>
+                                            <label id="father_alt_contact_no_error_smsg"></label>
+                                        </div>
                                     </div>
                                     
                                     <button class="btn btn-warning" onclick="stepper.previous()">Previous</button>
