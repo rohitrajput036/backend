@@ -66,4 +66,42 @@ class Driver_master_model extends CI_Model {
             return false;
         }
     }
+
+    function update(){
+        $where['driver_master_id'] = $this->driver_master_id;
+        $update_data =[
+            'branch_id'         => $this->branch_id,
+            'first_name'        => $this->first_name,
+            'middle_name'       => $this->middle_name,
+            'last_name'         => $this->last_name,
+            'gender'            => $this->gender,
+            'contact_no'        => $this->contact_no,
+            'alt_contact_no'    => $this->alt_contact_no,
+            'address_line_1'    => $this->address_line_1,
+            'address_line_2'    => $this->address_line_2,
+            'state_id'          => $this->state_id,
+            'city_id'           => $this->city_id,
+            'pincode'           => $this->pincode,
+            'dl_no'             => $this->dl_no,
+            'driver_type'       => $this->driver_type,
+            'updated_by'        => $this->updated_by,
+            'updated_on'        => $this->updated_on
+
+        ];
+        return $this->global_model->update($this->table_name,$update_data,$where);
+    }
+
+    function delete(){
+        $where['driver_master_id'] = $this->driver_master_id;
+        $update_data = [
+            'is_active'        => $this->is_active,
+            'updated_by'       => $this->updated_by,
+            'updated_on'       => $this->updated_on
+        ];
+        return $this->global_model->update($this->table_name,$update_data,$where);
+    }
+
+    function get(){
+        
+    }
 };
