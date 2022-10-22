@@ -857,3 +857,228 @@ $(document.body).addClass('fixed');
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
   })
 </script>
+<script>
+    function get_state_list(id){
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            version : {$smarty.const.API_VERSION}
+        };
+        var data = {
+            is_active : 1
+        };
+        var request = {
+            control : control,
+            data : data
+        };
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}state/get";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            $('#'+id).children().remove();
+            $('#'+id).append("<option value='0'>--Select State--</option>");
+            $.each(response.data,function(k,v){
+                $('#'+id).append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+            });
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
+    }
+    function get_city_list(target_id,state_id){
+        if(state_id == 0){
+            $('#'+target_id).children().remove();
+            $('#'+target_id).append("<option value='0'>--Select City--</option>");
+            return false;
+        }
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            version : {$smarty.const.API_VERSION}
+        };
+        var data = {
+            is_active : 1,
+            state_id : state_id
+        };
+        var request = {
+            control : control,
+            data : data
+        }
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}city/get";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            $('#'+target_id).children().remove();
+            $('#'+target_id).append("<option value='0'>--Select City--</option>");
+            $.each(response.data,function(k,v){
+                $('#'+target_id).append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");
+            });
+            $('#'+target_id).trigger('change');
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
+    }
+    function get_area_list(target_id,city_id){
+        if(city_id == 0){
+            $('#'+target_id).children().remove();
+            $('#'+target_id).append("<option value='0'>--Select Area--</option>");
+            $('#'+target_id).trigger('change');
+            return false;
+        }
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            version : {$smarty.const.API_VERSION}
+        };
+        var data = {
+            is_active : 1,
+            city_id : city_id
+        };
+        var request = {
+            control : control,
+            data : data
+        }
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}area/get";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            $('#'+target_id).children().remove();
+            $('#'+target_id).append("<option value='0'>--Select Area--</option>");
+            $.each(response.data,function(k,v){
+                $('#'+target_id).append("<option value='"+v.area_master_id+"'>"+v.area_name+"</option>");
+            });
+            $('#'+target_id).trigger('change');
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
+    }
+    $(document).ready(function(){
+        var child_state_box = $('#child_state_id').select2({
+            width : '100%'
+        });
+        var child_city_box = $('#child_city_id').select2({
+            width : '100%'
+        });
+        var child_area_box = $('#child_area_id').select2({
+            width : '100%'
+        });
+        var child_permanent_state_box = $('#child_permanent_state_id').select2({
+            width : '100%'
+        });
+        var child_permanent_city_box = $('#child_permanent_city_id').select2({
+            width : '100%'
+        });
+        var child_permanent_area_box = $('#child_permanent_area_id').select2({
+            width : '100%'
+        });
+        $(window).load(function(){
+            get_state_list('child_state_id');
+            get_state_list('child_permanent_state_id');
+            get_state_list('father_state_id');
+            get_state_list('father_office_state_id');
+            get_state_list('mother_state_id');
+            get_state_list('mother_office_state_id');
+            get_state_list('guardian_state_id');
+            get_state_list('guardian_office_state_id');
+        });
+        $(document).on('change','#child_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('child_city_id',state_id);
+        });
+        $(document).on('change','#child_permanent_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('child_permanent_city_id',state_id);
+        });
+        $(document).on('change','#father_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('father_city_id',state_id);
+        });
+        $(document).on('change','#father_office_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('father_office_city_id',state_id);
+        });
+        $(document).on('change','#mother_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('mother_city_id',state_id);
+        });
+        $(document).on('change','#mother_office_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('mother_office_city_id',state_id);
+        });
+        $(document).on('change','#guardian_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('guardian_city_id',state_id);
+        });
+        $(document).on('change','#guardian_office_state_id',function(){
+            var state_id = $(this).val();    
+            get_city_list('guardian_office_city_id',state_id);
+        });
+        $(document).on('change','#child_city_id',function(){
+            var city_id = $(this).val();
+            get_area_list('child_area_id',city_id);
+        });
+        $(document).on('change','#child_permanent_city_id',function(){
+            var city_id = $(this).val();
+            get_area_list('child_permanent_area_id',city_id);
+        });
+    });
+</script>
