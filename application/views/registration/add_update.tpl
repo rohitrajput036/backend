@@ -2,6 +2,13 @@
 {css('plugins/bs-stepper/css/bs-stepper.min.css')}
 {include file='top_header.tpl'}
 {include file='left_menu.tpl'}
+<style>
+.form-control[readonly]{
+    cursor: auto;
+    background-color:white !important;
+    opacity: 1;
+}
+</style>
 <!-- Right side column. Contains the navbar and content of the page -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -68,27 +75,27 @@
                                         </div>
                                         <div class="col-md-2 form-group" id="registration_date_box">
                                             <label>Registration Date<span class="text-red">*</span></label>
-                                            <input type="text" name="registration_date" id="registration_date" class="form-control" placeholder="Enter Registration Date"/>
+                                            <input type="text" name="registration_date" id="registration_date" class="form-control" placeholder="Enter Registration Date" readonly/>
                                             <label id="registration_date_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="registration_fee_box">
                                             <label>Registration Fee<span class="text-red">*</span></label>
-                                            <input type="text" name="registration_fee" id="registration_fee" class="form-control" placeholder="Enter Registration Fee"/>
+                                            <input type="text" name="registration_fee" id="registration_fee" class="form-control" placeholder="Enter Registration Fee" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
                                             <label id="registration_fee_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="total_marks_box">
                                             <label>Total Marks<span class="text-red">*</span></label>
-                                            <input type="text" name="total_marks" id="total_marks" class="form-control" placeholder="Enter Total Marks"/>
+                                            <input type="text" name="total_marks" id="total_marks" class="form-control" placeholder="Enter Total Marks" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
                                             <label id="total_marks_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="earn_marks_box">
                                             <label>Earn Marks<span class="text-red">*</span></label>
-                                            <input type="text" name="earn_marks" id="earn_marks" class="form-control" placeholder="Enter Earn Marks"/>
+                                            <input type="text" name="earn_marks" id="earn_marks" class="form-control" placeholder="Enter Earn Marks" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
                                             <label id="earn_marks_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="earn_percentage_box">
                                             <label>Earn Percentage<span class="text-red">*</span></label>
-                                            <input type="text" name="earn_percentage" id="earn_percentage" class="form-control" placeholder="Enter Earn Percentage(%)"/>
+                                            <input type="text" name="earn_percentage" id="earn_percentage" class="form-control" placeholder="Enter Earn Percentage(%)" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode <= 57 || event.charCode==46 ||event.charCode==127 ||event.charCode==8"/>
                                             <label id="earn_percentage_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="class_id_box">
@@ -120,7 +127,7 @@
                                         </div>
                                         <div class="col-md-2 form-group" id="child_date_of_birth_box">
                                             <label>Date Of Birth</label>
-                                            <input type="text" name="child_date_of_birth" id="child_date_of_birth" class="form-control" placeholder="Child date of birth"/>
+                                            <input type="text" name="child_date_of_birth" id="child_date_of_birth" class="form-control" placeholder="Child date of birth" readonly/>
                                             <label id="child_date_of_birth_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="child_place_of_birth_box">
@@ -274,28 +281,29 @@
                                                             <th>Acadmic Year</th>
                                                             <th>Grade/Marks</th>
                                                             <th>Achievements</th>
-                                                            <th><button class="btn btn-success btn-xs"><i class="fa fa-plus"></i></button></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1.</td>
-                                                            <td>
-                                                                <input type="text" name="pre_school_name" id="pre_school_name_1" class="form-control" placeholder="Enter previous school name"/>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" name="pre_class" id="pre_class_1" class="form-control" placeholder="Enter class"/>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" name="pre_acadmic_year" id="pre_acadmic_year_1" class="form-control" placeholder="Enter acadmic year"/>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" name="pre_grade" id="pre_grade_1" class="form-control" placeholder="Enter grade/marks"/>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" name="pre_achievements" id="pre_achievements_1" class="form-control" placeholder="Enter achievements if any"/>
-                                                            </td>
-                                                        </tr>
+                                                        {for $i = 1 to 3}
+                                                            <tr>
+                                                                <td>{$i}.</td>
+                                                                <td>
+                                                                    <input type="text" name="pre_school_name" id="pre_school_name_{$i}" class="form-control" placeholder="Enter previous school name"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="pre_class" id="pre_class_{$i}" class="form-control" placeholder="Enter class"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="pre_acadmic_year" id="pre_acadmic_year_{$i}" class="form-control" placeholder="Enter acadmic year"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="pre_grade" id="pre_grade_{$i}" class="form-control" placeholder="Enter grade/marks"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="pre_achievements" id="pre_achievements_{$i}" class="form-control" placeholder="Enter achievements if any"/>
+                                                                </td>
+                                                            </tr>
+                                                        {/for}
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -328,7 +336,7 @@
                                             <label id="child_remarks_error_msg"></label>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary pull-right" onclick="stepper.next()">Next</button>
+                                    <button class="btn btn-primary pull-right next_btn" data-step="1">Next</button>
                                 </div>
                                 <div id="father-information-part" class="content" role="tabpanel" aria-labelledby="father-information-part-trigger">
                                     <div class="row">
@@ -480,8 +488,8 @@
                                         </div>
                                         <div class="col-md-12 form-group"></div>
                                     </div>
-                                    <button class="btn btn-warning" onclick="stepper.previous()">Previous</button>
-                                    <button class="btn btn-primary pull-right" onclick="stepper.next()">Next</button>
+                                    <button class="btn btn-warning previous_btn">Previous</button>
+                                    <button class="btn btn-primary pull-right next_btn" data-step="2">Next</button>
                                 </div>
                                 <div id="mother-information-part" class="content" role="tabpanel" aria-labelledby="mother-information-part-trigger">
                                     <div class="row">
@@ -633,8 +641,8 @@
                                         </div>
                                         <div class="col-md-12 form-group"></div>
                                     </div>
-                                    <button class="btn btn-warning" onclick="stepper.previous()">Previous</button>
-                                    <button class="btn btn-primary pull-right" onclick="stepper.next()">Next</button>
+                                    <button class="btn btn-warning previous_btn">Previous</button>
+                                    <button class="btn btn-primary pull-right next_btn" data-step="3">Next</button>
                                 </div>
                                 <div id="guardian-information-part" class="content" role="tabpanel" aria-labelledby="guardian-information-part-trigger">
                                     <div class="row">
@@ -795,8 +803,8 @@
                                         </div>
                                         <div class="col-md-12 form-group"></div>
                                     </div>
-                                    <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                                    <button class="btn btn-primary pull-right" onclick="stepper.next()">Next</button>
+                                    <button class="btn btn-primary previous_btn">Previous</button>
+                                    <button class="btn btn-primary pull-right next_btn" data-step="4">Next</button>
                                 </div>
                                 <div id="document-information-part" class="content" role="tabpanel" aria-labelledby="document-information-part-trigger">
                                     <div class="row">
@@ -834,8 +842,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="btn btn-warning" onclick="stepper.previous()">Previous</button>
-                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                    <button class="btn btn-warning previous_btn">Previous</button>
+                                    <button type="submit" class="btn btn-primary pull-right final_btn" data-step="5">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -1011,7 +1019,272 @@ $(document.body).addClass('fixed');
             
         });
     }
+
+    function child_information(){
+        var output = [];
+        var registration_no = $.trim($('#registration_no').val());
+        var registration_date = $.trim($('#registration_date').val());
+        var registration_fee = $.trim($('#registration_fee').val());
+        var total_marks = $.trim($('#total_marks').val());
+        var earn_marks = $.trim($('#earn_marks').val());
+        var earn_percentage = $.trim($('#earn_percentage').val());
+        var class_id = $('#class_id').val();
+        var child_first_name = $('#child_first_name').val();
+        var child_middle_name = $('#child_middle_name').val();
+        var child_last_name = $('#child_last_name').val();
+        var child_date_of_birth = $('#child_date_of_birth').val();
+        var child_place_of_birth = $('#child_place_of_birth').val();
+        var gender = $('input[name=child_gender]:checked').val();
+        var child_categoty_id = $('#child_categoty_id').val();
+        var child_cast = $('#child_cast').val();
+        var child_nationality_id = $('#child_nationality_id').val();
+        var child_religion_id = $('#child_religion_id').val();
+        var child_address_line_1 = $('#child_address_line_1').val();
+        var child_address_line_2 = $('#child_address_line_2').val();
+        var child_state_id = $('#child_state_id').val();
+        var child_city_id = $('#child_city_id').val();
+        var child_area_id = $('#child_area_id').val();
+        var child_pincode = $('#child_pincode').val();
+        var child_permanent_address_line_1 = $('#child_permanent_address_line_1').val();
+        var child_permanent_address_line_2 = $('#child_permanent_address_line_2').val();
+        var child_permanent_state_id = $('#child_permanent_state_id').val();
+        var child_permanent_city_id = $('#child_permanent_city_id').val();
+        var child_permanent_area_id = $('#child_permanent_area_id').val();
+        var child_permanent_pincode = $('#child_permanent_pincode').val();
+        var child_mother_tongue = $('#child_mother_tongue').val();
+        var child_blood_group = $('#child_blood_group').val();
+        var child_indentification_mark_1 = $('#child_indentification_mark_1').val();
+        var child_indentification_mark_2 = $('#child_indentification_mark_2').val();
+        var child_remarks = $('#child_remarks').val();
+        var previous_acadmic = [];
+        var i=0;
+        if(checkBlank('registration_no_box','registration_no_error_msg','Required!', registration_no, 'registration_no', '')){
+            return false;
+        }
+        if(checkBlank('registration_date_box','registration_date_error_msg','Required!', registration_date, 'registration_date', '')){
+            return false;
+        }
+        if(checkBlank('registration_fee_box','registration_fee_error_msg','Required!', registration_fee, 'registration_fee', '')){
+            return false;
+        }
+        if(checkBlank('total_marks_box','total_marks_error_msg','Required!', total_marks, 'total_marks', '')){
+            return false;
+        }
+        if(checkBlank('earn_marks_box','earn_marks_error_msg','Required!', earn_marks, 'earn_marks', '')){
+            return false;
+        }
+        if(checkBlank('earn_percentage_box','earn_percentage_error_msg','Required!', earn_percentage, 'earn_percentage', '')){
+            return false;
+        }
+        if(checkBlank('class_id_box','class_id_error_msg','Required!', class_id, 'class_id', '0')){
+            return false;
+        }
+        if(checkBlank('child_first_name_box','child_first_name_error_msg','Required!', child_first_name, 'child_first_name', '')){
+            return false;
+        }
+        $('input[name=pre_school_name]').each(function(){
+            i++;
+            var pre_school_name = $('#pre_school_name_'+i).val();
+            var pre_class = $('#pre_class_'+i).val();
+            var pre_acadmic_year = $('#pre_acadmic_year_'+i).val();
+            var pre_grade = $('#pre_grade_'+i).val();
+            var pre_achievements = $('#pre_achievements_'+i).val();
+            if(pre_school_name.length > 0){
+                var inner = {
+                    school_name : pre_school_name,
+                    class : pre_class,
+                    acadmic_year : pre_acadmic_year,
+                    grade : pre_grade,
+                    achievements : pre_achievements
+                };
+                previous_acadmic.push(inner);
+            }
+        });
+        output = {
+            registration_id : 0,
+            branch_id : '{userdata("BranchId")}',
+            enquiry_id : '0',
+            registration_no : registration_no,
+            registration_date : registration_date,
+            registration_fee : registration_fee,
+            is_qualified : (earn_percentage > 50) ? 1 : 0,
+            total_marks : total_marks,
+            earn_marks : earn_marks,
+            earn_percentage : earn_percentage,
+            remarks : child_remarks,
+            student : {
+                student_id : 0,
+                first_name : child_first_name,
+                middle_name : child_middle_name,
+                last_name : child_last_name,
+                date_of_birth : child_date_of_birth,
+                place_of_birth : child_place_of_birth,
+                gender : gender,
+                cast_category_id : child_categoty_id,
+                cast : child_cast,
+                nationality_id : child_nationality_id,
+                religion_id : child_religion_id,
+                address_line_1 : child_address_line_1,
+                address_line_2 : child_address_line_2,
+                area_id : child_area_id,
+                city_id : child_city_id,
+                state_id : child_state_id,
+                pincode : child_pincode,
+                permanent_maddress_line_1 : child_permanent_address_line_1,
+                permanent_address_line_2 : child_permanent_address_line_2,
+                permanent_area_id : child_permanent_area_id,
+                permanent_city_id : child_permanent_city_id,
+                permanent_state_id : child_permanent_state_id,
+                permanent_pincode : child_permanent_pincode,
+                mother_tongue : child_mother_tongue,
+                blood_group : child_blood_group,
+                indentification_mark_1 : child_indentification_mark_1,
+                indentification_mark_2 : child_indentification_mark_2,
+                remarks : child_remarks
+            },
+            previous_acadmic : previous_acadmic,
+            parents : []
+        };
+        return output;
+    }
+    
+    function father_information(){
+        var output = [];
+        var father_first_name = $('#father_first_name').val();
+        var father_middle_name = $('#father_middle_name').val();
+        var father_last_name = $('#father_last_name').val();
+        var father_email_id = $('#father_email_id').val();
+        var father_alt_email_id = $('#father_alt_email_id').val();
+        var father_contact_no = $('#father_contact_no').val();
+        var father_alt_contact_no = $('#father_alt_contact_no').val();
+        var father_date_of_birth = $('#father_date_of_birth').val();
+        var father_education_id = $('#father_education_id').val();
+        var father_occupation_type_id = $('#father_occupation_type_id').val();
+        var father_document_type_id = $('#father_document_type_id').val();
+        var father_document_no = $('#father_document_no').val();
+        var father_address_line_1 = $('#father_address_line_1').val();
+        var father_address_line_2 = $('#father_address_line_2').val();
+        var father_state_id = $('#father_state_id').val();
+        var father_city_id  = $('#father_city_id').val();
+        var father_pincode = $('#father_pincode').val();
+        var father_office_address_line_1 = $('#father_office_address_line_1').val();
+        var father_office_address_line_2 = $('#father_office_address_line_2').val();
+        var father_office_state_id = $('#father_office_state_id').val();
+        var father_office_city_id = $('#father_office_city_id').val();
+        var father_office_pincode = $('#father_office_pincode').val();
+        if(checkBlank('father_first_name_box','father_first_name_error_msg','Required!', father_first_name, 'father_first_name', '')){
+            return false;
+        }
+        if(checkBlank('father_contact_no_box','father_contact_no_error_msg','Required!', father_contact_no, 'father_contact_no', '')){
+            return false;
+        }
+        output = {
+            parent_type : '1',
+            relation_id : '1',
+            first_name : father_first_name,
+            middle_name : father_middle_name,
+            last_name : father_last_name,
+            email_id : father_email_id,
+            alt_email_id : father_alt_email_id,
+            contact_no : father_contact_no,
+            alt_contact_no : father_alt_contact_no,
+            date_of_birth : father_date_of_birth,
+            education_type_id : father_education_id,
+            occupation_type_id : father_occupation_type_id,
+            address_line_1 : father_address_line_1,
+            address_line_2 : father_address_line_2,
+            city_id : father_city_id,
+            state_id : father_state_id,
+            pincode : father_pincode,
+            office_address_line_1 : father_office_address_line_1,
+            office_address_line_2 : father_office_address_line_2,
+            office_city_id : father_office_city_id,
+            office_state_id : father_office_state_id,
+            office_pincode : father_office_pincode,
+            document_type_id : father_document_type_id,
+            document_no : father_document_no
+        };
+        return output;
+    }
+
+    function mother_information(){
+        var first_name = $('#mother_first_name').val();
+        var middle_name = $('#mother_middle_name').val();
+        var last_name = $('#mother_last_name').val();
+        var email_id = $('#mother_email_id').val();
+        var alt_email_id = $('#mother_alt_email_id').val();
+        var contact_no = $('#mother_contact_no').val();
+        var alt_contact_no = $('#mother_alt_contact_no').val();
+        var date_of_birth = $('#mother_date_of_birth').val();
+        var education_id = $('#mother_education_id').val();
+        var occupation_type_id = $('#mother_occupation_type_id').val();
+        var document_type_id = $('#mother_document_type_id').val();
+        var document_no = $('#mother_document_no').val();
+        var address_line_1 = $('#mother_address_line_1').val();
+        var address_line_2 = $('#mother_address_line_2').val();
+        var state_id = $('#mother_state_id').val();
+        var city_id  = $('#mother_city_id').val();
+        var pincode = $('#mother_pincode').val();
+        var office_address_line_1 = $('#mother_office_address_line_1').val();
+        var office_address_line_2 = $('#mother_office_address_line_2').val();
+        var office_state_id = $('#mother_office_state_id').val();
+        var office_city_id = $('#mother_office_city_id').val();
+        var office_pincode = $('#mother_office_pincode').val();
+        if(first_name.length <= 0){
+            return false;
+        }
+        output = {
+            parent_type : '2',
+            relation_id : '2',
+            first_name : first_name,
+            middle_name : middle_name,
+            last_name : last_name,
+            email_id : email_id,
+            alt_email_id : alt_email_id,
+            contact_no : contact_no,
+            alt_contact_no : alt_contact_no,
+            date_of_birth : date_of_birth,
+            education_type_id : education_id,
+            occupation_type_id : occupation_type_id,
+            address_line_1 : address_line_1,
+            address_line_2 : address_line_2,
+            city_id : city_id,
+            state_id : state_id,
+            pincode : pincode,
+            office_address_line_1 : office_address_line_1,
+            office_address_line_2 : office_address_line_2,
+            office_city_id : office_city_id,
+            office_state_id : office_state_id,
+            office_pincode : office_pincode,
+            document_type_id : document_type_id,
+            document_no : document_no
+        };
+        return output;
+    }
+
+    var registration_request = {
+
+    };                                     
     $(document).ready(function(){
+        var registration_date = $('#registration_date').datepicker({
+
+        });
+        var child_date_of_birth = $('#child_date_of_birth').datepicker({
+
+        });
+        var class_box = $('#class_id').select2({
+            width : '100%'
+        });
+        var child_categoty_box = $('#child_categoty_id').select2({
+            width : '100%'
+        });
+        var child_nationality_box = $('#child_nationality_id').select2({
+            width : '100%'
+        });
+        var child_religion_box = $('#child_religion_id').select2({
+            width : '100%'
+        });
+
         var child_state_box = $('#child_state_id').select2({
             width : '100%'
         });
@@ -1028,6 +1301,44 @@ $(document.body).addClass('fixed');
             width : '100%'
         });
         var child_permanent_area_box = $('#child_permanent_area_id').select2({
+            width : '100%'
+        });
+        var father_state_box = $('#father_state_id').select2({
+            width : '100%'
+        });
+        var father_office_state_box = $('#father_office_state_id').select2({
+            width : '100%'
+        });
+        var father_city_box = $('#father_city_id').select2({
+            width : '100%'
+        });
+        var father_office_city_box = $('#father_office_city_id').select2({
+            width : '100%'
+        });
+        
+        var mother_state_box = $('#mother_state_id').select2({
+            width : '100%'
+        });
+        var mother_office_state_box = $('#mother_office_state_id').select2({
+            width : '100%'
+        });
+        var mother_city_box = $('#mother_city_id').select2({
+            width : '100%'
+        });
+        var mother_office_city_box = $('#mother_office_city_id').select2({
+            width : '100%'
+        });
+
+        var guardian_state_box = $('#guardian_state_id').select2({
+            width : '100%'
+        });
+        var guardian_office_state_box = $('#guardian_office_state_id').select2({
+            width : '100%'
+        });
+        var guardian_city_box = $('#guardian_city_id').select2({
+            width : '100%'
+        });
+        var guardian_office_city_box = $('#guardian_office_city_id').select2({
             width : '100%'
         });
         $(window).load(function(){
@@ -1080,5 +1391,40 @@ $(document.body).addClass('fixed');
             var city_id = $(this).val();
             get_area_list('child_permanent_area_id',city_id);
         });
+        $(document).on('click','.previous_btn',function(){
+            stepper.previous();
+        });
+        $(document).on('click','.next_btn',function(){
+            var step_no = $(this).data('step');
+            var child_info = child_information();
+            var father_info  = father_information();
+            var mother_info = mother_information();
+            var request_data = child_info;
+            if(step_no == '1'){
+                if(child_info){
+                    stepper.next();
+                }
+            }else if(step_no == '2'){
+                if(father_info){
+                    request_data.parents.push(father_info);
+                    stepper.next();
+                }
+            }else if(step_no == '3'){
+                if(mother_info){
+                    request_data.parents.push(mother_info);
+                    stepper.next();
+                }
+            }else if(step_no == '4'){
+                
+            }else if(step_no == '5'){
+                
+            }
+            
+            console.log(step_no);
+            console.log(JSON.stringify(request_data));
+        });
     });
+</script>
+<script>
+   
 </script>
