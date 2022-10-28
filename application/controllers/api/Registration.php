@@ -80,9 +80,6 @@ class Registration extends REST_Controller {
                 $this->load->model('student_parents_detail_model');
                 $this->load->model('student_previous_acadmic_records_model');
                 $this->load->model('student_document_model');
-                $this->load->model('admission_model');
-                $this->load->model('admission_class_model');
-                $this->load->model('academic_session_model');
                 $this->registration_model->registration_id      = $request->data->registration_id;
                 $this->registration_model->branch_id            = $request->data->branch_id;
                 $this->registration_model->enquiry_id           = $request->data->enquiry_id;
@@ -133,19 +130,6 @@ class Registration extends REST_Controller {
                         if(!$this->student_model->check()){
                             $this->student_model->add();
                             if($this->student_model->student_id > 0){
-                                // add entry in admission table
-                                $this->academic_session_model->get_current = true;
-                                $academic_session = $this->academic_session_model->get();
-                                $this->admission_model->student_id = $this->student_model->student_id;
-                                $this->admission_model->acadmic_session_id = (isset($academic_session['academic_session_id'])) ? $academic_session['academic_session_id'] : 0;
-                                $this->admission_model->branch_id            = $request->data->branch_id;
-                                $this->admission_model->enquiry_id           = $request->data->enquiry_id;
-                                $this->admission_model->admission_no         = '1';
-                                $this->admission_model->admission_date       = NULL;
-                                $this->admission_model->is_complete          = 0;
-                                $this->admission_model->is_active            = 1;
-                                $this->admission_model->created_by = $this->admission_model->updated_by  = (isset($request->data->login_id)) ? $request->data->login_id : 0;
-                                // add entry in admission_class table
                                 // add in pre acadmic record if any
                                 foreach($request->data->previous_acadmic as $previous_acadmic){
                                     $this->student_previous_acadmic_records_model->student_id = $this->student_model->student_id;
