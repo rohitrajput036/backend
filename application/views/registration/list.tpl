@@ -23,6 +23,19 @@
                         <div class="col-md-12">
                             <a href="{base_url('registration/add')}" class="btn btn-primary btn-xs pull-right">Add Registration</a>
                         </div>
+                        <div style="margin-top:10px ;" class="col-md-12">
+                            <table id="registration_table" class="table table-striped">
+                                <thead>
+                                    <th>S.No.</th>
+                                    <th>Enq. Form Id</th>
+                                    <th>Registration No.</th>
+                                    <th>Class</th>
+                                    <th>Child Info</th>
+                                    <th>Father Info</th>
+                                    <th>#</th>
+                                </thead>
+                            </table>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -33,3 +46,41 @@
 </div><!-- ./wrapper -->
 {include file='footer.tpl'}
 {js('common.js')}
+<script>
+$(document).ready(function(){
+    var login_user_id = {userdata("UserId")};
+    var registration_table = $('#registration_table').DataTable({
+        responsive: true,
+        lengthChange: true,
+        autoWidth: false,
+        paging: true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{$smarty.const.API_URL}registration/get",
+            type: "POST",
+            dataType: "json",
+            async: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: function (d) {
+                var control = {
+                    request_id : generateUUId(),
+                    source : 1,
+                    request_time : Math.round(+new Date()/1000),
+                    version : {$smarty.const.API_VERSION}
+                }
+                d.branch_id = {userdata('BranchId')};
+                d.login_id = login_user_id;
+                d.format = 'datatable';
+                var req = {
+                    control : control,
+                    data : d,
+                }
+                return JSON.stringify(req);
+            }
+        }
+    });
+});
+</script>

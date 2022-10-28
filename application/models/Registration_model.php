@@ -3,7 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Registration_model extends CI_Model {
     
-    public $registration_id, $branch_id, $enquiry_id, $registration_no, $registration_date, $registration_fee, $is_qualified, $total_marks, $earn_marks, $earn_percentage, $remarks, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
+    public $registration_id, $branch_id, $enquiry_id, $registration_no, $registration_date, $registration_fee, $is_qualified, $total_marks, $earn_marks, $earn_percentage, $remarks, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $datatable;
     
     function __construct() {
         parent::__construct();
@@ -24,6 +24,7 @@ class Registration_model extends CI_Model {
         $this->updated_by           = 0;
         $this->updated_on           = date('Y-m-d H:i:s');
         $this->table_name           = DB_NAME.'registration';
+        $this->datatable            = (object)[];
     }
 
     function add(){
@@ -89,8 +90,76 @@ class Registration_model extends CI_Model {
         ];
         return $this->global_model->update($this->table_name, $update_data, $where);
     }
-
+    function total_data(){
+        if(!empty($this->is_active)){
+            $where['is_active'] = $this->is_active;
+        }else{
+            $where['is_active in (1,2)'] = NULL;
+        }
+        if($this->branch_id > 0){
+            $where['branch_id'] = $this->branch_id;
+        }
+        $results = $this->global_model->select($this->table_name,$where);
+        return $results->num_rows();
+    }
     function get(){
-        
+        $output = [];
+        if(!empty($this->is_active)){
+            $where['r.is_active'] = $this->is_active;
+        }else{
+            $where['r.is_active in (1,2)'] = NULL;
+        }
+        if($this->datatable->branch_id > 0){
+            $this->branch_id = $this->datatable->branch_id;
+        }
+        $where['r.branch_id'] = $this->branch_id;
+        $or_like = [];
+        $limit = NULL;
+        $order_by = NULL;
+        if($this->datatable->length>0) {
+            $limit = [$this->datatable->length, $this->datatable->start];
+        }
+        if(!empty($this->datatable->search->value)){
+            $or_like = [
+                // 'vendor_name'  => $this->datatable->search->value,
+                // 'vendor_address'  => $this->datatable->search->value
+            ];
+        }
+        $fields = '*';
+        $results = $this->global_model->select($this->table_name.' r', $where, $fields, NULL, NULL, $limit, $order_by, NULL, NULL, NULL, NULL, NULL, NULL, $or_like);
+        echo $this->db->last_query();exit;
+        if(!empty($this->datatable)){
+            $output = $this->prepare_result_datatable($results);
+        }else{
+            $output = $this->prepare_result($results);
+        }
+        return $output;
+    }
+    function prepare_result_datatable($results){
+        $data = [];
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $results){
+                $data[] = [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7
+                    ];   
+            }
+        }
+        $output = [
+            'draw'              => $this->datatable->draw,
+            'recordsTotal'      => $this->total_data(),
+            'recordsFiltered'   => count($data),
+            'data'              => $data
+        ];
+        return $output;
+    }
+    function prepare_result($results){
+        $output = [];
+        return $output;
     }
 }

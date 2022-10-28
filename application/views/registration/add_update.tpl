@@ -1261,7 +1261,61 @@ $(document.body).addClass('fixed');
         };
         return output;
     }
-
+    function guardian_information(){
+        var relation_id = $('#guardian_relation_id').val();
+        var first_name = $('#guardian_first_name').val();
+        var middle_name = $('#guardian_middle_name').val();
+        var last_name = $('#guardian_last_name').val();
+        var email_id = $('#guardian_email_id').val();
+        var alt_email_id = $('#guardian_alt_email_id').val();
+        var contact_no = $('#guardian_contact_no').val();
+        var alt_contact_no = $('#guardian_alt_contact_no').val();
+        var date_of_birth = $('#guardian_date_of_birth').val();
+        var education_id = $('#guardian_education_id').val();
+        var occupation_type_id = $('#guardian_occupation_type_id').val();
+        var document_type_id = $('#guardian_document_type_id').val();
+        var document_no = $('#guardian_document_no').val();
+        var address_line_1 = $('#guardian_address_line_1').val();
+        var address_line_2 = $('#guardian_address_line_2').val();
+        var state_id = $('#guardian_state_id').val();
+        var city_id  = $('#guardian_city_id').val();
+        var pincode = $('#guardian_pincode').val();
+        var office_address_line_1 = $('#guardian_office_address_line_1').val();
+        var office_address_line_2 = $('#guardian_office_address_line_2').val();
+        var office_state_id = $('#guardian_office_state_id').val();
+        var office_city_id = $('#guardian_office_city_id').val();
+        var office_pincode = $('#guardian_office_pincode').val();
+        if(first_name.length <= 0){
+            return false;
+        }
+        output = {
+            parent_type : '3',
+            relation_id : relation_id,
+            first_name : first_name,
+            middle_name : middle_name,
+            last_name : last_name,
+            email_id : email_id,
+            alt_email_id : alt_email_id,
+            contact_no : contact_no,
+            alt_contact_no : alt_contact_no,
+            date_of_birth : date_of_birth,
+            education_type_id : education_id,
+            occupation_type_id : occupation_type_id,
+            address_line_1 : address_line_1,
+            address_line_2 : address_line_2,
+            city_id : city_id,
+            state_id : state_id,
+            pincode : pincode,
+            office_address_line_1 : office_address_line_1,
+            office_address_line_2 : office_address_line_2,
+            office_city_id : office_city_id,
+            office_state_id : office_state_id,
+            office_pincode : office_pincode,
+            document_type_id : document_type_id,
+            document_no : document_no
+        };
+        return output;
+    }
     var registration_request = {
 
     };                                     
@@ -1396,32 +1450,79 @@ $(document.body).addClass('fixed');
         });
         $(document).on('click','.next_btn',function(){
             var step_no = $(this).data('step');
-            var child_info = child_information();
-            var father_info  = father_information();
-            var mother_info = mother_information();
-            var request_data = child_info;
             if(step_no == '1'){
+                var child_info = child_information();
                 if(child_info){
                     stepper.next();
                 }
             }else if(step_no == '2'){
+                var father_info  = father_information();
                 if(father_info){
-                    request_data.parents.push(father_info);
                     stepper.next();
                 }
             }else if(step_no == '3'){
-                if(mother_info){
-                    request_data.parents.push(mother_info);
-                    stepper.next();
-                }
+                var mother_info = mother_information();
+                stepper.next();
             }else if(step_no == '4'){
-                
+                var guardian_inf = guardian_information();
+                stepper.next();
             }else if(step_no == '5'){
                 
             }
-            
-            console.log(step_no);
-            console.log(JSON.stringify(request_data));
+        });
+        $(document).on('click','.final_btn',function(){
+            var data = child_information();
+            if(data){
+                var father_info  = father_information();
+                var mother_info = mother_information();
+                var guardian_inf = guardian_information();
+                if(father_info){
+                    data.parents.push(father_info);
+                }
+                if(mother_info){
+                    data.parents.push(mother_info);
+                }
+                if(guardian_inf){
+                    data.parents.push(guardian_inf);
+                }
+            }
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                version : {$smarty.const.API_VERSION}
+            };
+            var request = {
+                control : control,
+                data : data
+            };
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}registration/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                //location.reload(true);
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
         });
     });
 </script>
