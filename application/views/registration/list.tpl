@@ -32,6 +32,7 @@
                                     <th>Class</th>
                                     <th>Child Info</th>
                                     <th>Father Info</th>
+                                    <th>Status</th>
                                     <th>#</th>
                                 </thead>
                             </table>

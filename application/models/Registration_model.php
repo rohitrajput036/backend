@@ -134,14 +134,11 @@ class Registration_model extends CI_Model {
         }
         if(!empty($this->datatable->search->value)){
             $or_like = [
+                'r.registration_no'  => $this->datatable->search->value,
                 'e.form_id'  => $this->datatable->search->value,
-                's.first_name'  => $this->datatable->search->value,
-                's.middle_name' => $this->datatable->search->value,
-                'f.last_name' => $this->datatable->search->value,
+                'concat(s.first_name," ",s.middle_name," ",s.last_name)'  => $this->datatable->search->value,
+                'concat(f.first_name," ",f.middle_name," ",f.last_name)' => $this->datatable->search->value,
                 'c.class_name' => $this->datatable->search->value,
-                'f.first_name' => $this->datatable->search->value,
-                'f.middle_name' => $this->datatable->search->value,
-                'f.last_name' => $this->datatable->search->value,
                 'f.email_id' => $this->datatable->search->value,
                 'f.alt_email_id' => $this->datatable->search->value,
                 'f.contact_no' => $this->datatable->search->value,
@@ -150,6 +147,7 @@ class Registration_model extends CI_Model {
         }
         $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no";
         $results = $this->global_model->select($this->table_name.' r', $where, $fields, $joins, NULL, $limit, $order_by, NULL, NULL, NULL, NULL, NULL, NULL, $or_like);
+        echo $this->db->last_query();exit;
         if(!empty($this->datatable)){
             $output = $this->prepare_result_datatable($results);
         }else{
@@ -173,7 +171,6 @@ class Registration_model extends CI_Model {
                 $child_info .= '<br/><b>Class :</b>'.$result->class_name;
                 $parents_info = '';
                 if(!empty($result->father_first_name)){
-                    $parents_info .= '<b>Father info :</b><br/>';
                     $parents_info .= $result->father_first_name.' '.$result->father_middel_name.' '.$result->father_last_name;
                     if(!empty($result->father_email_id)){
                         $parents_info .= '<br/><b>Email : </b>'.$result->father_email_id;
@@ -182,26 +179,18 @@ class Registration_model extends CI_Model {
                         $parents_info .= '<br/><b>Contact No : </b>'.$result->father_contact_no;
                     }
                 }
-                if(!empty($result->mother_first_name)){
-                    $parents_info .= '<br/><b>Mother info :</b><br/>';
-                    $parents_info .= $result->mother_first_name.' '.$result->mother_middel_name.' '.$result->mother_last_name;
-                    if(!empty($result->mother_email_id)){
-                        $parents_info .= '<br/><b>Email : </b>'.$result->mother_email_id;
-                    }
-                    if(!empty($result->mother_contact_no)){
-                        $parents_info .= '<br/><b>Contact No : </b>'.$result->mother_contact_no;
-                    }
-                }
+                
                 $btn = '';
                 $data[] = [
-                        $i,
-                        (!empty($result->form_id)) ? $result->form_id : 'Direct',
-                        $result->registration_no,
-                        $result->class_name,
-                        $child_info,
-                        $parents_info,
-                        $btn
-                    ];   
+                    $i,
+                    (!empty($result->form_id)) ? $result->form_id : 'Direct',
+                    $result->registration_no,
+                    $result->class_name,
+                    $child_info,
+                    $parents_info,
+                    'status',
+                    $btn
+                ];   
             }
         }
         $output = [
