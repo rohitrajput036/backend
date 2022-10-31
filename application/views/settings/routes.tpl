@@ -136,24 +136,37 @@
                                         <label id="api_error"></label>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4 form-group" id="first_name_box">
+                                        <div class="col-md-3 form-group" id="first_name_box">
                                             <label>First Name<span class="text-red">*</span></label>
                                             <input type="text" name="first_name" id="first_name" class="form-control" placeholder="Enter your first name"/>
                                             <label for="first_name" id="first_name_error_msg"></label>
                                         </div>
-                                        <div class="col-md-4 form-group" id="middle_name_box">
+                                        <div class="col-md-3 form-group" id="middle_name_box">
                                             <label>Middle Name</label>
                                             <input type="text" name="middle_name" id="middle_name" class="form-control" placeholder="Enter your middle name"/>
                                             <label for="middle_name" id="middle_name_error_msg"></label>
                                         </div>
-                                        <div class="col-md-4 form-group" id="last_name_box">
+                                        <div class="col-md-3 form-group" id="last_name_box">
                                             <label>Last Name</label>
                                             <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Enter your last name"/>
                                             <label for="last_name" id="last_name_error_msg"></label>
                                         </div>
+                                        <div class="col-md-3 form-group" id="driver_type_box">
+                                            <label>Type</label>
+                                            <select name="driver_type" id="driver_type" class="form-control">
+                                                <option value="driver">Driver</option>
+                                                <option value="guard">Guard</option>
+                                            </select>
+                                            <label for="driver_type" id="driver_type_error_msg"></label>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-2 form-group" id="gender_box">
+                                        <div class="col-md-3 form-group" id="dl_no_box">
+                                            <label>DL.NO<span class="text-red">*</span></label>
+                                            <input type="text" name="dl_no" id="dl_no" class="form-control"/>
+                                            <label for="dl_no" id="dl_no_error_msg"></label>
+                                        </div>
+                                        <div class="col-md-3 form-group" id="gender_box">
                                             <label>Gender</label>
                                             <select name="gender" id="gender" class="form-control">
                                                 <option value="male">Male</option>
@@ -161,12 +174,12 @@
                                             </select>
                                             <label for="gender" id="gender_error_msg"></label>
                                         </div>
-                                        <div class="col-md-5 form-group" id="address_line_box">
+                                        <div class="col-md-3 form-group" id="address_line_box">
                                             <label>Address Line 1<span class="text-red">*</span></label>
                                             <input type="text" name="address_line" id="address_line" class="form-control" placeholder="Enter your address"/>
                                             <label for="address_line" id="address_line_error_msg"></label>
                                         </div>
-                                        <div class="col-md-5 form-group" id="address_line2_box">
+                                        <div class="col-md-3 form-group" id="address_line2_box">
                                             <label>Address Line 2<span class="text-red">*</span></label>
                                             <input type="text" name="address_line2" id="address_line2" class="form-control" placeholder="Enter your address"/>
                                             <label for="address_line2" id="address_line2_error_msg"></label>
@@ -205,21 +218,8 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4 form-group" id="dl_no_box">
-                                            <label>DL.NO<span class="text-red">*</span></label>
-                                            <input type="text" name="dl_no" id="dl_no" class="form-control"/>
-                                            <label for="dl_no" id="dl_no_error_msg"></label>
-                                        </div>
-                                        <div class="col-md-4 form-group" id="driver_type_box">
-                                            <label>Type</label>
-                                            <select name="driver_type" id="driver_type" class="form-control">
-                                                <option value="driver">Driver</option>
-                                                <option value="guard">Guard</option>
-                                            </select>
-                                            <label for="driver_type" id="driver_type_error_msg"></label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <button id="add_driver" class="btn btn-primary" style="margin-top:20px">Save</button>
+                                        <div class="col-md-12">
+                                            <button id="add_driver" class="btn btn-primary pull-right" style="margin-top:20px">Save</button>
                                             <input type="hidden" name="driver_id" id="driver_id" value="0"/>
                                         </div>
                                     </div>

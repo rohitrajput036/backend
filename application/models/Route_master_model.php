@@ -63,7 +63,13 @@ class Route_master_model extends CI_Model{
         return $this->global_model->update($this->table_name, $update_data, $where);
     }
     function delete(){
-
+        $where['route_master_id'] = $this->route_master_id;
+        $update_data =[
+            'is_active' => $this->is_active,
+            'updated_by' => $this->updated_by,
+            'updated_on' => $this->updated_on
+        ];
+        return $this->global_model->update($this->table_name, $update_data, $where);
     }
 
     function get(){
