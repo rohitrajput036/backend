@@ -49,10 +49,14 @@ class Login extends REST_Controller {
                 keyExist(['UserName', 'Password'], $Request);
                 checkBlank(['UserName' => $Request->UserName, 'Password' => $Request->Password]);
                 $this->load->model('Login_model');
+                $this->load->model('academic_session_model');
                 $this->Login_model->UserName = $Request->UserName;
                 $this->Login_model->UserPassword = $Request->Password;
                 $this->Login_model->IsActive = '1';
                 $UserInfo = $this->Login_model->ValidateLogin();
+                $this->academic_session_model->get_current = true;
+                $this->academic_session_model->date = date('Y-m-d');
+                $academic_session = $this->academic_session_model->get();
                 if (count($UserInfo) > 0) {
                     if (password_verify($Request->Password, $UserInfo['password'])) {
                         $BranchId = $UserInfo['branch_id'];
@@ -65,7 +69,7 @@ class Login extends REST_Controller {
                         if ($UserInfo['gender'] == "F") {
                             $DefaultImg = "images/icons/female.png";
                         }
-                        setSession($UserInfo['user_id'], $UserInfo['unique_no'], $UserInfo['user_name'], $UserInfo['gender'], $UserInfo['role'], $BranchId, $UserInfo['brnach_name'], $HeaderHeading, $DefaultImg, $UserInfo['email_id'],$UserInfo['school_id'],$UserInfo['school_name'],$UserInfo['department_list']);
+                        setSession($UserInfo['user_id'], $UserInfo['unique_no'], $UserInfo['user_name'], $UserInfo['gender'], $UserInfo['role'], $BranchId, $UserInfo['brnach_name'], $HeaderHeading, $DefaultImg, $UserInfo['email_id'],$UserInfo['school_id'],$UserInfo['school_name'],$UserInfo['department_list'],$academic_session);
                         $Data = $UserInfo;
                     } else {
                         throw new Exception("Invalid Password! Please Try Again!", REST_Controller::HTTP_BAD_REQUEST);
