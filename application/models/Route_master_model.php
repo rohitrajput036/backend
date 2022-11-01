@@ -89,10 +89,10 @@ class Route_master_model extends CI_Model{
         }
         $joins = [ 
             $this->branch_model->table_name.' b' => ['(r.branch_id = b.branch_id AND b.is_active = 1)','INNER'],
-            $this->vehicle_master->table_name.' v' => ['(r.vehicle_master_id = v.vehicle_master_id AND v.is_active = 1)','INNER'],
-            $this->driver_master->table_name.' d' => ['r.driver_master_id = d.driver_master_id AND r.guard_id = d.guard_id AND d.is_active = 1','INNER']
+            $this->vehicle_master_model->table_name.' v' => ['(r.vehicle_master_id = v.vehicle_master_id AND v.is_active = 1)','INNER'],
+            $this->driver_master_model->table_name.' d' => ['r.driver_master_id = d.driver_master_id AND d.is_active = 1','INNER'],
         ];
-        $fields = "r.* b.branch_id,v.vehicle_master_id,d.driver_master_id,d.guard_id,";
+        $fields = "r.*";
         $order_by= ['r.route_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' r',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];

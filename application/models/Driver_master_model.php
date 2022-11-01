@@ -103,8 +103,8 @@ class Driver_master_model extends CI_Model {
 
     function get($for_table = false) {
         $this->load->model('branch_model');
-        $this->load->model('city_model');
-        $this->load->model('state_model');
+        // $this->load->model('city_model');
+        // $this->load->model('state_model');
         if($this->driver_master_id > 0){
             $where['d.driver_master_id'] = $this->driver_master_id;
         }
@@ -118,17 +118,17 @@ class Driver_master_model extends CI_Model {
         }
         $joins = [ 
             $this->branch_model->table_name.' b' => ['(d.branch_id = b.branch_id AND b.is_active = 1)','INNER'],
-            $this->city_model->table_name.' c' => ['(d.city_id = c.city_id AND c.is_active = 1)','INNER'],
-            $this->state_model->table_name.' s' => ['(d.state_id = s.state_id AND s.is_active = 1)','INNER']
+            // $this->city_model->table_name.' c' => ['(d.city_id = c.city_id AND c.is_active = 1)','INNER'],
+            // $this->state_model->table_name.' s' => ['(d.state_id = s.state_id AND s.is_active = 1)','INNER']
         ];
-        $fields = "d.* b.branch_id";
+        $fields = "d.*";
         $order_by= ['d.driver_type' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' d',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
-            $s_no = 0;
+            $i = 0;
             foreach($results->result() as $result){
-                $i++;
+                ++$i;
                 if($this->for_table){
                     if($result->is_active == 1){
                         $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
