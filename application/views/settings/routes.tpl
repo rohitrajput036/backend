@@ -30,13 +30,13 @@
                             <a class="nav-link " data-toggle="tab" href="#home">Home</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#manage_routes">Manage routes</a>
+                            <a class="nav-link active" data-toggle="tab" href="#manage_routes">Manage routes</a>
                             </li>
                             <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#manage_vehicle">Manage Vehicle</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#manage_driver">Manage Driver/Guard</a>
+                            <a class="nav-link " data-toggle="tab" href="#manage_driver">Manage Driver/Guard</a>
                             </li>
                         </ul>
                         <!-- Tab panes -->
@@ -45,17 +45,17 @@
                                 <h3>HOME</h3>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                             </div>
-                            <div id="manage_routes" class="tab-pane fade">
+                            <div id="manage_routes" class="tab-pane active">
                                 <div class="col-md-4">
                                     <div class="col-md-12 form-group has-error text-center">
                                         <label id="api_error"></label>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-8 form-group" id="routes_name_box">
+                                        <div class="col-md-8 form-group" id="route_name_box">
                                             <label>Route Name<span class="text-red">*</span></label>
                                             <input type="text" name="route_name" id="route_name" class="form-control" placeholder="Enter Route name"/>
-                                            <input type="hidden" name="route_id" id="route_id" value="0"/>
-                                            <label id="route_error_msg"></label>
+                                            <input type="hidden" name="route_master_id" id="route_master_id" value="0"/>
+                                            <label id="route_name_error_msg"></label>
                                         </div>
                                         <div class="col-md-4">
                                             <button id="add_route" class="btn btn-primary" style="margin-top:20px">Save</button>
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <table class="table table-bordered" id="DataTable">
+                                    <table class="table table-bordered" id="DataTable1">
                                         <thead>
                                             <tr>
                                                 <th>S. No.</th>
@@ -109,12 +109,12 @@
                                         </div>
                                         <div class="col-md-4">
                                             <button id="add_vehicle" class="btn btn-primary" style="margin-Ftop:20px">Save</button>
-                                            <input type="hidden" name="vehicle_id" id="vehicle_id" value="0"/>
+                                            <input type="hidden" name="vehicle_master_id" id="vehicle_master_id" value="0"/>
                                         </div>
                                     </div>   
                                 </div>
                                 <div class="col-md-8">
-                                    <table class="table table-bordered" id="DataTable">
+                                    <table class="table table-bordered" id="DataTable2">
                                         <thead>
                                             <tr>
                                                 <th>S. No.</th>
@@ -130,7 +130,7 @@
                                     </table>    
                                 </div>
                             </div>
-                            <div id="manage_driver" class="tab-pane active"><br>
+                            <div id="manage_driver" class="tab-pane fade"><br>
                                 <div class="col-md-12">
                                     <div class="col-md-12 form-group has-error text-center">
                                         <label id="api_error"></label>
@@ -174,15 +174,15 @@
                                             </select>
                                             <label for="gender" id="gender_error_msg"></label>
                                         </div>
-                                        <div class="col-md-3 form-group" id="address_line_box">
+                                        <div class="col-md-3 form-group" id="address_line_1_box">
                                             <label>Address Line 1<span class="text-red">*</span></label>
-                                            <input type="text" name="address_line" id="address_line" class="form-control" placeholder="Enter your address"/>
-                                            <label for="address_line" id="address_line_error_msg"></label>
+                                            <input type="text" name="address_line_1" id="address_line_1" class="form-control" placeholder="Enter your address"/>
+                                            <label for="address_line_1" id="address_line_1_error_msg"></label>
                                         </div>
-                                        <div class="col-md-3 form-group" id="address_line2_box">
+                                        <div class="col-md-3 form-group" id="address_line_2_box">
                                             <label>Address Line 2</label>
-                                            <input type="text" name="address_line2" id="address_line2" class="form-control" placeholder="Enter your address"/>
-                                            <label for="address_line2" id="address_line2_error_msg"></label>
+                                            <input type="text" name="address_line_2" id="address_line_2" class="form-control" placeholder="Enter your address"/>
+                                            <label for="address_line_2" id="address_line_2_error_msg"></label>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -220,12 +220,12 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <button id="add_driver" class="btn btn-primary pull-right" style="margin-top:20px">Save</button>
-                                            <input type="hidden" name="driver_id" id="driver_id" value="0"/>
+                                            <input type="hidden" name="driver_master_id" id="driver_master_id" value="0"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="table table-bordered" id="DataTable">
+                                    <table class="table table-bordered" id="DataTable3">
                                         <thead>
                                             <tr>
                                                 <th>S. No.</th>
@@ -256,5 +256,516 @@
 {include file='footer.tpl'}
 {js('common.js')}
 <script>
-
+    $(document).ready(function(){
+        var DataTable = $('#DataTable1').DataTable({
+            searching:true,
+            ordering:false
+        });
+        $(window).load(function(){
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                branch_id : '{userdata('BranchId')}',
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}route_master/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#route_master_id').val(0);
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click', '#add_route', function(){
+            var route_master_id = $('#route_master_id').val();
+            var route_name = $.trim($('#route_name').val());
+            if(checkBlank('route_name_box','route_name_error_msg','Required..', route_name, 'route_name', '')){
+                return false;
+            }
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                route_master_id     :  route_master_id,
+               
+                route_name          :  route_name,
+                branch_id           :  '{userdata('BranchId')}',
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}route_master/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#route_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var route_master_id = $(this).data('#route_master_id');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                route_master_id : route_master_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}route_master/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#route_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.edit',function(){
+            var route_master_id = $(this).data('route_master_id');
+            $('#route_master_id').val(route_master_id);
+            $('#route_name').val($('#route_'+route_master_id).text());
+            $('#route_name').focus();
+        });
+        var DataTable = $('#DataTable2').DataTable({
+            searching:true,
+            ordering:false
+        });
+        $(window).load(function(){
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                branch_id : '{userdata('BranchId')}',
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}vehicle_master/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#vehicle_master_id').val(0);
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click', '#add_vehicle', function(){
+            var vehicle_master_id = $('#vehicle_master_id').val();
+            var vehicle_no = $.trim($('#vehicle_no').val());
+            var vehicle_color = $.trim($('#vehicle_color').val());
+            var manufacturing_year = $.trim($('#manufacturing_year').val());
+            var seating_capacity = $.trim($('#seating_capacity').val());
+            var pre_reserved_seat = $.trim($('#pre_reserved_seat').val());
+            if(checkBlank('vehicle_no_box','vehicle_no_error_msg','Required..', vehicle_no, 'vehicle_no', '')){
+                return false;
+            }
+            if(checkBlank('vehicle_color_box','vehicle_color_error_msg','Required..', vehicle_color, 'vehicle_color', '')){
+                return false;
+            }
+            if(checkBlank('manufacturing_year_box','manufacturing_year_error_msg','Required..', manufacturing_year, 'manufacturing_year', '')){
+                return false;
+            }
+            if(checkBlank('seating_capacity_box','seating_capacity_error_msg','Required..', seating_capacity, 'seating_capacity', '')){
+                return false;
+            }
+            if(checkBlank('pre_reserved_seat_box','pre_reserved_seat_error_msg','Required..', pre_reserved_seat, 'pre_reserved_seat', '')){
+                return false;
+            }
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                vehicle_master_id   :  vehicle_master_id,
+                vehicle_no          :  vehicle_no,
+                vehicle_color       : vehicle_color,
+                manufacturing_year  : manufacturing_year,
+                seating_capacity    : seating_capacity,
+                pre_reserved_seat   : pre_reserved_seat,
+                branch_id           : '{userdata('BranchId')}',
+                login_id            : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}vehicle_master/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#vehicle_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var vehicle_master_id = $(this).data('#vehicle_master_id');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                vehicle_master_id : vehicle_master_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}vehicle_master/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#vehicle_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        var DataTable = $('#DataTable3').DataTable({
+            searching:true,
+            ordering:false
+        });
+        $(window).load(function(){
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                branch_id : '{userdata('BranchId')}',
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}driver/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#driver_master_id').val(0);
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click', '#add_driver', function(){
+            var driver_master_id = $('#driver_master_id').val();
+            var first_name = $.trim($('#first_name').val());
+            var middle_name = $.trim($('#middle_name').val());
+            var last_name = $.trim($('#last_name').val());
+            var gender = $.trim($('#gender').val());
+            var contact_no = $.trim($('#contact_no').val());
+            var alt_contact_no = $.trim($('#alt_contact_no').val());
+            var address_line_1 = $.trim($('#address_line_1').val());
+            var address_line_2 = $.trim($('#address_line_2').val());
+            var state_id = $.trim($('#state_id').val());
+            var city_id = $.trim($('#city_id').val());
+            var pincode = $.trim($('#pincode').val());
+            var dl_no = $.trim($('#dl_no').val());
+            var driver_type = $.trim($('#driver_type').val());
+            if(checkBlank('first_name_box','first_name_error_msg','Required..', first_name, 'first_name', '')){
+                return false;
+            }
+            if(checkBlank('middle_name_box','middle_name_error_msg','Required..', middle_name, 'middle_name', '')){
+                return false;
+            }
+            if(checkBlank('last_name_box','last_name_error_msg','Required..', last_name, 'last_name', '')){
+                return false;
+            }
+            if(checkBlank('gender_box','gender_error_msg','Required..', gender, 'gender', '')){
+                return false;
+            }
+            if(checkBlank('contact_no_box','contact_no_error_msg','Required..', contact_no, 'contact_no', '')){
+                return false;
+            }
+            if(checkBlank('alt_contact_no_box','alt_contact_no_error_msg','Required..', alt_contact_no, 'alt_contact_no', '')){
+                return false;
+            }
+            if(checkBlank('address_line_1_box','address_line_1_error_msg','Required..', address_line_1, 'address_line_1', '')){
+                return false;
+            }
+            if(checkBlank('address_line_2_box','address_line_2_error_msg','Required..', address_line_2, 'address_line_2', '')){
+                return false;
+            }
+            if(checkBlank('state_id_box','state_id_error_msg','Required..', state_id, 'state_id', '')){
+                return false;
+            }
+            if(checkBlank('city_id_box','city_id_error_msg','Required..', city_id, 'city_id', '')){
+                return false;
+            }
+            if(checkBlank('pincoded_box','pincode_error_msg','Required..', pincode, 'pincode', '')){
+                return false;
+            }
+            if(checkBlank('dl_no_box','dl_no_error_msg','Required..', dl_no, 'dl_no', '')){
+                return false;
+            }
+            if(checkBlank('driver_type_box','driver_type_error_msg','Required..', driver_type, 'driver_type', '')){
+                return false;
+            }
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                driver_master_id  : driver_master_id,
+                branch_id         : '{userdata('BranchId')}',
+                fisrt_name        : first_name,
+                middle_name       : middle_name,
+                last_name         : last_name,
+                gender            : gender,
+                contact_no        : contact_no,
+                alt_contact_no    : alt_contact_no,
+                address_line_1    : address_line_1,
+                address_line_2    : address_line_2,
+                state_id          : state_id,
+                city_id           : city_id,
+                pincode           : pincode,
+                dl_no             : dl_no,
+                driver_type       : driver_type,                
+                login_id          : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}driver/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#driver_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var driver_master_id = $(this).data('#driver_master_id');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                driver_master_id : driver_master_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}driver/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#driver_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+    });
 </script>
