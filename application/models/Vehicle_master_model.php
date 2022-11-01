@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Subject_model extends CI_Model{
+class Vehicle_master_model extends CI_Model{
 
     public $vehicle_master_id, $branch_id, $vehicle_no, $vehicle_color, $manufacturing_year, $seating_capacity, $pre_reserved_seat, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $for_table;
     
@@ -92,7 +92,7 @@ class Subject_model extends CI_Model{
         $joins = [ 
             $this->branch_model->table_name.' b' => ['(v.branch_id = b.branch_id AND b.is_active = 1)','INNER'],
         ];
-        $fields = "v.* b.branch_id";
+        $fields = "v.*";
         $order_by= ['v.vehicle_no' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' v',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];

@@ -247,11 +247,7 @@
                 }
             }).always(function() {
             });
-        });
-        $(document).on('click','#cancel',function(){
-
-        });
-       
+        });       
     });
 
 </script>
