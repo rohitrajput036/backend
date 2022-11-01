@@ -104,6 +104,18 @@
                     <li {if uriseg(1)=='routes'}class="active"{/if}>
                         <a href= "{site_url('routes')}"><i class="fa fa-circle-o"></i>Manage Routes</a>
                     </li>
+                    <li {if uriseg(1)=='country'}class="active"{/if}>
+                        <a href= "{site_url('country')}"><i class="fa fa-circle-o"></i> Country</a>
+                    </li>
+                    <li {if uriseg(1)=='state'}class="active"{/if}>
+                        <a href= "{site_url('state')}"><i class="fa fa-circle-o"></i> State</a>
+                    </li>
+                    <li {if uriseg(1)=='city'}class="active"{/if}>
+                        <a href= "{site_url('city')}"><i class="fa fa-circle-o"></i> City</a>
+                    </li>
+                    <li {if uriseg(1)=='area'}class="active"{/if}>
+                        <a href= "{site_url('area')}"><i class="fa fa-circle-o"></i> Area</a>
+                    </li>
                 </ul>
             </li>
 
