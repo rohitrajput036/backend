@@ -298,8 +298,13 @@ class Registration extends REST_Controller {
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
                 checkBlank(['branch_id' => $request->data->branch_id]);
                 $this->load->model('registration_model');
+                if(isset($request->data->registration_id)){
+                    $this->registration_model->registration_id = $request->data->registration_id;
+                }
                 if(isset($request->data->format) && $request->data->format == 'datatable'){
                     $this->registration_model->datatable = $request->data;
+                }else{
+                    $this->registration_model->branch_id = $request->data->branch_id;
                 }
                 $results = $this->registration_model->get();
                 $response = [

@@ -77,6 +77,33 @@ class Student_document_model extends CI_Model {
     }
 
     function get(){
-        
+        $output = [];
+        $this->load->model('document_model');
+        if(!empty($this->is_active)){
+            $where['sd.is_active'] = $this->is_active;
+        }else{
+            $where['sd.is_active IN (1,2)'] = NULL;
+        }
+        if($this->student_id > 0){
+            $where['sd.student_id'] = $this->student_id;
+        }
+        $joins = [
+            $this->document_model->table_name.' d' => ['(sd.document_id = d.document_id)','LEFT']
+        ];
+        $fields = 'd.document,sd.*';        
+        $results = $this->global_model->select($this->table_name.' sd', $where, $fields, $joins);
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $result){
+                $output[] = [
+                    'student_document_id' => $result->student_document_id,
+                    'student_id' => $result->student_id,
+                    'document_id' => $result->document_id,
+                    'document' => $result->document,
+                    'document_no' => $result->document_no,
+                    'document_file_name' => $result->document_file_name
+                ];
+            }
+        }
+        return $output;
     }
 }

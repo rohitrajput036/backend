@@ -116,7 +116,10 @@ class Registration_model extends CI_Model {
         }else{
             $where['r.is_active in (1,2)'] = NULL;
         }
-        if($this->datatable->branch_id > 0){
+        if($this->registration_id > 0){
+            $where['r.registration_id'] = $this->registration_id;
+        }
+        if(isset($this->datatable->branch_id) && $this->datatable->branch_id > 0){
             $this->branch_id = $this->datatable->branch_id;
         }
         $where['r.branch_id'] = $this->branch_id;
@@ -131,7 +134,7 @@ class Registration_model extends CI_Model {
         $or_like = [];
         $limit = NULL;
         $order_by = NULL;
-        if($this->datatable->length>0) {
+        if(isset($this->datatable->length) && $this->datatable->length > 0) {
             $limit = [$this->datatable->length, $this->datatable->start];
         }
         if(!empty($this->datatable->search->value)){
@@ -149,7 +152,7 @@ class Registration_model extends CI_Model {
         }
         $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no,a.admission_id,r.is_active";
         $results = $this->global_model->select($this->table_name.' r', $where, $fields, $joins, NULL, $limit, $order_by, NULL, NULL, NULL, NULL, NULL, NULL, $or_like);
-        if(!empty($this->datatable)){
+        if(!empty($this->datatable) && isset($this->datatable->draw)){
             $output = $this->prepare_result_datatable($results);
         }else{
             $output = $this->prepare_result($results);
@@ -180,7 +183,7 @@ class Registration_model extends CI_Model {
                         $parents_info .= '<br/><b>Contact No : </b>'.$result->father_contact_no;
                     }
                 }
-                $adm_btn = '<a href="'.base_url('admission/add/'.$result->registration_id).'" class="btn btn-success btn-xs">Add Admission</a>';
+                $adm_btn = '<a href="'.base_url('admission/add/'.$result->student_id).'" class="btn btn-success btn-xs">Add Admission</a>';
                 $edit_btn = '<a href="'.base_url('registration/edit/'.$result->registration_id).'" class="btn btn-default btn-xs" style="border:none; background:none"><i class="fa fa-edit"></i></a>';
                 if(!empty($result->admission_id)){
                     if($result->is_active == 1){
@@ -220,6 +223,14 @@ class Registration_model extends CI_Model {
     }
     function prepare_result($results){
         $output = [];
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $result){
+                $output[] = [
+                    'registration_id' => $result->registration_id,
+                    ''
+                ];
+            }
+        }
         return $output;
     }
 }
