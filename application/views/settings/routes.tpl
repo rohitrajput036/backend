@@ -317,7 +317,6 @@
             }
             var data = {
                 route_master_id     :  route_master_id,
-               
                 route_name          :  route_name,
                 branch_id           :  '{userdata('BranchId')}',
                 login_id : '{userdata('UserId')}'

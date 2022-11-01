@@ -169,7 +169,7 @@ class Route_master extends REST_Controller {
             $response = [
                 'control' => [
                     'status' => 1,
-                    'message' => 'List of  drivers',
+                    'message' => 'List of routes',
                     'message_code' => REST_Controller::HTTP_OK,
                     'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
