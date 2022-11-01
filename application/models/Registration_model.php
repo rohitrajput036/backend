@@ -109,6 +109,7 @@ class Registration_model extends CI_Model {
         $this->load->model('student_model');
         $this->load->model('enquiry_master_model');
         $this->load->model('student_parents_detail_model');
+        $this->load->model('admission_model');
         $output = [];
         if(!empty($this->is_active)){
             $where['r.is_active'] = $this->is_active;
@@ -122,6 +123,7 @@ class Registration_model extends CI_Model {
         $joins = [
             $this->class_model->table_name.' c' => ['(r.class_id = c.class_id AND c.is_active = 1)','INNER'],
             $this->student_model->table_name.' s' => ['(r.registration_id = s.registration_id AND s.is_active=1)','INNER'],
+            $this->admission_model->table_name.' a' => ['(s.student_id = a.student_id AND a.is_active=1)','LEFT'], 
             $this->enquiry_master_model->table_name.' e' => ['(r.enquiry_id = e.enquiry_id AND e.is_active = 1)','LEFT'],
             $this->student_parents_detail_model->table_name.' f' => ['(s.student_id = f.student_id AND f.parent_type = 1 AND f.is_active = 1)','LEFT'],
             $this->student_parents_detail_model->table_name.' m' => ['(s.student_id = m.student_id AND m.parent_type = 2 AND m.is_active = 1)','LEFT']
@@ -145,9 +147,8 @@ class Registration_model extends CI_Model {
                 'f.alt_contact_no' => $this->datatable->search->value
             ];
         }
-        $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no";
+        $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no,a.admission_id,r.is_active";
         $results = $this->global_model->select($this->table_name.' r', $where, $fields, $joins, NULL, $limit, $order_by, NULL, NULL, NULL, NULL, NULL, NULL, $or_like);
-        echo $this->db->last_query();exit;
         if(!empty($this->datatable)){
             $output = $this->prepare_result_datatable($results);
         }else{
@@ -179,8 +180,24 @@ class Registration_model extends CI_Model {
                         $parents_info .= '<br/><b>Contact No : </b>'.$result->father_contact_no;
                     }
                 }
-                
-                $btn = '';
+                $adm_btn = '<a href="'.base_url('admission/add/'.$result->registration_id).'" class="btn btn-success btn-xs">Add Admission</a>';
+                $edit_btn = '<a href="'.base_url('registration/edit/'.$result->registration_id).'" class="btn btn-default btn-xs" style="border:none; background:none"><i class="fa fa-edit"></i></a>';
+                if(!empty($result->admission_id)){
+                    if($result->is_active == 1){
+                        $status_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="2" disabled><i class="fa fa-check text-green"></i></button>';
+                    }else{
+                        $status_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="1" disabled><i class="fa fa-times text-red"></i></button>';
+                    }
+                    $delete_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="3" disabled><i class="fa fa-trash text-red"></i></button>';    
+                }else{
+                    if($result->is_active == 1){
+                        $status_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="2"><i class="fa fa-check text-green"></i></button>';
+                    }else{
+                        $status_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="1"><i class="fa fa-times text-red"></i></button>';
+                    }
+                    $delete_btn = '<button class="btn btn-default btn-xs active_deactive" style="border:none; background:none" data-rid="'.$result->registration_id.'" data-at="3"><i class="fa fa-trash text-red"></i></button>';
+                }
+                $btn = $edit_btn.' '.$status_btn.' '.$delete_btn;
                 $data[] = [
                     $i,
                     (!empty($result->form_id)) ? $result->form_id : 'Direct',
@@ -188,7 +205,7 @@ class Registration_model extends CI_Model {
                     $result->class_name,
                     $child_info,
                     $parents_info,
-                    'status',
+                    (!empty($result->admission_id)) ? '<span class="text-green">Admission Done</span>' : $adm_btn,
                     $btn
                 ];   
             }
