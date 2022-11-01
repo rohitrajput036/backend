@@ -152,7 +152,7 @@
                                             <label for="last_name" id="last_name_error_msg"></label>
                                         </div>
                                         <div class="col-md-3 form-group" id="driver_type_box">
-                                            <label>Type</label>
+                                            <label>Type<span class="text-red">*</span></label>
                                             <select name="driver_type" id="driver_type" class="form-control">
                                                 <option value="driver">Driver</option>
                                                 <option value="guard">Guard</option>
@@ -180,7 +180,7 @@
                                             <label for="address_line" id="address_line_error_msg"></label>
                                         </div>
                                         <div class="col-md-3 form-group" id="address_line2_box">
-                                            <label>Address Line 2<span class="text-red">*</span></label>
+                                            <label>Address Line 2</label>
                                             <input type="text" name="address_line2" id="address_line2" class="form-control" placeholder="Enter your address"/>
                                             <label for="address_line2" id="address_line2_error_msg"></label>
                                         </div>
@@ -233,7 +233,8 @@
                                                 <th>Gender</th>
                                                 <th>Contact Number</th>
                                                 <th>Address</th>
-                                                <th>City/State</th>
+                                                <th>State</th>
+                                                <th>City</th>
                                                 <th>DL. No</th>
                                                 <th>Type</th>
                                                 <th>#</th>
@@ -254,3 +255,6 @@
 </div><!-- ./wrapper -->
 {include file='footer.tpl'}
 {js('common.js')}
+<script>
+
+</script>

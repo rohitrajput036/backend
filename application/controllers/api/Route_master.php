@@ -46,11 +46,12 @@ class Route_master extends REST_Controller {
             $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
             $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
             if(!empty($request)){
-                keyExist(['control','datas'],$request);
+                keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['route_id','branch_id','route_name','vehicle_master_id','driver_master_id','guard_id'],$request->data);
+                keyExist(['route_master_id','branch_id','route_name','vehicle_master_id','driver_master_id','guard_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['route_name' => $request->data->route_name, 'branch_id' => $request->data->branch_id, 'vehicle_master_id'=>$request->data->vehicle_master_id, 'driver_master_id'=>$request->data->driver_master_id, 'guard_id'=>$request->data->guard_id]);
+                checkBlank(['branch_id' => $request->data->branch_id,'route_name' => $request->data->route_name]);
+                $this->route_master_model->route_master_id = $request->data->route_master_id;
                 $this->Route_master_model->branch_id = $request->data->branch_id;
                 $this->route_master_model->route_name = $request->data->route_name;
                 $this->Route_master_model->vehicle_master_id = $request->data->vehicle_master_id;
