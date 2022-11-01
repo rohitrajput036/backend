@@ -236,6 +236,54 @@ class Registration extends REST_Controller {
         }
     }
 
+    function delete_post(){
+        $start_time = microtime(true);
+        try {
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)) {
+                keyExist(['control','data'],$request);
+                keyExist(['request_id','source','request_time'],$request->control);
+                keyExist(['registration_id','is_active','login_id'],$request->data);
+                checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
+                checkBlank(['registration_id' => $request->data->registration_id, 'is_active' => $request->data->is_active,'login_id' => $request->data->login_id]);
+                $this->load->model('registration_model');
+                $this->registration_model->registration_id = $request->data->registration_id;
+                $this->registration_model->is_active = $request->data->is_active;
+                $this->registration_model->created_by = $this->registration_model->updated_by = (isset($request->data->login_id)) ? $request->data->login_id : 0;
+                $this->registration_model->delete();
+                $response = [
+                    'control' => [
+                        'status' => 1,
+                        'message' => 'Registration update successfully!',
+                        'message_code' => REST_Controller::HTTP_OK,
+                        'time_taken' => (microtime(true) - $start_time) . ' Second'
+                    ],
+                    'data' => (object) []
+                ];
+                $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+                $this->response($response, REST_Controller::HTTP_OK);
+            }else{
+                throw new Exception('Invalid request',REST_Controller::HTTP_BAD_REQUEST);
+            }
+        }catch (Exception $E) {
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, $E->getCode());
+        }
+    }
+
     function get_post(){
         $start_time = microtime(true);
         try {
@@ -250,8 +298,13 @@ class Registration extends REST_Controller {
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
                 checkBlank(['branch_id' => $request->data->branch_id]);
                 $this->load->model('registration_model');
+                if(isset($request->data->registration_id)){
+                    $this->registration_model->registration_id = $request->data->registration_id;
+                }
                 if(isset($request->data->format) && $request->data->format == 'datatable'){
                     $this->registration_model->datatable = $request->data;
+                }else{
+                    $this->registration_model->branch_id = $request->data->branch_id;
                 }
                 $results = $this->registration_model->get();
                 $response = [

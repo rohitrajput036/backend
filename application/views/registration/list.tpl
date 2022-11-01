@@ -20,7 +20,10 @@
             <div class="col-lg-12 col-md-12 col-xs-12">
                 <div class="box">
                     <div class="box-body">
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-center">
+                            <div class="form-group has-error">
+                                <label id="api_error"></label>
+                            </div>
                             <a href="{base_url('registration/add')}" class="btn btn-primary btn-xs pull-right">Add Registration</a>
                         </div>
                         <div style="margin-top:10px ;" class="col-md-12">
@@ -32,7 +35,7 @@
                                     <th>Class</th>
                                     <th>Child Info</th>
                                     <th>Father Info</th>
-                                    <th>Status</th>
+                                    <th>Admission Status</th>
                                     <th>#</th>
                                 </thead>
                             </table>
@@ -82,6 +85,53 @@ $(document).ready(function(){
                 return JSON.stringify(req);
             }
         }
+    });
+    $(document).on('click','.active_deactive',function(){
+        var registration_id = $(this).data('rid');
+        var is_active = $(this).data('at');
+        var control = {
+            request_id : generateUUId(),
+            source : 1,
+            request_time : Math.round(+new Date() / 1000),
+            version : {$smarty.const.API_VERSION}
+        };
+        var data = {
+            registration_id : registration_id,
+            is_active : is_active,
+            login_id : login_user_id
+        }
+        var request = {
+            control : control,
+            data : data
+        };
+        request = JSON.stringify(request);
+        var url = "{$smarty.const.API_URL}registration/delete";
+        $.ajax({
+            method: "POST",
+            url: url,
+            async: true,
+            crossDomain: true,
+            processData: false,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: request,
+            beforeSend: function(xhr) {
+                $("#animatedLoader").show();
+            }
+        }).done(function(response) {
+            $("#animatedLoader").hide();
+            $('#api_error').html('');
+            //location.reload(true);
+            registration_table.ajax.reload();
+        }).fail(function(response) {
+            $("#animatedLoader").hide();
+            if (response.responseJSON.control) {
+                $('#api_error').text(response.responseJSON.control.message);
+            }
+        }).always(function() {
+            
+        });
     });
 });
 </script>

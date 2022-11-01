@@ -80,6 +80,30 @@ class Student_previous_acadmic_records_model extends CI_Model {
     }
 
     function get(){
-        
+        $output = [];
+        if($this->student_id > 0){
+            $where['student_id'] = $this->student_id;
+        }
+        if(!empty($this->is_active)){
+            $where['is_active'] = $this->is_active;
+        }else{
+            $where['is_active IN (1,2)'] = NULL;
+        }
+        $results = $this->global_model->select($this->table_name, $where);
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $result){
+                $output[] = [
+                    'student_previous_acadmic_records_id' => $result->student_previous_acadmic_records_id,
+                    'student_id' => $result->student_id,
+                    'school_name' => $result->school_name,
+                    'class' => $result->class,
+                    'acadmic_year' => $result->acadmic_year,
+                    'grade' => $result->grade,
+                    'achievements' => $result->achievements,
+                    'is_active' => $result->is_active
+                ];
+            }
+        }
+        return $output;
     }
 }

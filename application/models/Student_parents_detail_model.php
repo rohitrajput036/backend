@@ -145,6 +145,58 @@ class Student_parents_detail_model extends CI_Model {
     }
 
     function get(){
-        
+        $output = [];
+        $this->load->model('relation_master_model');
+        $this->load->model('document_model');
+        if(!empty($this->is_active)){
+            $where['p.is_active'] = $this->is_active;
+        }else{
+            $where['p.is_active IN (1,2)'] = NULL;   
+        }
+        if($this->student_id > 0){
+            $where['p.student_id'] = $this->student_id;
+        }
+        $joins = [
+            $this->relation_master_model->table_name.' r' =>  ['(p.relation_id = r.relation_id AND r.is_active = 1)','LEFT']
+        ];
+        $results = $this->global_model->select($this->table_name.' p', $where, '*', $joins);
+        if(isset($results) && $results->num_rows() > 0){
+            foreach($results->result() as $result){
+                $this->document_model->document_id = $result->document_type_id;
+                $this->document_model->is_active = 1;
+                $document = $this->document_model->get();
+                $output[] = [
+                    'student_parents_detail_id' => $result->student_parents_detail_id,
+                    'student_id' => $result->student_id,
+                    'parent_type' => $result->parent_type,
+                    'relation_id' => $result->relation_id,
+                    'relation' => $result->relation,
+                    'first_name' => $result->first_name,
+                    'middle_name' => $result->middle_name,
+                    'last_name' => $result->last_name,
+                    'email_id' => $result->email_id,
+                    'alt_email_id' => $result->alt_email_id,
+                    'contact_no' => $result->contact_no,
+                    'alt_contact_no' => $result->alt_contact_no,
+                    'date_of_birth' => $result->date_of_birth,
+                    'education_type_id' => $result->education_type_id,
+                    'occupation_type_id' => $result->occupation_type_id,
+                    'address_line_1' => $result->address_line_1,
+                    'address_line_2' => $result->address_line_2,
+                    'city_id' => $result->city_id,
+                    'state_id' => $result->state_id,
+                    'pincode' => $result->pincode,
+                    'office_address_line_1' => $result->office_address_line_1,
+                    'office_address_line_2' => $result->office_address_line_2,
+                    'office_city_id' => $result->office_city_id,
+                    'office_state_id' => $result->office_state_id,
+                    'office_pincode' => $result->office_pincode,
+                    'document_type_id' => $result->document_type_id,
+                    'document_type' => ($result->document_type_id > 0) ? $document[0]['document'] : '',
+                    'document_no' => $result->document_no
+                ];
+            }
+        }
+        return $output;
     }
 }
