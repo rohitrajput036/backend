@@ -1,11 +1,6 @@
 {include file='header.tpl'}
 {include file='top_header.tpl'}
-{include file='left_menu.tpl'}
-<style>
-    #sidebar_toggle {
-        display: none;
-    }
-</style>
+{include file='left_menu.tpl'}  
 <!-- Right side column. Contains the navbar and content of the page -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -26,26 +21,83 @@
                 <div class="box">
                     <div class="box-body">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                            <li class="nav-item active">
+                                <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#manage_routes">Manage routes</a>
+                                <a class="nav-link" data-toggle="tab" href="#manage_routes">Manage routes</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#manage_vehicle">Manage Vehicle</a>
+                                <a class="nav-link" data-toggle="tab" href="#manage_vehicle">Manage Vehicle</a>
                             </li>
                             <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#manage_driver">Manage Driver/Guard</a>
+                                <a class="nav-link " data-toggle="tab" href="#manage_driver">Manage Driver/Guard</a>
                             </li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div id="home" class="tab-pane fade">
-                                <h3>HOME</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <div id="home" class="tab-pane active">
+                                <div style="margin-top:15px;" class="col-md-12">
+                                    {if !empty($routes_info)}
+                                        {foreach $routes_info as $r}
+                                        {$route_id = $r['route_master_id']}
+                                            <div class="panel panel-primary">
+                                                <div class="panel-heading clickable">
+                                                    <h3 class="panel-title">
+                                                        Route Name - [ 
+                                                            {$r['route_name']} 
+                                                            ], 
+                                                            Vehicle - [
+                                                            {(!empty($r['vehicle_no'])) ? $r['vehicle_no'] : 'Not Assign'}
+                                                            ], 
+                                                            Driver - [
+                                                                {(!empty($r['driver_name'])) ? $r['driver_name'] : 'Not Assign'}
+                                                            ], 
+                                                            Guard - [
+                                                                {(!empty($r['guard_name'])) ? $r['guard_name'] : 'Not Assign'}
+                                                            ]
+                                                        <span class="pull-right clickable">
+                                                            <i class="glyphicon glyphicon-minus fa fa-plus"></i>
+                                                        </span>
+                                                    </h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-3 form-group" id="add_vehicle_id_{$route_id}_box">
+                                                            <label>Vehicle<span class="text-red">*</span></label>
+                                                            <select class="form-control" name="add_vehicle_id_{$route_id}" id="add_vehicle_id_{$route_id}">
+                                                                <option value="0">--Select Vehicle--</option>
+                                                            </select>
+                                                            <label id="add_vehicle_id_{$route_id}_error_msg"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group" id="add_driver_id_{$route_id}_box">
+                                                            <label>Driver<span class="text-red">*</span></label>
+                                                            <select class="form-control" name="add_driver_id_{$route_id}" id="add_driver_id_{$route_id}">
+                                                                <option value="0">--Select Driver--</option>
+                                                            </select>
+                                                            <label id="add_driver_id_{$route_id}_error_msg"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group" id="add_guard_id_{$route_id}_box">
+                                                            <label>Guard</label>
+                                                            <select class="form-control" name="add_guard_id_{$route_id}" id="add_guard_id_{$route_id}">
+                                                                <option value="0">--Select Guard--</option>
+                                                            </select>
+                                                            <label id="add_guard_id_{$route_id}_error_msg"></label>
+                                                        </div>
+                                                        <div class="col-md-3 form-group" style="padding-top:20px;">
+                                                            <label>&nbsp;</label>
+                                                            <button class="btn btn-success save_route" data-rid="{$route_id}">Assign</button>
+                                                            <button class="btn btn-danger delete_route" data-rid="{$route_id}">Delete</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {/foreach}
+                                    {/if}
+                                    
+                                </div>
                             </div>
-                            <div id="manage_routes" class="tab-pane active">
+                            <div id="manage_routes" class="tab-pane fade">
                                 <div class="col-md-4">
                                     <div class="col-md-12 form-group has-error text-center">
                                         <label id="api_error"></label>
@@ -257,18 +309,29 @@
 {js('common.js')}
 <script>
     $(document).ready(function(){
-        var DataTable = $('#DataTable1').DataTable({
+        $('.panel-heading span.clickable').click();
+        $('.panel div.clickable').click();
+        $('.panel-body').hide();
+        var DataTable1 = $('#DataTable1').DataTable({
             searching:true,
             ordering:false
         });
-        $(window).load(function(){
+        var DataTable2 = $('#DataTable2').DataTable({
+            searching:true,
+            ordering:false
+        });
+        var DataTable3 = $('#DataTable3').DataTable({
+            searching:true,
+            ordering:false
+        });
+        function get_routes(DataTable){
             var control  = {
                 request_id : generateUUId(),
                 source : 1,
                 request_time : Math.round(+new Date()/1000)
             }
             var data = {
-                branch_id : '{userdata('BranchId')}',
+                branch_id : "{userdata('BranchId')}",
                 for_table : true
             };
             var request = {
@@ -303,6 +366,97 @@
                 }
             }).always(function() {
             });
+        }
+        function get_vehicle(DataTable){
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                branch_id : '{userdata('BranchId')}',
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}vehicle_master/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#vehicle_master_id').val(0);
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        }
+        function get_driver(DataTable){
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                branch_id : '{userdata('BranchId')}',
+                for_table : true
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}driver/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#driver_master_id').val(0);
+                DataTable.clear().draw();
+                DataTable.rows.add(response.data).draw();
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        }
+        $(window).load(function(){
+            get_routes(DataTable1);
+            get_vehicle(DataTable2);
+            get_driver(DataTable3);
         });
         $(document).on('click', '#add_route', function(){
             var route_master_id = $('#route_master_id').val();
@@ -318,8 +472,8 @@
             var data = {
                 route_master_id     :  route_master_id,
                 route_name          :  route_name,
-                branch_id           :  '{userdata('BranchId')}',
-                login_id : '{userdata('UserId')}'
+                branch_id           :  "{userdata('BranchId')}",
+                login_id : "{userdata('UserId')}"
             }
             var request = {
                 control : control,
@@ -353,7 +507,7 @@
             }).always(function() {
             });
         });
-        $(document).on('click','.active_deactive',function(){
+        $(document).on('click','.active_deactive_route',function(){
             var route_master_id = $(this).data('#route_master_id');
             var is_active = $(this).data('at');
             var control  = {
@@ -398,58 +552,12 @@
             }).always(function() {
             });
         });
-        $(document).on('click','.edit',function(){
+        $(document).on('click','.edit_route',function(){
             var route_master_id = $(this).data('route_master_id');
+            var route_name = $(this).data('route_name');
             $('#route_master_id').val(route_master_id);
-            $('#route_name').val($('#route_'+route_master_id).text());
+            $('#route_name').val(route_name);
             $('#route_name').focus();
-        });
-        var DataTable = $('#DataTable2').DataTable({
-            searching:true,
-            ordering:false
-        });
-        $(window).load(function(){
-            var control  = {
-                request_id : generateUUId(),
-                source : 1,
-                request_time : Math.round(+new Date()/1000)
-            }
-            var data = {
-                branch_id : '{userdata('BranchId')}',
-                for_table : true
-            };
-            var request = {
-                control : control,
-                data : data
-            }
-            request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}vehicle_master/get";
-            $.ajax({
-                method: "POST",
-                url: url,
-                async: true,
-                crossDomain: true,
-                processData: false,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: request,
-                beforeSend: function(xhr) {
-                    $("#animatedLoader").show();
-                }
-            }).done(function(response) {
-                $("#animatedLoader").hide();
-                $('#api_error').html('');
-                $('#vehicle_master_id').val(0);
-                DataTable.clear().draw();
-                DataTable.rows.add(response.data).draw();
-            }).fail(function(response) {
-                $("#animatedLoader").hide();
-                if (response.responseJSON.control) {
-                    $('#api_error').text(response.responseJSON.control.message);
-                }
-            }).always(function() {
-            });
         });
         $(document).on('click', '#add_vehicle', function(){
             var vehicle_master_id = $('#vehicle_master_id').val();
@@ -520,7 +628,7 @@
             }).always(function() {
             });
         });
-        $(document).on('click','.active_deactive',function(){
+        $(document).on('click','.active_deactive_vehicle',function(){
             var vehicle_master_id = $(this).data('#vehicle_master_id');
             var is_active = $(this).data('at');
             var control  = {
@@ -557,53 +665,6 @@
                 $('#api_error').html('');
                 $('#vehicle_master_id').val(0);
                 $(window).trigger('load');
-            }).fail(function(response) {
-                $("#animatedLoader").hide();
-                if (response.responseJSON.control) {
-                    $('#api_error').text(response.responseJSON.control.message);
-                }
-            }).always(function() {
-            });
-        });
-        var DataTable = $('#DataTable3').DataTable({
-            searching:true,
-            ordering:false
-        });
-        $(window).load(function(){
-            var control  = {
-                request_id : generateUUId(),
-                source : 1,
-                request_time : Math.round(+new Date()/1000)
-            }
-            var data = {
-                branch_id : '{userdata('BranchId')}',
-                for_table : true
-            };
-            var request = {
-                control : control,
-                data : data
-            }
-            request = JSON.stringify(request);
-            var url = "{$smarty.const.API_URL}driver/get";
-            $.ajax({
-                method: "POST",
-                url: url,
-                async: true,
-                crossDomain: true,
-                processData: false,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: request,
-                beforeSend: function(xhr) {
-                    $("#animatedLoader").show();
-                }
-            }).done(function(response) {
-                $("#animatedLoader").hide();
-                $('#api_error').html('');
-                $('#driver_master_id').val(0);
-                DataTable.clear().draw();
-                DataTable.rows.add(response.data).draw();
             }).fail(function(response) {
                 $("#animatedLoader").hide();
                 if (response.responseJSON.control) {
@@ -721,7 +782,7 @@
             }).always(function() {
             });
         });
-        $(document).on('click','.active_deactive',function(){
+        $(document).on('click','.active_deactive_driver',function(){
             var driver_master_id = $(this).data('#driver_master_id');
             var is_active = $(this).data('at');
             var control  = {
@@ -757,6 +818,87 @@
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
                 $('#driver_master_id').val(0);
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click', '.panel-heading span.clickable', function (e) {
+            var $this = $(this);
+            if (!$this.hasClass('panel-collapsed')) {
+                $this.parents('.panel').find('.panel-body').slideUp();
+                $this.addClass('panel-collapsed');
+                $this.find('i').removeClass('fa fa-minus').addClass('fa fa-plus');
+            } else {
+                $this.parents('.panel').find('.panel-body').slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.find('i').removeClass('fa fa-plus').addClass('fa fa-minus');
+            }
+        });
+        $(document).on('click', '.panel div.clickable', function (e) {
+            var $this = $(this);
+            if (!$this.hasClass('panel-collapsed')) {
+                $this.parents('.panel').find('.panel-body').slideUp();
+                $this.addClass('panel-collapsed');
+                $this.find('i').removeClass('fa fa-minus').addClass('fa fa-plus');
+            } else {
+                $this.parents('.panel').find('.panel-body').slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.find('i').removeClass('fa fa-plus').addClass('fa fa-minus');
+            }
+        });
+        $(document).on ('click', '.save_route' function(){
+            var add_vehicle_id_ = $('#add_vehicle_id_').val();
+            var add_driver_id_ = $.trim($('#add_driver_id_').val());
+            var add_guard_id_ = $.trim($('#add_guard_id_').val());
+            if(checkBlank('add_vehicle_id_{$route_id}_box','add_vehicle_id_{$route_id}_error_msg','Required..', add_vehicle_id_, 'add_vehicle_id_', '')){
+                return false;
+            }
+            if(checkBlank('add_driver_id_{$route_id}_box','add_driver_id_{$route_id}_error_msg','Required..', add_driver_id_, 'add_driver_id_', '')){
+                return false;
+            }
+            if(checkBlank('add_guard_id_{$route_id}_box','add_guard_id_{$route_id}_error_msg','Required..', add_guard_id_, 'add_guard_id_', '')){
+                return false;
+            }
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                add_vehicle_id_ : vehicle_master_id,
+                add_driver_id_  : driver_master_id,
+                add_guard_id_   : guard_id,
+                branch_id       :  "{userdata('BranchId')}",
+                login_id        : "{userdata('UserId')}"
+            }
+             var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}route_master/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#route_id').val(0);
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();

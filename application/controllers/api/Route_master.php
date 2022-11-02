@@ -45,35 +45,41 @@ class Route_master extends REST_Controller {
             $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
             $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
             $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
-            if(!empty($request)){
+            if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['route_master_id','branch_id','route_name'],$request->data);
+                keyExist(['route_master_id','route_name'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
                 checkBlank(['route_name' => $request->data->route_name]);
-                $this->route_master_model->route_master_id      = $request->data->route_master_id;
-                $this->route_master_model->branch_id            = $request->data->branch_id;
-                $this->route_master_model->route_name           = $request->data->route_name;     
-                $this->route_master_model->is_active            = 1;
-                $this->route_master_model->created_by  = $this->route_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
-                $message = 'Route add successfully!';
+                $this->route_master_model->route_name = $request->data->route_name;
+                $this->route_master_model->is_active = 1;
+                $this->route_master_model->created_by = $this->route_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
+                $message = 'route add successfully!';
                 if(isset($request->data->route_master_id) && $request->data->route_master_id > 0){
                     $this->route_master_model->route_master_id = $request->data->route_master_id;
                     $this->route_master_model->update();
-                    $message = 'Route update successfully!';
+                    $message = 'route update successfully!';
                 }else{
                     if(!$this->route_master_model->check()){
-                        $this->load->model('branch_model');
-                        $this->load->model('vehicle_master_model');
-                        $this->load->model('driver_master_model');
                         $this->route_master_model->add();
                     }else{
-                        throw new Exception('Name aready exists!',400);
+                        throw new Exception('route aready exists!',400);
                     }
                 }
             }else{
                 throw new Exception('Invalid request',400);
             }
+            $response = [
+                'control' => [
+                    'status' => 1,
+                    'message' => $message,
+                    'message_code' => REST_Controller::HTTP_OK,
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, REST_Controller::HTTP_OK);
         }catch (Exception $E) {
             $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
             $response = [
@@ -88,7 +94,6 @@ class Route_master extends REST_Controller {
             $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
             $this->response($response, $E->getCode());
         }
-
     }
 
     function delete_post(){
@@ -101,10 +106,10 @@ class Route_master extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['route_id','is_active'],$request->data);
+                keyExist(['route_master_id','is_active'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['route_id' => $request->data->route_id,'is_active' => $request->data->is_active]);
-                $this->route_master_model->route_id = $request->data->route_id;
+                checkBlank(['route_master_id' => $request->data->route_master_id,'is_active' => $request->data->is_active]);
+                $this->route_master_model->route_master_id = $request->data->route_master_id;
                 $this->route_master_model->is_active = $request->data->is_active;
                 $this->route_master_model->created_by = $this->route_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
                 $this->route_master_model->delete();
