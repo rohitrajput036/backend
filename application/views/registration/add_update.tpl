@@ -317,6 +317,9 @@
                                             <label>Blood Group</label>
                                             <select name="child_blood_group" id="child_blood_group" class="form-control">
                                                 <option value="0">--Select Blood Group--</option>
+                                                {foreach $smarty.const.BLOOD_GROUP_LIST as $b}
+                                                    <option value="{$b}">{$b}</option>
+                                                {/foreach}
                                             </select>
                                             <label id="child_blood_group_error_msg"></label>
                                         </div>

@@ -181,6 +181,18 @@ class Student_model extends CI_Model {
                 $this->student_document_model->student_id = $result->student_id;
                 $this->student_document_model->is_active = 1;
                 $documents = $this->student_document_model->get();
+                $father_info = [];
+                $mother_info = [];
+                $guardian_info = [];
+                foreach($parents_info as $pa){
+                    if($pa['parent_type'] == 1){
+                        $father_info = $pa;
+                    }elseif($pa['parent_type'] == 2){
+                        $mother_info = $pa;
+                    }elseif($pa['parent_type'] == 3){
+                        $guardian_info = $pa;
+                    }
+                }
                 $data = [
                     'student_id' => $result->student_id,
                     'first_name' => $result->first_name,
@@ -228,7 +240,11 @@ class Student_model extends CI_Model {
                         'remarks' => $result->remarks
                     ],
                     'prev_acadmic_record' => $prev_acadmic_record,
-                    'parents' => $parents_info,
+                    'parents' => [
+                        'father' => $father_info,
+                        'mother' => $mother_info,
+                        'guardian' => $guardian_info
+                    ],
                     'documents' => $documents
                 ];
                 if($this->student_id > 0){
