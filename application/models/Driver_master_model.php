@@ -129,14 +129,14 @@ class Driver_master_model extends CI_Model {
             $i = 0;
             foreach($results->result() as $result){
                 ++$i;
-                if($this->for_table){
+                if($for_table){
                     if($result->is_active == 1){
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_driver btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
                     }else{
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_driver btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
                     }
-                    $delete_btn = '<button class="btn active_deactive btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
-                    $edit_btn = '<btn class="btn edit" data-driver_master_id="'.$result->driver_master_id.'" data-first_name="'.$result->first_name.'" data-gender="'.$result->gender.'" data-contact_no="'.$result->contact_no.'"  data-address_line_1="'.$result->address_line_1.'" data-state_id="'.$result->state_id.'" data-city_id="'.$result->city_id.'" data-dl_no="'.$result->dl_no.'" data-driver_type="'.$result->driver_type.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $delete_btn = '<button class="btn active_deactive_driver btn-xs" data-driver_master_id="'.$result->driver_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    $edit_btn = '<btn class="btn edit_driver" data-driver_master_id="'.$result->driver_master_id.'" data-first_name="'.$result->first_name.'" data-gender="'.$result->gender.'" data-contact_no="'.$result->contact_no.'"  data-address_line_1="'.$result->address_line_1.'" data-state_id="'.$result->state_id.'" data-city_id="'.$result->city_id.'" data-dl_no="'.$result->dl_no.'" data-driver_type="'.$result->driver_type.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output [] = [
                         $i, 
