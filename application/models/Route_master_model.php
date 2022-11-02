@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Route_master_model extends CI_Model{
 
-    public $route_master_id, $branch_id, $route_name, $vehicle_master_id, $driver_master_id, $guard_id, $is_active, $created_by, $created_on, $updated_by, $updated_on;
+    public $route_master_id, $branch_id, $route_name, $vehicle_master_id, $driver_master_id, $guard_id, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
 
     function __construct(){
         parent:: __construct();
@@ -89,25 +89,26 @@ class Route_master_model extends CI_Model{
         }
         $joins = [ 
             $this->branch_model->table_name.' b' => ['(r.branch_id = b.branch_id AND b.is_active = 1)','INNER'],
-            $this->vehicle_master_model->table_name.' v' => ['(r.vehicle_master_id = v.vehicle_master_id AND v.is_active = 1)','INNER'],
-            $this->driver_master_model->table_name.' d' => ['r.driver_master_id = d.driver_master_id AND d.is_active = 1','INNER'],
+            $this->vehicle_master_model->table_name.' v' => ['(r.vehicle_master_id = v.vehicle_master_id AND v.is_active = 1)','LEFT'],
+            $this->driver_master_model->table_name.' d' => ['r.driver_master_id = d.driver_master_id AND d.driver_type = 0 AND d.is_active = 1','LEFT'],
+            $this->driver_master_model->table_name.' g' => ['r.guard_id = g.driver_master_id AND g.driver_type = 1 AND g.is_active = 1','LEFT'],
         ];
-        $fields = "r.*";
+        $fields = "r.*,v.vehicle_no,d.first_name driver_first_name,d.middle_name driver_middle_name,d.last_name driver_last_name, g.first_name guard_first_name,g.middle_name guard_middle_name,g.last_name guard_last_name";
         $order_by= ['r.route_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' r',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
-            $s_no = 0;
+            $i = 0;
             foreach($results->result() as $result){
-                $i++;
-                if($this->for_table){
+                ++$i;
+                if($for_table){
                     if($result->is_active == 1){
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_route btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
                     }else{
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_route btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
                     }
-                    $delete_btn = '<button class="btn active_deactive btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
-                    $edit_btn = '<btn class="btn edit" data-route_master_id="'.$result->route_master_id.'" data-route_name="'.$result->route_name.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $delete_btn = '<button class="btn active_deactive_route btn-xs" data-route_master_id="'.$result->route_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    $edit_btn = '<btn class="btn edit_route" data-route_master_id="'.$result->route_master_id.'" data-route_name="'.$result->route_name.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output [] = [
                         $i, 
@@ -120,8 +121,11 @@ class Route_master_model extends CI_Model{
                         'route_name'=> $result->route_name,
                         'branch_id' => $result->branch_id,
                         'vehicle_master_id' =>$result->vehicle_master_id,
+                        'vehicle_no' => (string) $result->vehicle_no,
                         'driver_master_id' => $result->driver_master_id,
+                        'driver_name' => trim($result->driver_first_name.' '.$result->driver_middle_name.' '.$result->driver_last_name),
                         'guard_id' => $result->guard_id,
+                        'guard_name' => trim($result->guard_first_name.' '.$result->guard_middle_name.' '.$result->guard_last_name),
                     ];
                 }
             }

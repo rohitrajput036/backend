@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Vehicle_master_model extends CI_Model{
 
-    public $vehicle_master_id, $branch_id, $vehicle_no, $vehicle_color, $manufacturing_year, $seating_capacity, $pre_reserved_seat, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $for_table;
+    public $vehicle_master_id, $branch_id, $vehicle_no, $vehicle_color, $manufacturing_year, $seating_capacity, $pre_reserved_seat, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
     
     function __construct(){
         parent:: __construct();
@@ -76,7 +76,7 @@ class Vehicle_master_model extends CI_Model{
         return $this->global_model->update($this->table_name, $update_data, $where);
     }
 
-    function get(){
+    function get($for_table = false){
         $this->load->model('branch_model');
         if($this->vehicle_master_id > 0){
             $where['v.vehicle_master_id'] = $this->vehicle_master_id;
@@ -97,17 +97,17 @@ class Vehicle_master_model extends CI_Model{
         $results = $this->global_model->select($this->table_name.' v',$where,$fields,$joins,NULL,NULL,$order_by);
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
-            $s_no = 0;
+            $i = 0;
             foreach($results->result() as $result){
                 $i++;
-                if($this->for_table){
+                if($for_table){
                     if($result->is_active == 1){
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_vehicle btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="2" style="background:none"><i class="fa fa-check text-green"></i></button>';
                     }else{
-                        $active_deactive_btn = '<button class="btn active_deactive btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
+                        $active_deactive_btn = '<button class="btn active_deactive_vehicle btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="1" style="background:none"><i class="fa fa-times text-red"></i></button>';
                     }
-                    $delete_btn = '<button class="btn active_deactive btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
-                    $edit_btn = '<btn class="btn edit" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-vehicle_no="'.$result->vehicle_no.'" data-vehicle_color="'.$result->vehicle_color.'" data-manufacturing_year="'.$result->manufacturing_year.'"  data-seating_capacity="'.$result->seating_capacity.'" data-pre_reserved_seat="'.$result->pre_reserved_seat.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $delete_btn = '<button class="btn active_deactive_vehicle btn-xs" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-at="3" style="background:none"><i class="fa fa-trash text-red"></i></button>';
+                    $edit_btn = '<btn class="btn edit_vehicle" data-vehicle_master_id="'.$result->vehicle_master_id.'" data-vehicle_no="'.$result->vehicle_no.'" data-vehicle_color="'.$result->vehicle_color.'" data-manufacturing_year="'.$result->manufacturing_year.'"  data-seating_capacity="'.$result->seating_capacity.'" data-pre_reserved_seat="'.$result->pre_reserved_seat.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output [] = [
                         $i, 
