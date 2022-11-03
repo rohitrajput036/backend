@@ -27,6 +27,17 @@ class Admission extends CI_Controller {
         if(isset($cast_categoty_response['data'])){
             $this->outputData['cast_categoty_list'] = $cast_categoty_response['data'];
         }
+        $document_type_url = API_URL.'document/get';
+        $document_type_response = callAPI($document_type_url,'POST',json_encode($request));
+        if(isset($document_type_response['data'])){
+            $this->outputData['document_type_list'] = $document_type_response['data'];
+        }
+        $request['data']['ignore_id'] = [1,2];
+        $relation_type_url = API_URL.'relation/get';
+        $relation_type_response = callAPI($relation_type_url,'POST',json_encode($request));
+        if(isset($relation_type_response['data'])){
+            $this->outputData['relation_type_list'] = $relation_type_response['data'];
+        }
         $nationality_url = API_URL.'common/get_nationality';
         $nationality_response = callAPI($nationality_url,'POST',json_encode($request));
         if(isset($nationality_response['data'])){
