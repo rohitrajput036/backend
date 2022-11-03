@@ -326,6 +326,7 @@
                                     <div class="row">
                                         <div class="col-md-2 form-group" id="father_first_name_box">
                                             <label>First Name<span class="text-red">*</span></label>
+                                            <input type="hidden" name="father_id" id="father_id" value="{(isset($student_info['parents']['father']['student_parents_detail_id'])) ? $student_info['parents']['father']['student_parents_detail_id'] : '0'}"/>
                                             <input type="text" name="father_first_name" id="father_first_name" class="form-control" placeholder="Enter first name" value="{(isset($student_info['parents']['father']['first_name'])) ? $student_info['parents']['father']['first_name'] : ''}"/>
                                             <label id="father_first_name_error_smsg"></label>
                                         </div>
@@ -392,12 +393,17 @@
                                             <label>Document Type</label>
                                             <select name="father_document_type_id" id="father_document_type_id" class="form-control">
                                                 <option value="0">--Select Document--</option>
+                                                {if isset($document_type_list) && !empty($document_type_list)}
+                                                    {foreach $document_type_list as $dt}
+                                                        <option value="{$dt['document_id']}" {(isset($student_info['parents']['father']['document_type_id']) && $student_info['parents']['father']['document_type_id'] == $dt['document_id']) ? 'selected' : ''}>{$dt['document']}</option>
+                                                    {/foreach}
+                                                {/if}
                                             </select>
                                             <label id="father_document_type_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="father_document_no_box">
                                             <label>Document No</label>
-                                            <input type="text" name="father_document_no" id="father_document_no" class="form-control" placeholder="Enter document no."/>
+                                            <input type="text" name="father_document_no" id="father_document_no" class="form-control" placeholder="Enter document no." value="{(isset($student_info['parents']['father']['document_no'])) ? $student_info['parents']['father']['document_no'] : ''}"/>
                                             <label id="father_document_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-6" style="border:1px solid #ccc; border-radius:10px;">
@@ -405,12 +411,12 @@
                                                 <div class="col-md-12 text-center" style="font-weight:bold;"><span>Residence Address</span></div>
                                                 <div class="col-md-6 form-group" id="father_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="father_address_line_1" id="father_address_line_1" class="form-control" placeholder="Enter address line 1"/>
+                                                    <input type="text" name="father_address_line_1" id="father_address_line_1" class="form-control" placeholder="Enter address line 1" value="{(isset($student_info['address_line_1'])) ? $student_info['address_line_1'] : ''}"/>
                                                     <label id="father_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="father_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="father_address_line_2" id="father_address_line_2" class="form-control" placeholder="Enter address line 2"/>
+                                                    <input type="text" name="father_address_line_2" id="father_address_line_2" class="form-control" placeholder="Enter address line 2" value="{(isset($student_info['address_line_2'])) ? $student_info['address_line_2'] : ''}"/>
                                                     <label id="father_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="father_state_id_box">
@@ -429,7 +435,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="father_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="father_pincode" id="father_pincode" class="form-control" placeholder="Enter Pincode"/>
+                                                    <input type="text" name="father_pincode" id="father_pincode" class="form-control" placeholder="Enter Pincode" value="{(isset($student_info['pincode'])) ? $student_info['pincode'] : ''}"/>
                                                     <label id="father_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -441,12 +447,12 @@
                                                 </div>
                                                 <div class="col-md-6 form-group" id="father_office_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="father_office_address_line_1" id="father_office_address_line_1" class="form-control" placeholder="Enter office address line 1"/>
+                                                    <input type="text" name="father_office_address_line_1" id="father_office_address_line_1" class="form-control" placeholder="Enter office address line 1" value="{(isset($student_info['parents']['father']['office_address_line_1'])) ? $student_info['parents']['father']['office_address_line_1'] : ''}"/>
                                                     <label id="father_office_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="father_office_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="father_office_address_line_2" id="father_office_address_line_2" class="form-control" placeholder="Enter office address line 2"/>
+                                                    <input type="text" name="father_office_address_line_2" id="father_office_address_line_2" class="form-control" placeholder="Enter office address line 2" value="{(isset($student_info['parents']['father']['office_address_line_2'])) ? $student_info['parents']['father']['office_address_line_2'] : ''}"/>
                                                     <label id="father_office_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="father_office_state_id_box">
@@ -465,7 +471,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="father_office_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="father_office_pincode" id="father_office_pincode" class="form-control" placeholder="Enter office Pincode"/>
+                                                    <input type="text" name="father_office_pincode" id="father_office_pincode" class="form-control" placeholder="Enter office Pincode" value="{(isset($student_info['parents']['father']['office_pincode'])) ? $student_info['parents']['father']['office_pincode'] : ''}"/>
                                                     <label id="father_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -479,42 +485,43 @@
                                     <div class="row">
                                         <div class="col-md-2 form-group" id="mother_first_name_box">
                                             <label>First Name<span class="text-red">*</span></label>
-                                            <input type="text" name="mother_first_name" id="mother_first_name" class="form-control" placeholder="Enter first name"/>
+                                            <input type="hidden" name="mother_id" id="mother_id" value="{(isset($student_info['parents']['mother']['student_parents_detail_id'])) ? $student_info['parents']['mother']['student_parents_detail_id'] : '0'}"/>
+                                            <input type="text" name="mother_first_name" id="mother_first_name" class="form-control" placeholder="Enter first name" value="{(isset($student_info['parents']['mother']['first_name'])) ? $student_info['parents']['mother']['first_name'] : ''}"/>
                                             <label id="mother_first_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_middle_name_box">
                                             <label>Middle Name</label>
-                                            <input type="text" name="mother_middle_name" id="mother_middle_name" class="form-control" placeholder="Enter middle name"/>
+                                            <input type="text" name="mother_middle_name" id="mother_middle_name" class="form-control" placeholder="Enter middle name" value="{(isset($student_info['parents']['mother']['middle_name'])) ? $student_info['parents']['mother']['middle_name'] : ''}"/>
                                             <label id="mother_middle_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_last_name_box">
                                             <label>Last Name</label>
-                                            <input type="text" name="mother_last_name" id="mother_last_name" class="form-control" placeholder="Enter last name"/>
+                                            <input type="text" name="mother_last_name" id="mother_last_name" class="form-control" placeholder="Enter last name" value="{(isset($student_info['parents']['mother']['last_name'])) ? $student_info['parents']['mother']['last_name'] : ''}"/>
                                             <label id="mother_last_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_email_id_box">
                                             <label>Email Id</label>
-                                            <input type="text" name="mother_email_id" id="mother_email_id" class="form-control" placeholder="Enter email id"/>
+                                            <input type="text" name="mother_email_id" id="mother_email_id" class="form-control" placeholder="Enter email id" value="{(isset($student_info['parents']['mother']['email_id'])) ? $student_info['parents']['mother']['email_id'] : ''}"/>
                                             <label id="mother_email_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_alt_email_id_box">
                                             <label>Alt Email Id</label>
-                                            <input type="text" name="mother_alt_email_id" id="mother_alt_email_id" class="form-control" placeholder="Enter alternate email id"/>
+                                            <input type="text" name="mother_alt_email_id" id="mother_alt_email_id" class="form-control" placeholder="Enter alternate email id" value="{(isset($student_info['parents']['mother']['alt_email_id'])) ? $student_info['parents']['mother']['alt_email_id'] : ''}"/>
                                             <label id="mother_alt_email_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_contact_no_box">
                                             <label>Contact No</label>
-                                            <input type="text" name="mother_contact_no" id="mother_contact_no" class="form-control" placeholder="Enter contact no"/>
+                                            <input type="text" name="mother_contact_no" id="mother_contact_no" class="form-control" placeholder="Enter contact no" value="{(isset($student_info['parents']['mother']['contact_no'])) ? $student_info['parents']['mother']['contact_no'] : ''}"/>
                                             <label id="mother_contact_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_alt_contact_no_box">
                                             <label>Alt. Contact No</label>
-                                            <input type="text" name="mother_alt_contact_no" id="mother_alt_contact_no" class="form-control" placeholder="Enter alternate contact no"/>
+                                            <input type="text" name="mother_alt_contact_no" id="mother_alt_contact_no" class="form-control" placeholder="Enter alternate contact no" value="{(isset($student_info['parents']['mother']['alt_contact_no'])) ? $student_info['parents']['mother']['alt_contact_no'] : ''}"/>
                                             <label id="mother_alt_contact_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_date_of_birth_box">
                                             <label>Date of birth</label>
-                                            <input type="text" name="mother_date_of_birth" id="mother_date_of_birth" class="form-control" placeholder="Enter date of birth" readonly/>
+                                            <input type="text" name="mother_date_of_birth" id="mother_date_of_birth" class="form-control" placeholder="Enter date of birth" value="{(isset($student_info['parents']['mother']['date_of_birth']) && !empty($student_info['parents']['mother']['date_of_birth'])) ? date('m/d/Y',strtotime($student_info['parents']['mother']['date_of_birth'])) : ''}" readonly/>
                                             <label id="mother_date_of_birth_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_education_id_box">
@@ -523,7 +530,7 @@
                                                 <option value="0">--Select Education--</option>
                                                 {if isset($education_type_list) && !empty($education_type_list)}
                                                     {foreach $education_type_list as $edu}
-                                                        <option value="{$edu['education_type_id']}">{$edu['education_type']}</option>
+                                                        <option value="{$edu['education_type_id']}" {(isset($student_info['parents']['mother']['education_type_id']) && $student_info['parents']['mother']['education_type_id'] == $edu['education_type_id']) ? 'selected' : ''}>{$edu['education_type']}</option>
                                                     {/foreach}
                                                 {/if}
                                             </select>
@@ -535,7 +542,7 @@
                                                 <option value="0">--Select Occupation--</option>
                                                 {if isset($mother_occupation_type_list) && !empty($mother_occupation_type_list)}
                                                     {foreach $mother_occupation_type_list as $mot}
-                                                        <option value="{$mot['occupation_type_id']}">{$mot['occupation_type']}</option>
+                                                        <option value="{$mot['occupation_type_id']}" {(isset($student_info['parents']['mother']['occupation_type_id']) && $student_info['parents']['mother']['occupation_type_id'] == $mot['occupation_type_id']) ? 'selected' : ''}>{$mot['occupation_type']}</option>
                                                     {/foreach}
                                                 {/if}
                                             </select>
@@ -545,12 +552,17 @@
                                             <label>Document Type</label>
                                             <select name="mother_document_type_id" id="mother_document_type_id" class="form-control">
                                                 <option value="0">--Select Document--</option>
+                                                {if isset($document_type_list) && !empty($document_type_list)}
+                                                    {foreach $document_type_list as $dt}
+                                                        <option value="{$dt['document_id']}" {(isset($student_info['parents']['mother']['document_type_id']) && $student_info['parents']['mother']['document_type_id'] == $dt['document_id']) ? 'selected' : ''}>{$dt['document']}</option>
+                                                    {/foreach}
+                                                {/if}
                                             </select>
                                             <label id="mother_document_type_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="mother_document_no_box">
                                             <label>Document No</label>
-                                            <input type="text" name="mother_document_no" id="mother_document_no" class="form-control" placeholder="Enter document no."/>
+                                            <input type="text" name="mother_document_no" id="mother_document_no" class="form-control" placeholder="Enter document no." value="{(isset($student_info['parents']['mother']['document_no'])) ? $student_info['parents']['mother']['document_no'] : ''}"/>
                                             <label id="mother_document_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-6" style="border:1px solid #ccc; border-radius:10px;">
@@ -558,12 +570,12 @@
                                                 <div class="col-md-12 text-center" style="font-weight:bold;"><span>Residence Address</span></div>
                                                 <div class="col-md-6 form-group" id="mother_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="mother_address_line_1" id="mother_address_line_1" class="form-control" placeholder="Enter address line 1"/>
+                                                    <input type="text" name="mother_address_line_1" id="mother_address_line_1" class="form-control" placeholder="Enter address line 1" value="{(isset($student_info['address_line_1'])) ? $student_info['address_line_1'] : ''}"/>
                                                     <label id="mother_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="mother_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="mother_address_line_2" id="mother_address_line_2" class="form-control" placeholder="Enter address line 2"/>
+                                                    <input type="text" name="mother_address_line_2" id="mother_address_line_2" class="form-control" placeholder="Enter address line 2" value="{(isset($student_info['address_line_2'])) ? $student_info['address_line_2'] : ''}"/>
                                                     <label id="mother_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="mother_state_id_box">
@@ -582,7 +594,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="mother_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="mother_pincode" id="mother_pincode" class="form-control" placeholder="Enter Pincode"/>
+                                                    <input type="text" name="mother_pincode" id="mother_pincode" class="form-control" placeholder="Enter Pincode" value="{(isset($student_info['pincode'])) ? $student_info['pincode'] : ''}"/>
                                                     <label id="mother_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -594,12 +606,12 @@
                                                 </div>
                                                 <div class="col-md-6 form-group" id="mother_office_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="mother_office_address_line_1" id="mother_office_address_line_1" class="form-control" placeholder="Enter office address line 1"/>
+                                                    <input type="text" name="mother_office_address_line_1" id="mother_office_address_line_1" class="form-control" placeholder="Enter office address line 1" value="{(isset($student_info['parents']['mother']['office_address_line_1'])) ? $student_info['parents']['mother']['office_address_line_1'] : ''}"/>
                                                     <label id="mother_office_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="mother_office_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="mother_office_address_line_2" id="mother_office_address_line_2" class="form-control" placeholder="Enter office address line 2"/>
+                                                    <input type="text" name="mother_office_address_line_2" id="mother_office_address_line_2" class="form-control" placeholder="Enter office address line 2" value="{(isset($student_info['parents']['mother']['office_address_line_2'])) ? $student_info['parents']['mother']['office_address_line_2'] : ''}"/>
                                                     <label id="mother_office_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="mother_office_state_id_box">
@@ -618,7 +630,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="mother_office_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="mother_office_pincode" id="mother_office_pincode" class="form-control" placeholder="Enter office Pincode"/>
+                                                    <input type="text" name="mother_office_pincode" id="mother_office_pincode" class="form-control" placeholder="Enter office Pincode" value="{(isset($student_info['parents']['mother']['office_pincode'])) ? $student_info['parents']['mother']['office_pincode'] : ''}"/>
                                                     <label id="mother_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -633,48 +645,55 @@
                                         <div class="col-md-2 form-group" id="guardian_relation_id_box">
                                             <label>Relation</label>
                                                 <select name="guardian_relation_id" id="guardian_relation_id" class="form-control">
-                                                    <option value="0">--Select Relation--</option>    
+                                                    <option value="0">--Select Relation--</option>
+                                                    {if isset($relation_type_list) && !empty($relation_type_list)}
+                                                        {foreach $relation_type_list as $rl}
+                                                            <option value="{$rl['relation_id']}" {(isset($student_info['parents']['guardian']['relation_id']) && $student_info['parents']['guardian']['relation_id'] == $rl['relation_id']) ? 'selected' : ''}>{$rl['relation']}</option>
+                                                        {/foreach}
+                                                    {/if}
                                                 </select>
                                             <label id="guardian_relation_id_error_msg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_first_name_box">
                                             <label>First Name<span class="text-red">*</span></label>
-                                            <input type="text" name="guardian_first_name" id="guardian_first_name" class="form-control" placeholder="Enter first name"/>
+                                            <input type="hidden" name="guardian_id" id="guardian_id" value="{(isset($student_info['parents']['guardian']['student_parents_detail_id'])) ? $student_info['parents']['guardian']['student_parents_detail_id'] : '0'}"/>
+                                            <input type="text" name="guardian_first_name" id="guardian_first_name" class="form-control" placeholder="Enter first name" value="{(isset($student_info['parents']['guardian']['first_name'])) ? $student_info['parents']['guardian']['first_name'] : ''}"/>
                                             <label id="guardian_first_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_middle_name_box">
                                             <label>Middle Name</label>
-                                            <input type="text" name="guardian_middle_name" id="guardian_middle_name" class="form-control" placeholder="Enter middle name"/>
+                                            <input type="text" name="guardian_middle_name" id="guardian_middle_name" class="form-control" placeholder="Enter middle name" value="{(isset($student_info['parents']['guardian']['middle_name'])) ? $student_info['parents']['guardian']['middle_name'] : ''}"/>
                                             <label id="guardian_middle_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_last_name_box">
                                             <label>Last Name</label>
-                                            <input type="text" name="guardian_last_name" id="guardian_last_name" class="form-control" placeholder="Enter last name"/>
+                                            <input type="text" name="guardian_last_name" id="guardian_last_name" class="form-control" placeholder="Enter last name" value="{(isset($student_info['parents']['guardian']['last_name'])) ? $student_info['parents']['guardian']['last_name'] : ''}"/>
                                             <label id="guardian_last_name_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_email_id_box">
                                             <label>Email Id</label>
-                                            <input type="text" name="guardian_email_id" id="guardian_email_id" class="form-control" placeholder="Enter email id"/>
+                                            <input type="text" name="guardian_email_id" id="guardian_email_id" class="form-control" placeholder="Enter email id" value="{(isset($student_info['parents']['guardian']['email_id'])) ? $student_info['parents']['guardian']['email_id'] : ''}"/>
                                             <label id="guardian_email_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_alt_email_id_box">
                                             <label>Alt Email Id</label>
-                                            <input type="text" name="guardian_alt_email_id" id="guardian_alt_email_id" class="form-control" placeholder="Enter alternate email id"/>
+                                            <input type="text" name="guardian_alt_email_id" id="guardian_alt_email_id" class="form-control" placeholder="Enter alternate email id" value="{(isset($student_info['parents']['guardian']['alt_email_id'])) ? $student_info['parents']['guardian']['alt_email_id'] : ''}"/>
                                             <label id="guardian_alt_email_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_contact_no_box">
                                             <label>Contact No</label>
-                                            <input type="text" name="guardian_contact_no" id="guardian_contact_no" class="form-control" placeholder="Enter contact no"/>
+                                            <input type="text" name="guardian_contact_no" id="guardian_contact_no" class="form-control" placeholder="Enter contact no" value="{(isset($student_info['parents']['guardian']['contact_no'])) ? $student_info['parents']['guardian']['contact_no'] : ''}"/>
                                             <label id="guardian_contact_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_alt_contact_no_box">
                                             <label>Alt. Contact No</label>
-                                            <input type="text" name="guardian_alt_contact_no" id="guardian_alt_contact_no" class="form-control" placeholder="Enter alternate contact no"/>
+                                            <input type="text" name="guardian_alt_contact_no" id="guardian_alt_contact_no" class="form-control" placeholder="Enter alternate contact no" value="{(isset($student_info['parents']['guardian']['alt_contact_no'])) ? $student_info['parents']['guardian']['alt_contact_no'] : ''}
+                                            "/>
                                             <label id="guardian_alt_contact_no_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_date_of_birth_box">
                                             <label>Date of birth</label>
-                                            <input type="text" name="guardian_date_of_birth" id="guardian_date_of_birth" class="form-control" placeholder="Enter date of birth" readonly/>
+                                            <input type="text" name="guardian_date_of_birth" id="guardian_date_of_birth" class="form-control" placeholder="Enter date of birth" value="{(isset($student_info['parents']['guardian']['date_of_birth']) && !empty($student_info['parents']['guardian']['date_of_birth'])) ? date('m/d/Y',strtotime($student_info['parents']['guardian']['date_of_birth'])) : ''}" readonly/>
                                             <label id="guardian_date_of_birth_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_education_id_box">
@@ -683,7 +702,7 @@
                                                 <option value="0">--Select Education--</option>
                                                 {if isset($education_type_list) && !empty($education_type_list)}
                                                     {foreach $education_type_list as $edu}
-                                                        <option value="{$edu['education_type_id']}">{$edu['education_type']}</option>
+                                                        <option value="{$edu['education_type_id']}" {(isset($student_info['parents']['guardian']['education_type_id']) && $student_info['parents']['guardian']['education_type_id'] == $edu['education_type_id']) ? 'selected' : ''}>{$edu['education_type']}</option>
                                                     {/foreach}
                                                 {/if}
                                             </select>
@@ -695,7 +714,7 @@
                                                 <option value="0">--Select Occupation--</option>
                                                 {if isset($father_occupation_type_list) && !empty($father_occupation_type_list)}
                                                     {foreach $father_occupation_type_list as $fot}
-                                                        <option value="{$fot['occupation_type_id']}">{$fot['occupation_type']}</option>
+                                                        <option value="{$fot['occupation_type_id']}" {(isset($student_info['parents']['guardian']['occupation_type_id']) && $student_info['parents']['guardian']['occupation_type_id'] == $fot['occupation_type_id']) ? 'selected' : ''}>{$fot['occupation_type']}</option>
                                                     {/foreach}
                                                 {/if}
                                             </select>
@@ -706,12 +725,17 @@
                                             <label>Document Type</label>
                                             <select name="guardian_document_type_id" id="guardian_document_type_id" class="form-control">
                                                 <option value="0">--Select Document--</option>
+                                                {if isset($document_type_list) && !empty($document_type_list)}
+                                                    {foreach $document_type_list as $dt}
+                                                        <option value="{$dt['document_id']}" {(isset($student_info['parents']['guardian']['document_type_id']) && $student_info['parents']['guardian']['document_type_id'] == $dt['document_id']) ? 'selected' : ''}>{$dt['document']}</option>
+                                                    {/foreach}
+                                                {/if}
                                             </select>
                                             <label id="guardian_document_type_id_error_smsg"></label>
                                         </div>
                                         <div class="col-md-2 form-group" id="guardian_document_no_box">
                                             <label>Document No</label>
-                                            <input type="text" name="guardian_document_no" id="guardian_document_no" class="form-control" placeholder="Enter document no."/>
+                                            <input type="text" name="guardian_document_no" id="guardian_document_no" class="form-control" placeholder="Enter document no." value="{(isset($student_info['parents']['guardian']['document_no'])) ? $student_info['parents']['guardian']['document_no'] : ''}"/>
                                             <label id="guardian_document_no_error_smsg"></label>
                                         </div>
                                         <div class="clearfix"></div>
@@ -720,12 +744,12 @@
                                                 <div class="col-md-12 text-center" style="font-weight:bold;"><span>Residence Address</span></div>
                                                 <div class="col-md-6 form-group" id="guardian_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="guardian_address_line_1" id="guardian_address_line_1" class="form-control" placeholder="Enter address line 1"/>
+                                                    <input type="text" name="guardian_address_line_1" id="guardian_address_line_1" class="form-control" placeholder="Enter address line 1" value="{(isset($student_info['parents']['guardian']['address_line_1'])) ? $student_info['parents']['guardian']['address_line_1'] : ''}"/>
                                                     <label id="guardian_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="guardian_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="guardian_address_line_2" id="guardian_address_line_2" class="form-control" placeholder="Enter address line 2"/>
+                                                    <input type="text" name="guardian_address_line_2" id="guardian_address_line_2" class="form-control" placeholder="Enter address line 2" value="{(isset($student_info['parents']['guardian']['address_line_2'])) ? $student_info['parents']['guardian']['address_line_2'] : ''}"/>
                                                     <label id="guardian_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="guardian_state_id_box">
@@ -744,7 +768,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="guardian_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="guardian_pincode" id="guardian_pincode" class="form-control" placeholder="Enter Pincode"/>
+                                                    <input type="text" name="guardian_pincode" id="guardian_pincode" class="form-control" placeholder="Enter Pincode" value="{(isset($student_info['parents']['guardian']['pincode'])) ? $student_info['parents']['guardian']['pincode'] : ''}"/>
                                                     <label id="guardian_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -756,12 +780,12 @@
                                                 </div>
                                                 <div class="col-md-6 form-group" id="guardian_office_address_line_1_box">
                                                     <label>Address Line 1</label>
-                                                    <input type="text" name="guardian_office_address_line_1" id="guardian_office_address_line_1" class="form-control" placeholder="Enter office address line 1"/>
+                                                    <input type="text" name="guardian_office_address_line_1" id="guardian_office_address_line_1" class="form-control" placeholder="Enter office address line 1" value="{(isset($student_info['parents']['guardian']['office_address_line_1'])) ? $student_info['parents']['guardian']['office_address_line_1'] : ''}"/>
                                                     <label id="guardian_office_address_line_1_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-6 form-group" id="guardian_office_address_line_2_box">
                                                     <label>Address Line 2</label>
-                                                    <input type="text" name="guardian_office_address_line_2" id="guardian_office_address_line_2" class="form-control" placeholder="Enter office address line 2"/>
+                                                    <input type="text" name="guardian_office_address_line_2" id="guardian_office_address_line_2" class="form-control" placeholder="Enter office address line 2" value="{(isset($student_info['parents']['guardian']['office_address_line_2'])) ? $student_info['parents']['guardian']['office_address_line_2'] : ''}"/>
                                                     <label id="guardian_office_address_line_2_error_msg"></label>
                                                 </div>
                                                 <div class="col-md-4 form-group" id="guardian_office_state_id_box">
@@ -780,7 +804,7 @@
                                                 </div>
                                                 <div class="col-md-4 form-group" id="guardian_office_pincode_box">
                                                     <label>Pincode</label>
-                                                    <input type="text" name="guardian_office_pincode" id="guardian_office_pincode" class="form-control" placeholder="Enter office Pincode"/>
+                                                    <input type="text" name="guardian_office_pincode" id="guardian_office_pincode" class="form-control" placeholder="Enter office Pincode" value="{(isset($student_info['parents']['guardian']['office_pincode'])) ? $student_info['parents']['guardian']['office_pincode'] : ''}"/>
                                                     <label id="guardian_pincode_error_smsg"></label>
                                                 </div>
                                             </div>
@@ -807,13 +831,18 @@
                                                         <td>
                                                             <select name="child_document_type_id" id="child_document_type_id_1" class="form-control">
                                                                 <option value="0">--Select--</option>
+                                                                {if isset($document_type_list) && !empty($document_type_list)}
+                                                                    {foreach $document_type_list as $dt}
+                                                                        <option value="{$dt['document_id']}">{$dt['document']}</option>
+                                                                    {/foreach}
+                                                                {/if}
                                                             </select>
                                                         </td>
                                                         <td>
                                                             <input type="text" name="child_document_no" id="child_document_no_1" class="form-control" placeholder="Enter Document No"/>
                                                         </td>
                                                         <td>
-                                                            <input type="file" name="child_document_file" id="child_document_file_1" class="form-control"/>
+                                                            <input type="file" name="child_document_file" id="child_document_file_1" class="form-control" onchange="encodeImagetoBase64(this,'child_document_file_base64_1')"/>
                                                             <input type="hidden" name="child_document_file_base64" id="child_document_file_base64_1"/>
                                                         </td>
                                                     </tr>
@@ -822,7 +851,38 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="col-md-12 form-group">
-                                                <label>Document details :</label>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                            <tr>
+                                                                <th>S.No.</th>
+                                                                <th>Document Name</th>
+                                                                <th>Document No</th>
+                                                                <th>Document File</th>
+                                                                <th>#</th>
+                                                            </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {if isset($student_info['documents']) && !empty($student_info['documents'])}
+                                                            {foreach $student_info['documents'] as $upd}
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>{$upd['document']}</td>
+                                                                    <td>{$upd['document_no']}</td>
+                                                                    <td>
+                                                                        {if !empty($upd['document_file_name'])}
+                                                                            <a download="{$upd['document_file_name']}" class="btn btn-default">
+                                                                                <i class="fa fa-cloud-download"></i>
+                                                                            </a>
+                                                                        {/if}
+                                                                    </td>
+                                                                    <td>
+                                                                        <button class="btn" style="background:none" data-sdid="{$upd['student_document_id']}" data-at="3"><i class="fa fa-trash text-red"></i></button>
+                                                                    </td>
+                                                                </tr>
+                                                            {/foreach}
+                                                        {/if}
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -857,6 +917,18 @@ function get_state_list(id){
         select_state_id = {(isset($student_info['state_id'])) ? $student_info['state_id'] : 0};
     }else if(id == 'child_permanent_state_id'){
         select_state_id = {(isset($student_info['permanent_state_id'])) ? $student_info['permanent_state_id'] : 0};
+    }else if(id == 'father_state_id'){
+        select_state_id = {(isset($student_info['state_id'])) ? $student_info['state_id'] : 0};
+    }else if(id == 'father_office_state_id'){
+        select_state_id = {(isset($student_info['parents']['father']['office_state_id'])) ? $student_info['parents']['father']['office_state_id'] : 0};
+    }else if(id == 'mother_state_id'){
+        select_state_id = {(isset($student_info['state_id'])) ? $student_info['state_id'] : 0};
+    }else if(id == 'mother_office_state_id'){
+        select_state_id = {(isset($student_info['parents']['mother']['office_state_id'])) ? $student_info['parents']['mother']['office_state_id'] : 0};
+    }else if(id == 'guardian_state_id'){
+        select_state_id = {(isset($student_info['parents']['guardian']['state_id'])) ? $student_info['parents']['guardian']['state_id'] : 0};
+    }else if(id == 'guardian_office_state_id'){
+        select_state_id = {(isset($student_info['parents']['guardian']['office_state_id'])) ? $student_info['parents']['guardian']['office_state_id'] : 0};
     }
     var control = {
         request_id : generateUUId(),
@@ -919,6 +991,18 @@ function get_city_list(target_id,state_id){
         selected_city_id = {(isset($student_info['city_id'])) ? $student_info['city_id'] : 0};
     }else if(target_id == 'child_permanent_city_id'){
         selected_city_id = {(isset($student_info['permanent_city_id'])) ? $student_info['permanent_city_id'] : 0};
+    }else if(target_id == 'father_city_id'){
+        selected_city_id = {(isset($student_info['city_id'])) ? $student_info['city_id'] : 0};
+    }else if(target_id == 'father_office_city_id'){
+        selected_city_id = {(isset($student_info['parents']['father']['office_city_id'])) ? $student_info['parents']['father']['office_city_id'] : 0};
+    }else if(target_id == 'mother_city_id'){
+        selected_city_id = {(isset($student_info['city_id'])) ? $student_info['city_id'] : 0};
+    }else if(target_id == 'mother_office_city_id'){
+        selected_city_id = {(isset($student_info['parents']['mother']['office_city_id'])) ? $student_info['parents']['mother']['office_city_id'] : 0};
+    }else if(target_id == 'guardian_city_id'){
+        selected_city_id = {(isset($student_info['parents']['guardian']['city_id'])) ? $student_info['parents']['guardian']['city_id'] : 0};
+    }else if(target_id == 'guardian_office_city_id'){
+        selected_city_id = {(isset($student_info['parents']['guardian']['office_city_id'])) ? $student_info['parents']['guardian']['office_city_id'] : 0};
     }
     var control = {
         request_id : generateUUId(),
