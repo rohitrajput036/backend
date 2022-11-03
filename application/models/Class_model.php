@@ -68,7 +68,7 @@ class Class_model extends CI_Model {
             'updated_on' => $this->updated_on
         ];
         $results = $this->global_model->update($this->table_name, $update_data, $where);
-        echo $this->db->last_query();exit;
+       //echo $this->db->last_query();exit;
         return $results;
     }
 

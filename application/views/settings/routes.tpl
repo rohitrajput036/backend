@@ -44,9 +44,9 @@
                                             <div class="panel panel-primary">
                                                 <div class="panel-heading clickable">
                                                     <h3 class="panel-title">
-                                                        Route Name - [ 
-                                                            {$r['route_name']} 
-                                                            ], 
+                                                        Route Name - [
+                                                            {$r['route_name']}
+                                                            ],
                                                             Vehicle - [
                                                             {(!empty($r['vehicle_no'])) ? $r['vehicle_no'] : 'Not Assign'}
                                                             ], 
@@ -65,22 +65,25 @@
                                                     <div class="col-md-12">
                                                         <div class="col-md-3 form-group" id="add_vehicle_id_{$route_id}_box">
                                                             <label>Vehicle<span class="text-red">*</span></label>
-                                                            <select class="form-control" name="add_vehicle_id_{$route_id}" id="add_vehicle_id_{$route_id}">
+                                                            <select class="form-control add_vehicle_box" name="add_vehicle_id_{$route_id}" id="add_vehicle_id_{$route_id}">
                                                                 <option value="0">--Select Vehicle--</option>
+                                                                
                                                             </select>
                                                             <label id="add_vehicle_id_{$route_id}_error_msg"></label>
                                                         </div>
                                                         <div class="col-md-3 form-group" id="add_driver_id_{$route_id}_box">
                                                             <label>Driver<span class="text-red">*</span></label>
-                                                            <select class="form-control" name="add_driver_id_{$route_id}" id="add_driver_id_{$route_id}">
+                                                            <select class="form-control add_driver_box" name="add_driver_id_{$route_id}" id="add_driver_id_{$route_id}">
                                                                 <option value="0">--Select Driver--</option>
+                                                               
                                                             </select>
                                                             <label id="add_driver_id_{$route_id}_error_msg"></label>
                                                         </div>
                                                         <div class="col-md-3 form-group" id="add_guard_id_{$route_id}_box">
                                                             <label>Guard</label>
-                                                            <select class="form-control" name="add_guard_id_{$route_id}" id="add_guard_id_{$route_id}">
+                                                            <select class="form-control add_guard_box" name="add_guard_id_{$route_id}" id="add_guard_id_{$route_id}">
                                                                 <option value="0">--Select Guard--</option>
+                                                                
                                                             </select>
                                                             <label id="add_guard_id_{$route_id}_error_msg"></label>
                                                         </div>
@@ -285,8 +288,7 @@
                                                 <th>Gender</th>
                                                 <th>Contact Number</th>
                                                 <th>Address</th>
-                                                <th>State</th>
-                                                <th>City</th>
+                                                <th>State/City</th>
                                                 <th>DL. No</th>
                                                 <th>Type</th>
                                                 <th>#</th>
@@ -312,6 +314,108 @@
         $('.panel-heading span.clickable').click();
         $('.panel div.clickable').click();
         $('.panel-body').hide();
+        
+        var add_vehicle_box = $('.add_vehicle_box').select2({
+            width: '100%',
+            ajax: {
+                url : "{$smarty.const.API_URL}vehicle_master/get",
+                type : 'POST',
+                dataType : 'json',
+                delay: 250,
+                data: function (params) {
+                    var control  = {
+                        request_id : generateUUId(),
+                        source : 1,
+                        request_time : Math.round(+new Date()/1000)
+                    }
+                    var query = {
+                        control : control,
+                        data : {
+                            is_active : 1,
+                            for : 'select2',
+                            search: params.term
+                        }
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function (response, params) {
+                    console.log(response.data);
+                    return {
+                        results: response.data
+                    }
+                }
+            }
+        });
+        var add_driver_box = $('.add_driver_box').select2({
+            width: '100%',
+            ajax: {
+                url : "{$smarty.const.API_URL}driver/get",
+                type : 'POST',
+                dataType : 'json',
+                delay: 250,
+                data: function (params) {
+                    var control  = {
+                        request_id : generateUUId(),
+                        source : 1,
+                        request_time : Math.round(+new Date()/1000)
+                    }
+                    var query = {
+                        control : control,
+                        data : {
+                            is_active : 1,
+                             driver_type : '0',
+                            for : 'select2',
+                            search: params.term
+                        }
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function (response, params) {
+                    console.log(response.data);
+                    return {
+                        results: response.data
+                    }
+                }
+            }
+        });
+        var add_guard_box = $('.add_guard_box').select2({
+            width: '100%',
+            ajax: {
+                url : "{$smarty.const.API_URL}driver/get",
+                type : 'POST',
+                dataType : 'json',
+                delay: 250,
+                data: function (params) {
+                    var control  = {
+                        request_id : generateUUId(),
+                        source : 1,
+                        request_time : Math.round(+new Date()/1000)
+                    }
+                    var query = {
+                        control : control,
+                        data : {
+                            is_active : 1,
+                             driver_type : '1',
+                            for : 'select2',
+                            search: params.term
+                        }
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function (response, params) {
+                    console.log(response.data);
+                    return {
+                        results: response.data
+                    }
+                }
+            }
+        });
+        var city_id = $('#city_id').select2({
+            width:'100%'
+        });
+        var state_id = $('#state_id').select2({
+            width:'100%'
+        });
         var DataTable1 = $('#DataTable1').DataTable({
             searching:true,
             ordering:false
@@ -453,10 +557,108 @@
             }).always(function() {
             });
         }
+        function get_state_list(id){
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                cersion : {$smarty.const.API_VERSION}
+            };
+            var data = {
+                is_active : 1
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}state/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#'+id).children().remove();
+                $('#'+id).append("<option value='0'>--Select State--</option>");
+                $.each(response.data,function(k,v){
+                    $('#'+id).append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                });
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
+        }
         $(window).load(function(){
             get_routes(DataTable1);
             get_vehicle(DataTable2);
             get_driver(DataTable3);
+            get_state_list('state_id');
+        });
+        $(document).on('change','#state_id',function(){
+            var state_id = $(this).val();
+            var state_code = $('#state_id option:selected').data('sc');
+            $("#state_code").val(state_code);
+            var control = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date() / 1000),
+                cersion : 1.0
+            };
+            var data = {
+                is_active : 1,
+                state_id : state_id
+            };
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}city/get";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#city_id').children().remove();
+                $('#city_id').append("<option value='0'>--Select City--</option>");
+                $.each(response.data,function(k,v){
+                    $('#city_id').append("<option value='"+v.city_id+"'>"+v.city_name+"</option>");
+                });
+                $('#city_id').trigger('change');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+                
+            });
         });
         $(document).on('click', '#add_route', function(){
             var route_master_id = $('#route_master_id').val();
@@ -851,17 +1053,16 @@
                 $this.find('i').removeClass('fa fa-plus').addClass('fa fa-minus');
             }
         });
-        $(document).on ('click', '.save_route' function(){
-            var add_vehicle_id_ = $('#add_vehicle_id_').val();
-            var add_driver_id_ = $.trim($('#add_driver_id_').val());
-            var add_guard_id_ = $.trim($('#add_guard_id_').val());
-            if(checkBlank('add_vehicle_id_{$route_id}_box','add_vehicle_id_{$route_id}_error_msg','Required..', add_vehicle_id_, 'add_vehicle_id_', '')){
+        $(document).on('click', '.save_route', function(){
+            var route_id = $(this).data('rid');
+            var vehicle_id = $('#add_vehicle_id_'+route_id).val();
+            var driver_id = $('#add_driver_id_'+route_id).val();
+            var guard_id = $('#add_guard_id_'+route_id).val();
+            var login_id = {userdata('UserId')};
+            if(checkBlank('add_vehicle_id_'+route_id+'_box','add_vehicle_id_'+route_id+'_error_msg','Required..', vehicle_id, 'add_vehicle_id_'+route_id, '0')){
                 return false;
             }
-            if(checkBlank('add_driver_id_{$route_id}_box','add_driver_id_{$route_id}_error_msg','Required..', add_driver_id_, 'add_driver_id_', '')){
-                return false;
-            }
-            if(checkBlank('add_guard_id_{$route_id}_box','add_guard_id_{$route_id}_error_msg','Required..', add_guard_id_, 'add_guard_id_', '')){
+            if(checkBlank('add_driver_id_'+route_id+'_box','add_driver_id_'+route_id+'_error_msg','Required..', driver_id, 'add_driver_id_'+route_id, '0')){
                 return false;
             }
             var control  = {
@@ -870,13 +1071,12 @@
                 request_time : Math.round(+new Date()/1000)
             }
             var data = {
-                add_vehicle_id_ : vehicle_master_id,
-                add_driver_id_  : driver_master_id,
-                add_guard_id_   : guard_id,
-                branch_id       :  "{userdata('BranchId')}",
-                login_id        : "{userdata('UserId')}"
+                vehicle_id : vehicle_id,
+                driver_id :  driver_id,
+                guard_id :   guard_id,
+                login_id :  '{userdata('UserId')}'
             }
-             var request = {
+            var request = {
                 control : control,
                 data : data
             }

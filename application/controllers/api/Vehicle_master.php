@@ -164,6 +164,16 @@ class Vehicle_master extends REST_Controller {
                     $request->data->for_table = false;
                 }
                 $data = $this->vehicle_master_model->get($request->data->for_table);
+                if(isset($request->data->for) && $request->data->for == 'select2'){
+                    $newdata = [];
+                    foreach($data as $d){
+                        $newdata[] = [
+                           'text' => $d['vehicle_no'],
+                           'id' => $d['vehicle_master_id'] 
+                        ];
+                    }
+                    $data = $newdata;
+                }
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }

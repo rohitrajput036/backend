@@ -27,7 +27,7 @@ class Route_master_model extends CI_Model{
             'route_name' => strtoupper($this->route_name),
             'vehicle_master_id' => $this->vehicle_master_id,
             'driver_master_id' => $this->driver_master_id,
-            'guard_id' => $this->guard_id,
+            'guard_id'          => $this->guard_id,
             'is_active'   => $this->is_active,
             'created_by'  => $this->created_by,
             'created_on'  => $this->created_on
