@@ -206,7 +206,7 @@
         $(document).on('click','.edit',function(){
             var subject_id = $(this).data('subject_id');
             $('#subject_id').val(subject_id);
-            $('#subject_name').val($('#subject_'+subject_id).text());
+            $('#subject_name').val($('#subject_name'+subject_id).text());
             $('#subject').focus();
         });
     });

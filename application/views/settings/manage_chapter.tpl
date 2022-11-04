@@ -84,7 +84,7 @@
                         </div>
                         <div class="col-md-4 form-group" id="chapter_box">
                             <label>Chapter Name <span class="text-red">*</span></label>
-                            <input type="text" name="chapter_name" id="chapter_name" value="{if $action=='edit'}{$chapter_data['chapter_name']}{/if}"class="form-control" placeholder=""/>
+                            <input type="text" name="chapter_name" id="chapter_name" class="form-control" placeholder=""/>
                             <input type="hidden" name="chapter_id" id="chapter_id" value="0"/>
                             <label id="chapter_error_msg"></label>
                         </div>
@@ -265,18 +265,19 @@
                 }
             }).always(function() {
             });
+        });     
+        $('#add_edit_chapter').modal('hide');
+        $(document).on('click','.edit',function(){
+            $('#add_edit_chapter').modal('show');
+            var chapter_id = $(this).data('#chapter_id');
+            var class_id = $(this).data('#class_id');
+            var subject = $(this).data('#subject_id');
+            $('#chapter_id').val($('#chapter_id'+chapter_name).text());
+            $('#class_id').val($('#class_id'+class_name).text());
+            $('#subject_id').val($('#subject_id'+subject_name).text());
+
         });
         $(document).on('click','#cancel',function(){
-        });
-        
-        $(document).on('click','.edit',function(){
-            var class_name = $(this).data('class_name');
-            var chapter_id = $(this).data('chapter_id');
-            var subject_name = $(this).data('subject_name');
-            $('#subject_id').val(subject_id);
-            $('#chapter_id').val(chapter_id);
-            $('#class_id').val(class_id);
-            $('#chapter_id').focus();
         });
     });
 </script>
