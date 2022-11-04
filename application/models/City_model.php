@@ -23,8 +23,14 @@ class City_model extends CI_Model {
     function add(){
         $insert_data = [
             'state_id' => $this->state_id,
+            'city_name' => $this->city_name,
             
         ];
+        if ($this->global_model->insert($this->table_name, $insert_data)) {
+            $this->city_id = $this->db->insert_id();
+        } else {
+            throw new Exception("Issue in insertion", 500);
+        }
     }
 
     function get(){
