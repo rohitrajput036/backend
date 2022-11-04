@@ -7,9 +7,24 @@ class City_model extends CI_Model {
 
     function __construct() {
         parent::__construct();
-        $this->state_id = 0;
+        $this->city_id = 0;
+        $this->state_id = '';
+        $this->city_name = '';
+        $this->sort_order = '';
+        $this->created_by = 0;
+        $this->created_on = date('Y-m-d H:i:s');
+        $this->updated_by = 0;
+        $this->updated_on = date('Y-m-d H:i:s');
         $this->is_active = '';
+        $this->city_alias_name = '';
         $this->table_name = DB_NAME.'city';
+    }
+
+    function add(){
+        $insert_data = [
+            'state_id' => $this->state_id,
+            
+        ];
     }
 
     function get(){
