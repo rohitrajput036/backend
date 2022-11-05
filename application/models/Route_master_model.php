@@ -69,7 +69,8 @@ class Route_master_model extends CI_Model{
             'updated_by' => $this->updated_by,
             'updated_on' => $this->updated_on
         ];
-        return $this->global_model->update($this->table_name, $update_data, $where);
+        $results = $this->global_model->update($this->table_name, $update_data, $where);
+        return $results;
     }
 
     function get($for_table = false){
