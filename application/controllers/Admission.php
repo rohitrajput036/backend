@@ -4,6 +4,9 @@ class Admission extends CI_Controller {
     public $outputData;
     function __construct() {
         parent::__construct();
+        if (!checkLogin()) {
+            redirect('login');
+        }
     }
 
     function index(){
@@ -70,6 +73,21 @@ class Admission extends CI_Controller {
         if(isset($class_response['data'])){
             $this->outputData['class_list'] = $class_response['data'];
         }
+        $fee_str_api_url = API_URL.'branch/get_fee_structure';
+        $fee_str_request = [
+            'control' =>  [
+                'request_id' => generateUUId(),
+                'source' => 1,
+                'request_time' => time(),
+                'version' => WEB_VERSION
+            ],
+            'data' => [
+                'branch_id' => userdata('BranchId'),
+                'is_active' => 1
+            ]
+        ];
+        $fee_str_response = callAPI($fee_str_api_url,'POST',json_encode($fee_str_request));
+        $this->outputData['branch_fee_structure'] = (isset($fee_str_response['data'])) ? $fee_str_response['data'] : [];
         $student_id = $this->uri->segment(3, 0);
         $api_url = API_URL.'student/get';
         $request = [
@@ -87,7 +105,7 @@ class Admission extends CI_Controller {
         ];
         $response = callAPI($api_url,'POST',json_encode($request));
         $student_info = (isset($response['data'])) ? $response['data'] : [];
-        $this->outputData['student_info'] = (!isset($student_info[0])) ? $student_info : []; 
+        $this->outputData['student_info'] = (!isset($student_info[0])) ? $student_info : [];
         $this->parser->parse("admission/add_edit.tpl", $this->outputData);
     }
 }

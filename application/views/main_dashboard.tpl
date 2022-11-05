@@ -32,6 +32,7 @@
                                 <li><b>{$sess} : </b>{(is_array(userdata($sess))) ? print_r(userdata($sess)) : userdata($sess)}</li>
                             {/foreach}
                         </ol>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
