@@ -181,7 +181,21 @@ class driver extends REST_Controller {
                 }else{
                     $request->data->for_table = false;
                 }
+                if(isset($request->data->driver_type)){
+                    $this->driver_master_model->driver_type = $request->data->driver_type;
+                }
                 $data = $this->driver_master_model->get($request->data->for_table);
+                
+                if(isset($request->data->for) && $request->data->for == 'select2'){
+                    $newdata = [];
+                    foreach($data as $d){
+                        $newdata[] = [
+                           'text' => $d['first_name'].' '.$d['middle_name'].' '.$d['last_name'],
+                           'id' => $d['driver_master_id'] 
+                        ];
+                    }
+                    $data = $newdata;
+                }
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }

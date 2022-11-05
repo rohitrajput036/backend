@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Area_master_model extends CI_Model {
+    
     public $area_master_id, $city_id, $area_name, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name;
     function __construct() {
         parent::__construct();

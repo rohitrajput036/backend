@@ -48,12 +48,14 @@ class Route_master extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['route_master_id','route_name'],$request->data);
+                keyExist(['route_master_id', 'branch_id', 'route_name','vehicle_master_id', 'driver_master_id', 'guard_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
                 checkBlank(['route_name' => $request->data->route_name]);
+                $this->route_master_model->route_master_id = $request->data->route_master_id;
                 $this->route_master_model->route_name = $request->data->route_name;
                 $this->route_master_model->is_active = 1;
                 $this->route_master_model->created_by = $this->route_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
+                echo $this->db->last->query;exit;
                 $message = 'route add successfully!';
                 if(isset($request->data->route_master_id) && $request->data->route_master_id > 0){
                     $this->route_master_model->route_master_id = $request->data->route_master_id;
