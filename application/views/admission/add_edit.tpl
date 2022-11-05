@@ -8,6 +8,19 @@
     background-color:white !important;
     opacity: 1;
 }
+.small_table .form-control{
+    height: 25px !important;
+    padding: 0px 12px !important;
+}
+.small_table>tbody>tr>td, .small_table>tbody>tr>th, .small_table>tfoot>tr>td, .small_table>tfoot>tr>th, .small_table>thead>tr>td, .small_table>thead>tr>th {
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
 </style>
 <!-- Right side column. Contains the navbar and content of the page -->
 <div class="content-wrapper">
@@ -30,49 +43,49 @@
                     <div class="box-body">
                         <div class="bs-stepper">
                             <div class="bs-stepper-header" role="tablist">
-                                <div class="step" data-target="#child-information-part">
+                                <div class="step" data-target="#child-information-part" onclick="stepper.to(1)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="child-information-part" id="child-information-part-trigger">
                                         <span class="bs-stepper-circle">1</span>
                                         <span class="bs-stepper-label">Child Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#father-information-part">
+                                <div class="step" data-target="#father-information-part" onclick="stepper.to(2)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="father-information-part" id="father-information-part-trigger">
                                         <span class="bs-stepper-circle">2</span>
                                         <span class="bs-stepper-label">Father Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#mother-information-part">
+                                <div class="step" data-target="#mother-information-part" onclick="stepper.to(3)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="mother-information-part" id="mother-information-part-trigger">
                                         <span class="bs-stepper-circle">3</span>
                                         <span class="bs-stepper-label">Mother Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#guardian-information-part">
+                                <div class="step" data-target="#guardian-information-part" onclick="stepper.to(4)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="guardian-information-part" id="guardian-information-part-trigger">
                                         <span class="bs-stepper-circle">4</span>
                                         <span class="bs-stepper-label">Guardian Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#document-information-part">
+                                <div class="step" data-target="#document-information-part" onclick="stepper.to(5)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="document-information-part" id="document-information-part-trigger">
                                         <span class="bs-stepper-circle">5</span>
                                         <span class="bs-stepper-label">Documents Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#assignment-part">
+                                <div class="step" data-target="#assignment-part" onclick="stepper.to(6)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="assignment-part" id="assignment-part-trigger">
                                         <span class="bs-stepper-circle">6</span>
                                         <span class="bs-stepper-label">Assignment Information</span>
                                     </button>
                                 </div>
                                 <div class="line"></div>
-                                <div class="step" data-target="#fee-calculation-part">
+                                <div class="step" data-target="#fee-calculation-part" onclick="stepper.to(7)">
                                     <button type="button" class="step-trigger" role="tab" aria-controls="fee-calculation-part" id="fee-calculation-part-trigger">
                                         <span class="bs-stepper-circle">7</span>
                                         <span class="bs-stepper-label">Fee Calculation</span>
@@ -252,7 +265,7 @@
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <label>Previous Acadmic Details</label>
-                                                <table class="table table-bordered">
+                                                <table class="table table-bordered small_table">
                                                     <thead>
                                                         <tr>
                                                             <th style="width:5%">S.No</th>
@@ -894,6 +907,40 @@
                                     <button type="submit" class="btn btn-primary pull-right next_btn" data-step="6">Next</button>
                                 </div>
                                 <div id="fee-calculation-part" class="content" role="tabpanel" aria-labelledby="fee-calculation-part-trigger">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 col-md-offset-3">
+                                            <table class="table table-bordered small_table">
+                                                <thead style="background-color: #3c8dbc; border-color: #3c8dbc; color:white">
+                                                    <tr>
+                                                        <th class="text-center">Fee Head</th>
+                                                        <th class="text-center">Frequency</th>
+                                                        <th class="text-center">Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {if isset($branch_fee_structure) && !empty($branch_fee_structure)}
+                                                        {foreach $branch_fee_structure as $bfs}
+                                                            <tr>
+                                                                <td>{$bfs['structure_name']}</td>
+                                                                <td>
+                                                                    <input type="number" name="fee_amount_{$bfs['fee_structure_master_id']}" id="fee_amount_{$bfs['fee_structure_master_id']}" class="form-control" value="{$bfs['fee_amount']}"/>
+                                                                </td>
+                                                                <td>
+                                                                    <select name="fee_type_{$bfs['fee_structure_master_id']}" id="fee_type_{$bfs['fee_structure_master_id']}" class="form-control">
+                                                                        <option value="0">--Select--</option>
+                                                                        <option value="Annual" {($bfs['fee_type'] == 'Annual') ? 'selected' : ''}>Annual</option>
+                                                                        <option value="Monthly" {($bfs['fee_type'] == 'Monthly') ? 'selected' : ''}>Monthly</option>
+                                                                        <option value="Quarterly" {($bfs['fee_type'] == 'Quarterly') ? 'selected' : ''}>Quarterly</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                        {/foreach}
+                                                    {/if}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
                                     <button class="btn btn-warning previous_btn">Previous</button>
                                     <button type="submit" class="btn btn-primary pull-right final_btn" data-step="7">Submit</button>
                                 </div>

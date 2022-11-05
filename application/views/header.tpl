@@ -36,7 +36,7 @@
     {css('select2.css')}
     {css('plugins/light-gallery/css/lightgallery.css')}
     {css('jquery.magnify.css')}
-    
+    {css('loader/building-blocks.css')}
    
   </head>
   <body class="skin-blue">

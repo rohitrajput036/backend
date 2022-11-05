@@ -1,5 +1,6 @@
     
     </div><!-- ./wrapper -->
+    
     <div id="animatedLoader" style="position: fixed; background-color: white; top:0; bottom:0;right: 0; left: 0; width:100%; height: 100%; z-index:1050; text-align: center; font-size: 20px;">
         {image('loader.gif',['style'=>'width:50%'])}
         <p>Please Wait...</p>
