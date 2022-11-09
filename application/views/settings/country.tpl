@@ -22,9 +22,9 @@
                     <div class="box-body">
                         <div class="col-md-12">
                             <div class="col-md-3">
-                                <div class="form-group" id="area_box">
+                                <div class="form-group" id="country_box">
                                     <label>Country Name <span class="text-red">*</span></label>
-                                    <input type="text" name="country_name" id="country_name" class="form-control" placeholder="Write Your country name."/>
+                                    <input type="text" name="country_name" id="country_name" class="form-control" placeholder="Type Your country name."/>
                                     <input type="hidden" name="country_id" id="country_id" value="0"/>
                                     <label id="country_error_msg"></label>
                                 </div>
@@ -41,7 +41,7 @@
                                 <tr>
                                     <th style="width:10%">S NO</th>
                                     <th>Country Name</th>
-                                    <th style="width:15%">#</th>
+                                    <th style="width:20%">#</th>
                                 </tr>
                             </thead>
                             <tbody></tbody> 
@@ -56,12 +56,11 @@
 {include file='footer.tpl'}
 {js('common.js')}
 <script>
-  $(document).ready(function(){
+    $(document).ready(function(){
         var DataTable = $('#DataTable').DataTable({
             searching:true,
             ordering:false
         });
-        
         $(window).load(function(){
             var control  = {
                 request_id : generateUUId(),
@@ -102,6 +101,107 @@
                 }
             }).always(function() {
             });
+        });
+        $(document).on('click','#save',function(){
+            var country_id = $('#country_id').val();
+            var country_name = $.trim($('#country_name').val());
+            if(checkBlank('country_box','country_error_msg','Required..', country_name, 'country_name', '')){
+                return false;
+            }
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                country_id : country_id,
+                country_name : country_name,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}country/add";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#country_id').val(0);
+                $('#country_name').val('');
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.active_deactive',function(){
+            var country_id = $(this).data('country_id');
+            var is_active = $(this).data('at');
+            var control  = {
+                request_id : generateUUId(),
+                source : 1,
+                request_time : Math.round(+new Date()/1000)
+            }
+            var data = {
+                country_id : country_id,
+                is_active : is_active,
+                login_id : '{userdata('UserId')}'
+            }
+            var request = {
+                control : control,
+                data : data
+            }
+            request = JSON.stringify(request);
+            var url = "{$smarty.const.API_URL}country/delete";
+            $.ajax({
+                method: "POST",
+                url: url,
+                async: true,
+                crossDomain: true,
+                processData: false,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: request,
+                beforeSend: function(xhr) {
+                    $("#animatedLoader").show();
+                }
+            }).done(function(response) {
+                $("#animatedLoader").hide();
+                $('#api_error').html('');
+                $('#country_id').val(0);
+                $('#country_name').val('');
+                $(window).trigger('load');
+            }).fail(function(response) {
+                $("#animatedLoader").hide();
+                if (response.responseJSON.control) {
+                    $('#api_error').text(response.responseJSON.control.message);
+                }
+            }).always(function() {
+            });
+        });
+        $(document).on('click','.edit',function(){
+            var country_id = $(this).data('country_id');
+            $('#country_id').val(country_id);
+            $('#country_name').val($('#country_'+country_id).text());
+            $('#country').focus();
         });
     });
 </script>
