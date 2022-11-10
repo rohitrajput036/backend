@@ -363,7 +363,7 @@
                         control : control,
                         data : {
                             is_active : 1,
-                             driver_type : '0',
+                            driver_type : '0',
                             for : 'select2',
                             search: params.term
                         }
