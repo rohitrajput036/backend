@@ -1,11 +1,7 @@
 {include file='header.tpl'}
 {include file='top_header.tpl'}
 {include file='left_menu.tpl'}
-<style>
-    #sidebar_toggle {
-        display: none;
-    }
-</style>
+
 <!-- Right side column. Contains the navbar and content of the page -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
