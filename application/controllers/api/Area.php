@@ -11,13 +11,13 @@ class Area extends REST_Controller {
     public function index_get() {
         $StartTime = microtime(true);
         $response = [
-            'Control' => [
-                'Status' => 0,
-                'Message' => 'You have wrong direction, Please check the manual',
-                'MessageCode' => REST_Controller::HTTP_BAD_REQUEST,
-                'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            'control' => [
+                'status' => 0,
+                'message' => 'You have wrong direction, Please check the manual',
+                'message_code' => REST_Controller::HTTP_BAD_REQUEST,
+                'time_taken' => (microtime(true) - $StartTime) . ' Second'
             ],
-            'Data' => []
+            'data' => []
         ];
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
@@ -25,13 +25,13 @@ class Area extends REST_Controller {
     public function index_post() {
         $StartTime = microtime(true);
         $response = [
-            'Control' => [
-                'Status' => 0,
-                'Message' => 'You have wrong direction, Please check the manual',
-                'MessageCode' => REST_Controller::HTTP_BAD_REQUEST,
-                'TimeTaken' => (microtime(true) - $StartTime) . ' Second'
+            'control' => [
+                'status' => 0,
+                'message' => 'You have wrong direction, Please check the manual',
+                'message_code' => REST_Controller::HTTP_BAD_REQUEST,
+                'time_taken' => (microtime(true) - $StartTime) . ' Second'
             ],
-            'Data' => []
+            'data' => []
         ];
         $this->response($response, REST_Controller::HTTP_BAD_REQUEST);
     }
