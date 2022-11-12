@@ -7,11 +7,11 @@ class Teacher extends CI_Controller {
     function __construct() {
         parent::__construct();
         if (!checkLogin()) {
-        redirect('login');
+            redirect('login');
         }
     }
 
     public function index() {
-        $this->parser->parse("teacher/teacher.tpl", $this->outputData);
+        $this->parser->parse("teacher_enquiry/teacher.tpl", $this->outputData);
     }
 }

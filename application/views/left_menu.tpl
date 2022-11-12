@@ -74,14 +74,14 @@
                     </li>
                 </ul>
             </li>
-            <li {if uriseg(1)=='teacher'} class="treeview active" {else} class="treeview" {/if}>
+            <li {if uriseg(1)=='teacher'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
-                    <i class="glyphicon glyphicon-education"></i> <span>Teacher</span>
+                    <i class="fa  fa-graduation-cap"></i> <span>Teacher</span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li {if uriseg(1)=='teacher'}class="active"{/if}>
-                        <a href="{site_url('teacher')}"><i class="fa  fa-user-plus"></i> Add Teacher</a>
+                        <a href="{site_url('teacher')}"><i class="fa fa-user-plus"></i>ADD Teacher</a>
                     </li>
                 </ul>
             </li>
