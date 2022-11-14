@@ -48,7 +48,7 @@ class Area extends REST_Controller {
                 keyExist(['request_id', 'source', 'request_time'],$request->control);
                 keyExist(['city_id', 'state_id', 'city_name', 'sort_order'], $request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
-                checkBlank(['state_id' => $request->data->state_id, 'city_name' => $request->data->city_name]);
+                checkBlank([ 'city_name' => $request->data->city_name]);
                 $this->city_model->city_id = $request->data->city_id;
                 $this->city_model->state_id = $request->data->state_id;
                 $this->city_model->city_name = $request->data->city_name;
@@ -170,18 +170,19 @@ class Area extends REST_Controller {
                 if(isset($request->data->state_id)){
                     $this->city_model->state_id = $request->data->state_id;
                 }
-                if(!isset($request->data->for_table)){
+                if(isset($request->data->for_table)){
+                    $request->data->for_table = true;
+                }else{
                     $request->data->for_table = false;
                 }
-                $this->city_model->for_table = $request->data->for_table;
-                $data = $this->city_model->get();
+                $data = $this->city_model->get( $request->data->for_table);
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }
             $response = [
                 'control' => [
                     'status' => 1,
-                    'message' => 'List of city',
+                    'message' => 'All cities are here',
                     'message_code' => REST_Controller::HTTP_OK,
                     'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],

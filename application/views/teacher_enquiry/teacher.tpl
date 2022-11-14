@@ -20,27 +20,21 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="col-md-12">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group" id="teacher-box">
-                                    <label>Teacher Name<span class="text-red">*</span></label>
-                                    <input type="text" name="teacher_name" id="teacher_name" class="form-control" placeholder="Write Your name.">
-                                    <label id="teacher_error_msg"></label>
+                                    <label>Teacher<span class="text-red">*</span></label>
+                                        <select name="teacher_name" id="teacher_name" class="form-control">
+                                            <option value="0">--select--</option>
+                                        </select>
+                                    <label for="teacher_name" id="teacher_name_error_msg"></label>
                                 </div>
-                            </div>
-                            <div class="col-md-2 form-group" id="class_teacher_box">
-                                <label>Class Teacher</label>
-                                    <Select name="class_teacher" id="class_teacher" class="form-control">
-                                        <option value="0">No</option>
-                                        <option value="1">Yes</option>
-                                    </select>
-                                <label for="with_subject" id="with_subject_error_msg"></label>
                             </div>
                             <div class="col-md-2 form-group" id="class_box">
                                 <label>Class</label>
                                     <Select name="class_id" id="class_id" class="form-control">
                                         <option value="0">--Select--</option>
                                     </select>
-                                <label for="with_subject" id="with_subject_error_msg"></label>
+                                <label for="class_id" id="class_id_error_msg"></label>
                             </div>
                             <div class="col-md-1">
                                 <input type="hidden" name="teacher_id" id="teacher_id" value="0"/>

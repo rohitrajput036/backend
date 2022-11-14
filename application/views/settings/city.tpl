@@ -11,7 +11,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Manage Citys</li>
+            <li class="active">Manage Cities</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -21,6 +21,13 @@
                 <div class="box">
                     <div class="box-body">
                         <div class="col-md-12">
+                            <div class="col-md-2">
+                                <label>State</label>
+                                <select name="state_id" id="state_id" class="form-control">
+                                    <option value="0">--Select--</option>
+                                </select>
+                                </label for="state_id" id="state_id_error_msg">
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group" id="city_box">
                                     <label>City Name <span class="text-red">*</span></label>
@@ -40,6 +47,7 @@
                             <thead>
                                 <tr>
                                     <th style="width:10%">S NO</th>
+                                    <th>State</th>
                                     <th>City Name</th>
                                     <th style="width:15%">#</th>
                                 </tr>
@@ -143,7 +151,6 @@
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
                 $('#city_id').val(0);
-                $('#city_name').val('');
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();

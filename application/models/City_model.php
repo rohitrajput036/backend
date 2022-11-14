@@ -80,9 +80,9 @@ class City_model extends CI_Model {
             $where['c.is_active IN (1,2)'] = NULL;
         }
         $joins=[
-            $this->state_model->table_name.' s'=> ['c.state_id = s.state_id AND s.is_active = 1','LEFT']
+            $this->state_model->table_name.' s'=> ['c.state_id = s.state_id AND s.is_active = 1','INNER']
         ];
-        $fildes = 'c.*,s.state_id';
+        $fildes = 'c.*, s.state_name';
         $oder_by = ['c.city_name => ASC'];
         $results = $this->global_model->select($this->table_name.' c',$where, $fildes, $joins, NULL, NULL, $oder_by);
         $output = [];
@@ -101,12 +101,12 @@ class City_model extends CI_Model {
                     $btns = $active_deactive_btn.''.$delete_btn.''.$edit_btn.'';
                     $output [] = [
                         $i,
-                        '<span id="city_'.$result->city_id.'">'.$result->city_name.'</span>',
+                        $result->city_name,
+                        $result->state_name,
                         $btns
                     ];
                 }else{
                     $output [] = [
-                        'sno' => $i,
                         'city_id' => $result->city_id,
                         'state_id' => $result->state_id,
                         'city_name' => $result->city_name,
