@@ -24,7 +24,7 @@
                             <div class="col-md-3">
                                 <div class="form-group" id="state_box">
                                     <label>State Name <span class="text-red">*</span></label>
-                                    <input type="text" name="state_name" id="state_name" class="form-control" placeholder="Type Your state name."/>
+                                    <input type="text" name="state_name" id="state_name" class="form-control" placeholder="Write Your state name."/>
                                     <input type="hidden" name="state_id" id="state_id" value="0"/>
                                     <label id="state_error_msg"></label>
                                 </div>
@@ -140,8 +140,7 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
-                $('#state_id').val(0);
-                $('#state_name').val('');
+                $('#state_id').val('0');
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();
@@ -153,7 +152,7 @@
         });
         $(document).on('click','.active_deactive',function(){
             var state_id = $(this).data('state_id');
-            var is_active = $(this).data('at');
+            var status = $(this).data('at');
             var control  = {
                 request_id : generateUUId(),
                 source : 1,
@@ -161,7 +160,7 @@
             }
             var data = {
                 state_id : state_id,
-                is_active : is_active,
+                status : status,
                 login_id : '{userdata('UserId')}'
             }
             var request = {
@@ -186,8 +185,7 @@
             }).done(function(response) {
                 $("#animatedLoader").hide();
                 $('#api_error').html('');
-                $('#state_id').val(0);
-                $('#state_name').val('');
+                $('#state_id').val('0');
                 $(window).trigger('load');
             }).fail(function(response) {
                 $("#animatedLoader").hide();
@@ -201,7 +199,7 @@
             var state_id = $(this).data('state_id');
             $('#state_id').val(state_id);
             $('#state_name').val($('#state_'+state_id).text());
-            $('#state').focus();
+            $('#state_name').focus();
         });
     });
 </script>

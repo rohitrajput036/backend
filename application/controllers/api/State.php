@@ -47,18 +47,15 @@ class State extends REST_Controller {
             if (!empty($request)) {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time'],$request->control);
-                keyExist(['state_id', 'country_id', 'state_name', 'state_code', 'zone', 'gst_code', 'union_territories'],$request->data);
+                keyExist(['state_id', 'country_id'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id, 'source' => $request->control->source, 'request_time' => $request->control->request_time]);
-                checkBlank(['country_id' => $request->data->country_id, ' state_name' => $request->data->state_name, 'state_code' => $request->data->state_code, 'zone' => $request->data->zone, 'gst_code' => $request->data->gst_code, 'union_territories' => $request->data->union_territories]);
+                checkBlank([' state_name' => $request->data->state_name,]);
                 $this->state_model->state_id   = $request->data->state_id;
                 $this->state_model->country_id = $request->data->country_id;
                 $this->state_model->state_name = $request->data->state_name;
-                $this->state_model->state_code = $request->data->state_code;
-                $this->state_model->zone       = $request->data->zone;
-                $this->state_model->gst_code   = $request->data->gst_code;
-                $this->state_model->union_territories = $request->data->union_territories;
+                
                 $this->state_model->status = 1;
-                $this->state_model->created_by = $this->state_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
+                $this->state_model->created_on = $this->state_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
                 $message = 'Your State add successfully';
                 if(isset($request->data->state_id) && $request->data->state_id > 0){
                     $this->state_model->state_id = $request->data->state_id;
@@ -117,7 +114,7 @@ class State extends REST_Controller {
                 checkBlank(['state_id' => $request->data->state_id,'status' => $request->data->status]);
                 $this->state_model->state_id = $request->data->state_id;
                 $this->state_model->status = $request->data->status;
-                $this->state_model->created_by = $this->state_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
+                $this->state_model->created_on = $this->state_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
                 $this->state_model->delete();
                 $message = 'state update successfully';
                 if($request->data->status == 1){
