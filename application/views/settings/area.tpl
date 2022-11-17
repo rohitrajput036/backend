@@ -229,8 +229,8 @@ function get_state_list(id){
         $(document).on('click','#save',function(){
             var area_master_id = $('#area_master_id').val();
             var state_id = $.trim($('#state_id').val());
-            var city_id = $.trim($('#city_id').val());    
-            var area_name = $.trim($('#area_name').val());    
+            var city_id = $.trim($('#city_id').val());
+            var area_name = $.trim($('#area_name').val());
             if(checkBlank('state_box','state_error_msg','Required..', state_id, 'state_id', '')){
                 return false;
             }
