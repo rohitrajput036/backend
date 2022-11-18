@@ -122,7 +122,7 @@ class State_model extends CI_Model {
                         'state_name'         => $result->state_name,
                         'state_code'        => $result->state_code,
                         'zone'              => $result->zone,
-                        'gst_code'          =>$result->gst_code,
+
                         'union_territories' =>$result->union_territories,
                         'sort_order'        =>$result->sort_order,
                         'created_on'        =>$result->created_on,

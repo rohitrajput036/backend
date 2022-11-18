@@ -102,8 +102,8 @@ class Area_master_model extends CI_Model {
                     $btns = $active_deactive_btn. $delete_btn. $edit_btn;
                     $output[] = [
                         $i,
-                        $result->area_name,
                         $result->city_name.' / '.$result->state_name,
+                        $result->area_name,
                         $btns
                     ];
                 }else{

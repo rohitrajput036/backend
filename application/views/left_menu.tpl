@@ -116,7 +116,7 @@
                         <a href= "{site_url('chapter')}"><i class="fa fa-book"></i>Manage Chapter</a>
                     </li>
                     <li {if uriseg(1)=='routes'}class="active"{/if}>
-                        <a href= "{site_url('routes')}"><i class="fa fa-circle-o"></i>Manage Routes</a>
+                        <a href= "{site_url('routes')}"><i class="fa fa-arrows-alt"></i>Manage Routes</a>
                     </li>
                     <li {if uriseg(1)=='country'}class="active"{/if}>
                         <a href= "{site_url('country')}"><i class="fa fa-circle-o"></i> Country</a>
