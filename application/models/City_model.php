@@ -119,7 +119,7 @@ class City_model extends CI_Model {
                         'sort_order'        => $result->sort_order,
                         'city_alias_name'   => $result->city_alias_name,
                         'created_on'        =>$result->created_on,
-                        'status'            =>$result->status
+                        'is_active'            =>$result->is_active
                     ];
                 }
             }
