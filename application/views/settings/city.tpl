@@ -109,7 +109,7 @@
                 $('#'+id).children().remove();
                 $('#'+id).append("<option value='0'>--Select State--</option>");
                 $.each(response.data,function(k,v){
-                    $('#'+id).append("<option value='"+v.state_id+"' data-sc='"+v.state_code+"'>"+v.state_name+"</option>");
+                    $('#'+id).append("<option value='"+v.state_id+"'>"+v.state_name+"</option>");
                 });
             }).fail(function(response) {
                 $("#animatedLoader").hide();
