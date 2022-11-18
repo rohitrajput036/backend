@@ -67,7 +67,31 @@ class Teacher_model extends CI_Model{
         return $this->global_model->update($this->table_name, $update_data, $where);
     }
 
-    function get(){
-        
+    function get($for_table = false){
+        $output = [];
+        if(isset($results) && $results->num_rows() > 0){
+            $i=0;
+            foreach($results->result() as $result){
+                ++$i;
+                if($for_table){
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-teacher_id="'.$result->teacher_id.'" data-at="2"><i class="fa fa-check text-green"></i></btn>';
+                    }else{
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-teacher_id="'.$result->teacher_id.'" data-at="1"><i class="fa fa-times text-red"></i></btn>';
+                    }
+                    $delete_btn = '<btn class="btn active_deactive" data-teacher_id="'.$result->teacher_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
+                    $edit_btn = '<btn class="btn edit" data-teacher_id="'.$result->teacher_id.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $btns = $active_deactive_btn. $delete_btn. $edit_btn;
+                    $output[] = [
+                        $i,
+                        
+                        $btns
+                    ];
+                }else{
+                    $output[] = [];
+                }
+            }
+        }
+        return $output;
     }
 }
