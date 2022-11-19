@@ -88,7 +88,7 @@
                     </li>
                 </ul>
             </li>
-            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter' || uriseg(1)=='routes' ||  uriseg(1)=='country' || uriseg(1)=='state' || uriseg(1)=='city' || uriseg(1)=='area'} class="treeview active"{else}class="treeview"{/if}>
+            <li {if uriseg(1)=='role' || uriseg(1)=='department' || uriseg(1)=='fee_structure' || uriseg(1)=='cast_categoty' || uriseg(1)=='school' || uriseg(1)=='manage_class' || uriseg(1)=='subject' || uriseg(1)=='chapter' || uriseg(1)=='routes' ||  uriseg(1)=='country' || uriseg(1)=='state' || uriseg(1)=='city' || uriseg(1)=='area'} class="treeview active"{else}class="treeview"{/if}>
                 <a href="#">
                     <i class="fa fa-cogs"></i> <span>Setting</span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -102,6 +102,9 @@
                     </li>
                     <li {if uriseg(1)=='fee_structure'}class="active"{/if}>
                         <a href= "{site_url('fee_structure')}"><i class="fa fa-circle-o"></i>Fee Structure</a>
+                    </li>
+                     <li {if uriseg(1)=='cast_categoty'}class="active"{/if}>
+                        <a href= "{site_url('cast_categoty')}"><i class="fa fa-circle-o"></i>Cast Categoty</a>
                     </li>
                     <li {if uriseg(1)=='school'}class="active"{/if}>
                         <a href= "{site_url('school')}"><i class="fa fa-circle-o"></i>Manage School</a>

@@ -47,6 +47,7 @@ class Branch extends CI_Controller {
     }
     public function edit() {
         $this->outputData['action'] = 'edit';
+        $this->outputData['role'] = userdata('Role');
         $api_url = API_URL."department/get";
         $request = [
             'control' => [
