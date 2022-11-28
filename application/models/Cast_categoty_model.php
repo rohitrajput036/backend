@@ -68,31 +68,46 @@ class Cast_categoty_model extends CI_Model {
         $this->global_model->update($this->table_name, $update_data, $where);
     }
 
-    function get(){
+    function get($for_table = false){
         $output = [];
-        if(!empty($this->is_active)){
-            $where['is_active'] = $this->is_active;
-        }else{
-            $where['is_active in (1,2)'] = NULL;
-        }
         if($this->cast_category_id > 0){
             $where['cast_category_id'] = $this->cast_category_id;
         }
-        $order_by = ['sort_order' => 'ASC'];
-        $results = $this->global_model->select($this->table_name,$where,'*',NULL,NULL,NULL,$order_by);
-        if(isset($results) && $results->num_rows() > 0){
-            foreach($results->result() as $result){
-                if($this->for_table){
-                    $output[] = [];
+        if(!empty($this->is_active)){
+            $where['is_active'] = $this->is_active;
+        }else{
+            $where['is_active IN (1,2)'] = NULL;
+        }
+        $order_by = ['cast_name' => 'ASC'];
+        $resutls = $this->global_model->select($this->table_name, $where,'*', NULL,NULL,NULL, $order_by);
+        if(isset($resutls) && $resutls->num_rows() > 0){
+            $i=0;
+            foreach($resutls->result() as $result){
+                ++$i;
+                if($for_table){
+                    if($result->is_active == 1){
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-cast_category_id="'.$result->cast_category_id.'" data-at="2"><i class="fa fa-check text-green"></i></btn>';
+                    }else{
+                        $active_deactive_btn = '<btn class="btn active_deactive" data-cast_category_id="'.$result->cast_category_id.'" data-at="1"><i class="fa fa-times text-red"></i></btn>';
+                    }
+                    $delete_btn = '<btn class="btn active_deactive" data-cast_category_id="'.$result->cast_category_id.'" data-at="3"><i class="fa fa-trash text-red"></i></btn>';
+                    $edit_btn = '<btn class="btn edit" data-cast_category_id="'.$result->cast_category_id.'" data-cast_name="'.$result->cast_name.'" data-short_code="'.$result->short_code.'"><i class="fa fa-pencil-square-o text-primary"></i></btn>';
+                    $btns = $active_deactive_btn. $delete_btn. $edit_btn;
+                    $output[] = [
+                        $i,
+                        $result->cast_name,
+                        $result->short_code,
+                        $btns
+                    ];
                 }else{
                     $output[] = [
-                      'cast_category_id'    => $result->cast_category_id,
-                      'cast_name'           => $result->cast_name,
-                      'short_code'          => $result->short_code,
-                      'sort_order'          => $result->sort_order,
-                      'is_active'           => $result->is_active,
-                      'created_by'          => $result->created_by,
-                      'created_on'          => $result->created_on    
+                        'cast_category_id'     => $result->cast_category_id,
+                        'cast_name'            => $result->cast_name,
+                        'short_code'           => $result->short_code,
+                        'sort_order'           => $result->sort_order,
+                        'is_active'            => $result->is_active,
+                        'created_by'           => $result->created_by,
+                        'created_on'           => $result->created_on
                     ];
                 }
             }
