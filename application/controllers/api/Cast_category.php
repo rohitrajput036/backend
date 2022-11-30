@@ -1,8 +1,10 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
-class Cast_category extends REST_Controller {
 
+class Cast_category extends REST_Controller {
+    
     function __construct() {
         parent::__construct();
         $this->load->model('cast_category_model');
