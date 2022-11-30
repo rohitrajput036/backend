@@ -77,9 +77,9 @@ switch (ENVIRONMENT) {
     case 'development':
         $db['default'] = array(
             'dsn' => '',
-            'hostname' => '192.169.0.146',
-            'username' => 'mansi',
-            'password' => 'mansi',
+            'hostname' => 'localhost',
+            'username' => 'root',
+            'password' => '',
             'database' => 'backend',
             'dbdriver' => 'mysqli',
             'dbprefix' => '',
