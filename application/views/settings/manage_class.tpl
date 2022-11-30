@@ -66,7 +66,7 @@
                             <label> Link with Subject <span class="text-red">*</span></label>
                             <Select name="with_subject" id="with_subject" class="form-control">
                                 <option value="select">Select</option>
-                                <option value="yes">Yes</option>
+                                <option value="yes">YES</option>
                                 <option value="no">NO</option>
                             </select>
                             <label for="with_subject" id="with_subject_error_msg"></label>
