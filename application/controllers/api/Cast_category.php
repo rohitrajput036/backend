@@ -1,10 +1,9 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 
 class Cast_category extends REST_Controller {
-    
+
     function __construct() {
         parent::__construct();
         $this->load->model('cast_category_model');
@@ -39,7 +38,7 @@ class Cast_category extends REST_Controller {
     }
 
     public function add_post(){
-        $StartTime = microtime(true);
+        $start_time = microtime(true);
         try{
             $request = json_decode($this->input->raw_input_stream);
             $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
@@ -99,8 +98,8 @@ class Cast_category extends REST_Controller {
         }
     }
 
-    public function delete(){
-        $StartTime = microtime(true);
+    public function delete_post(){
+        $start_time = microtime(true);
         try{
             $request = json_decode($this->input->raw_input_stream);
             $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
@@ -154,7 +153,7 @@ class Cast_category extends REST_Controller {
         }
     }
 
-    function get_post(){
+    public function get_post(){
         $start_time = microtime(true);
         try {
             $request = json_decode($this->input->raw_input_stream);
@@ -181,7 +180,7 @@ class Cast_category extends REST_Controller {
                     'message_code' => REST_Controller::HTTP_OK,
                     'time_taken' => (microtime(true) - $start_time) . ' Second'
                 ],
-                'data' => $dat
+                'data' => $data
             ];
             $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
             $this->response($response, REST_Controller::HTTP_OK);
