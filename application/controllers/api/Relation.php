@@ -50,7 +50,6 @@ class Relation extends REST_Controller {
                 keyExist(['relation_id','relation'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id, 'source' => $request->control->source, 'request_time' => $request->control->request_time]);
                 checkBlank(['relation' => $request->data->relation]);
-                $this->relation_master_model->relation_id = $request->data->relation_id;
                 $this->relation_master_model->relation = $request->data->relation;
                 $this->relation_master_model->is_active = 1;
                 $this->relation_master_model->created_by = $this->relation_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
@@ -96,7 +95,7 @@ class Relation extends REST_Controller {
         }
     }
 
-    public function delete_post(){
+    function delete_post(){
         $start_time = microtime(true);
         try{
             $request = json_decode($this->input->raw_input_stream);
