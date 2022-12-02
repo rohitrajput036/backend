@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 
@@ -53,11 +54,11 @@ class Relation extends REST_Controller {
                 $this->relation_master_model->relation = $request->data->relation;
                 $this->relation_master_model->is_active = 1;
                 $this->relation_master_model->created_by = $this->relation_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
-                $message = 'Your relation add successfully.';
+                $message = 'Your Relation add successfully';
                 if(isset($request->data->relation_id) && $request->data->relation_id > 0){
                     $this->relation_master_model->relation_id = $request->data->relation_id;
                     $this->relation_master_model->update();
-                    $message = 'Your relation update successfully.';
+                    $message = 'Your Relation update successfully!';
                 }else{
                     if(!$this->relation_master_model->check()){
                         $this->relation_master_model->add();
@@ -97,28 +98,28 @@ class Relation extends REST_Controller {
 
     function delete_post(){
         $start_time = microtime(true);
-        try{
+        try {
             $request = json_decode($this->input->raw_input_stream);
             $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
             $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
             $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
             if (!empty($request)) {
-                keyExist(['control', 'data'],$request);
-                keyExist(['request_id', 'source', 'request_time'],$request->control);
-                keyExist(['relation_id', 'is_active'], $request->data);
+                keyExist(['control','data'],$request);
+                keyExist(['request_id','source','request_time'],$request->control);
+                keyExist(['relation_id','is_active'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time]);
                 checkBlank(['relation_id' => $request->data->relation_id,'is_active' => $request->data->is_active]);
                 $this->relation_master_model->relation_id = $request->data->relation_id;
                 $this->relation_master_model->is_active = $request->data->is_active;
                 $this->relation_master_model->created_by = $this->relation_master_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
                 $this->relation_master_model->delete();
-                $message = 'Your Relation update successfully';
+                $message = 'Your relation  update successfully';
                 if($request->data->is_active == 1){
-                    $message = 'This Relation activate successfully';
+                    $message = 'This relation activate successfully';
                 }else if($request->data->is_active == 2){
-                    $message = 'This Relation dactivate successfully';
+                    $message = 'This relation dactivate successfully';
                 }else if($request->data->is_active == 3){
-                    $message = 'This Relation delete successfully';
+                    $message = 'Your relation delete successfully';
                 }
             }else{
                 throw new Exception('Invalid request',400);
@@ -149,4 +150,52 @@ class Relation extends REST_Controller {
             $this->response($response, $E->getCode());
         }
     }
+
+    function get_post(){
+        $start_time = microtime(true);
+        try {
+            $request = json_decode($this->input->raw_input_stream);
+            $api_name = __CLASS__ . '/' . chop(__FUNCTION__, '_post');
+            $uuid = property_exists($request->control,"request_id") ? $request->control->request_id : generateUUId();
+            $this->log4php->log('info', 'REQUEST', $api_name, $uuid, $request, 0);
+            if (!empty($request)) {
+                if(isset($request->data->is_active)){
+                    $this->relation_master_model->is_active = $request->data->is_active;
+                }
+                if(isset($request->data->for_table)){
+                    $request->data->for_table = true;
+                }else{
+                    $request->data->for_table = false;
+                }
+                $data = $this->relation_master_model->get($request->data->for_table);
+            } else {
+                throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
+            }
+            $response = [
+                'control' => [
+                    'status' => 1,
+                    'message' => 'Here is a your all relation List!',
+                    'message_code' => REST_Controller::HTTP_OK,
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => $data
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, REST_Controller::HTTP_OK);
+        } catch (Exception $E) {
+            $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
+            $response = [
+                'control' => [
+                    'status' => 0,
+                    'message' => $E->getMessage(),
+                    'message_code' => $E->getCode(),
+                    'time_taken' => (microtime(true) - $start_time) . ' Second'
+                ],
+                'data' => []
+            ];
+            $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
+            $this->response($response, $E->getCode());
+        }
+    }
+
 }
