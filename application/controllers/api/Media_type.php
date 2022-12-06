@@ -51,21 +51,22 @@ class Media_type extends REST_Controller {
                 keyExist(['media_type_id','media_type'],$request->data);
                 checkBlank(['request_id' => $request->control->request_id, 'source' => $request->control->source, 'request_time' => $request->control->request_time]);
                 checkBlank(['media_type' => $request->data->media_type]);
-                $this->media_type_model->media_type_id = $request->data->media_type_id;
-                $this->media_type_model->media_type    = $request->data->media_type;
-                $this->media_type_model->is_active     = 1;
-                $this->media_type_model->created_by = $this->media_type_model->created_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
-                $message = 'Media add successfully.';
-                if(isset($request->data->relation_id) && $request->data->relation_id > 0){
-                    $this->relation_master_model->relation_id = $request->data->relation_id;
-                    $this->relation_master_model->update();
-                    $message = 'Media update successfully.';
-                } else{
-                    if(!$this->relation_master_model->check()){
-                        $this->relation_master_model->add();
+                $this->media_type_model->media_type = $request->data->media_type;
+                $this->media_type_model->is_active = 1;
+                $this->media_type_model->created_by = $this->media_type_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0;
+                $message = 'Your media add successfully';
+                if(isset($request->data->media_type_id) && $request->data->media_type_id > 0){
+                    $this->media_type_model->media_type_id = $request->data->media_type_id;
+                    $this->media_type_model->update();
+                    $message = 'Your media update successfully!';
+                }else{
+                    if(!$this->media_type_model->check()){
+                        $this->media_type_model->add();
+                    }else{
+                        throw new Exception('Your media aready exists!',400);
                     }
                 }
-            } else{
+            }else{
                 throw new Exception('Invalid request',400);
             }
             $response = [
@@ -79,7 +80,7 @@ class Media_type extends REST_Controller {
             ];
             $this->log4php->log('info', 'RESPONSE', $api_name, $uuid, $response, 0);
             $this->response($response, REST_Controller::HTTP_OK);
-        } catch (Exception $E) {
+        }catch (Exception $E) {
             $this->log4php->log('error', 'ERROR', $api_name, $uuid, $E->getMessage(), 0);
             $response = [
                 'control' => [
@@ -112,13 +113,13 @@ class Media_type extends REST_Controller {
                 $this->media_type_model->is_active = $request->data->is_active;
                 $this->media_type_model->created_by = $this->media_type_model->updated_by = (isset($request->data->login_id) && $request->data->login_id > 0) ? $request->data->login_id : 0; 
                 $this->media_type_model->delete();
-                $message = 'Media  update successfully';
+                $message = 'Your media  update successfully';
                 if($request->data->is_active == 1){
-                    $message = 'Media ID activate successfully';
+                    $message = 'This media activate successfully';
                 }else if($request->data->is_active == 2){
-                    $message = 'Media ID dactivate successfully';
+                    $message = 'This media dactivate successfully';
                 }else if($request->data->is_active == 3){
-                    $message = 'This Media delete successfully';
+                    $message = 'Your media delete successfully';
                 }
             }else{
                 throw new Exception('Invalid request',400);
@@ -196,4 +197,5 @@ class Media_type extends REST_Controller {
             $this->response($response, $E->getCode());
         }
     }
+
 }
