@@ -136,12 +136,12 @@
                     <li {if uriseg(1)=='area'}class="active"{/if}>
                         <a href= "{site_url('area')}"><i class="fa fa-circle-o"></i> Area</a>
                     </li>
-                    <li {if uriseg(1)=='religion'}class="active"{/if}>
+                    {* <li {if uriseg(1)=='religion'}class="active"{/if}>
                         <a href= "{site_url('religion')}"><i class="fa fa-circle-o"></i>Religion</a>
                     </li>
                     <li {if uriseg(1)=='media_type'}class="active"{/if}>
                         <a href= "{site_url('media_type')}"><i class="fa fa-circle-o"></i> Media</a>
-                    </li>
+                    </li> *}
 
                 </ul>
             </li>
