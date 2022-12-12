@@ -244,14 +244,14 @@ class Common extends REST_Controller {
                 keyExist(['control','data'],$request);
                 keyExist(['request_id','source','request_time','version'],$request->control);
                 checkBlank(['request_id' => $request->control->request_id,'source' => $request->control->source,'request_time' => $request->control->request_time, 'version' => $request->control->version]);
-                $this->load->model('cast_categoty_model');
+                $this->load->model('cast_category_model');
                 if(isset($request->data->is_active)){
-                    $this->cast_categoty_model->is_active = $request->data->is_active;
+                    $this->cast_category_model->is_active = $request->data->is_active;
                 }
                 if(isset($request->data->id)){
-                    $this->cast_categoty_model->cast_category_id = $request->data->id;
+                    $this->cast_category_model->cast_category_id = $request->data->id;
                 }
-                $data = $this->cast_categoty_model->get();
+                $data = $this->cast_category_model->get();
             } else {
                 throw new Exception("Invalid Request", REST_Controller::HTTP_BAD_REQUEST);
             }

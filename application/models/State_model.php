@@ -94,7 +94,6 @@ class State_model extends CI_Model {
         $fields = 's.*,c.country_name';
         $order_by = ['state_name' => 'ASC'];
         $results = $this->global_model->select($this->table_name.' s',$where, $fields, $joins, NULL,NULL, $order_by);
-        // echo $this->db->last_query();exit;
         $output = [];
         if(isset($results) && $results->num_rows() > 0){
             $i=0;
