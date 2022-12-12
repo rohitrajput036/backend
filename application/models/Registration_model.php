@@ -129,7 +129,8 @@ class Registration_model extends CI_Model {
             $this->admission_model->table_name.' a' => ['(s.student_id = a.student_id AND a.is_active=1)','LEFT'], 
             $this->enquiry_master_model->table_name.' e' => ['(r.enquiry_id = e.enquiry_id AND e.is_active = 1)','LEFT'],
             $this->student_parents_detail_model->table_name.' f' => ['(s.student_id = f.student_id AND f.parent_type = 1 AND f.is_active = 1)','LEFT'],
-            $this->student_parents_detail_model->table_name.' m' => ['(s.student_id = m.student_id AND m.parent_type = 2 AND m.is_active = 1)','LEFT']
+            $this->student_parents_detail_model->table_name.' m' => ['(s.student_id = m.student_id AND m.parent_type = 2 AND m.is_active = 1)','LEFT'],
+            $this->cast_category_model->table_name.' ca' => ['r.cast_category_id = ca.cast_category_id AND ca.is_active =1','INNER']
         ];
         $or_like = [];
         $limit = NULL;
@@ -150,7 +151,7 @@ class Registration_model extends CI_Model {
                 'f.alt_contact_no' => $this->datatable->search->value
             ];
         }
-        $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no,a.admission_id,r.is_active";
+        $fields = "r.registration_id,e.form_id,r.registration_no,s.student_id,s.first_name child_first_name,s.middle_name child_middle_name, f.last_name child_last_name,c.class_name,f.first_name father_first_name, f.middle_name father_middel_name,f.last_name father_last_name, f.alt_contact_no father_alt_contact_no, m.first_name mother_first_name, m.middle_name mother_middel_name, m.last_name mother_last_name,m.email_id mother_email_id, m.alt_email_id mother_alt_email_id, m.contact_no mother_contact_no, m.alt_contact_no mother_alt_contact_no,a.admission_id,ca.cast_category_id,r.is_active";
         $results = $this->global_model->select($this->table_name.' r', $where, $fields, $joins, NULL, $limit, $order_by, NULL, NULL, NULL, NULL, NULL, NULL, $or_like);
         if(!empty($this->datatable) && isset($this->datatable->draw)){
             $output = $this->prepare_result_datatable($results);
