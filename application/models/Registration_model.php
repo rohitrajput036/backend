@@ -110,6 +110,7 @@ class Registration_model extends CI_Model {
         $this->load->model('enquiry_master_model');
         $this->load->model('student_parents_detail_model');
         $this->load->model('admission_model');
+        $this->load->model('cast_category_model');
         $output = [];
         if(!empty($this->is_active)){
             $where['r.is_active'] = $this->is_active;
@@ -130,7 +131,7 @@ class Registration_model extends CI_Model {
             $this->enquiry_master_model->table_name.' e' => ['(r.enquiry_id = e.enquiry_id AND e.is_active = 1)','LEFT'],
             $this->student_parents_detail_model->table_name.' f' => ['(s.student_id = f.student_id AND f.parent_type = 1 AND f.is_active = 1)','LEFT'],
             $this->student_parents_detail_model->table_name.' m' => ['(s.student_id = m.student_id AND m.parent_type = 2 AND m.is_active = 1)','LEFT'],
-            $this->cast_category_model->table_name.' ca' => ['r.cast_category_id = ca.cast_category_id AND ca.is_active =1','INNER']
+            $this->cast_category_model->table_name.' ca' => ['(s.cast_category_id = ca.cast_category_id AND ca.is_active=1)','INNER']
         ];
         $or_like = [];
         $limit = NULL;
@@ -227,8 +228,22 @@ class Registration_model extends CI_Model {
         if(isset($results) && $results->num_rows() > 0){
             foreach($results->result() as $result){
                 $output[] = [
-                    'registration_id' => $result->registration_id,
-                    ''
+                    'registration_id'   => $result->registration_id,
+                    'branch_id'         => $result->branch_id,
+                    'registration_no'   => $result->registration_no,
+                    'registration_date' => $result->registration_date,
+                    'enquiry_id'        => $result->enquiry_id,
+                    'class_id'          => $result->class_id,
+                    'registration_fee'  => $result->registration_fee,
+                    'is_qualified'      => $result->is_qualified,
+                    'total_marks'       => $result->total_marks,
+                    'earn_marks'        => $result->earn_marks,
+                    'earn_percentage'   => $result->earn_percentage,
+                    'remarks'           => $result->remarks,
+                    'is_active'         => $result->is_active,
+                    'created_by'        => $result->created_by,
+                    'created_on'        => $result->created_on
+
                 ];
             }
         }

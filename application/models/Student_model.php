@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Student_model extends CI_Model {
     
-    public $student_id, $registration_id, $first_name, $middle_name, $last_name, $date_of_birth, $place_of_birth, $gender, $cast_category_id, $cast, $nationality_id, $religion_id, $address_line_1, $address_line_2, $area_id, $city_id, $state_id, $pincode, $permanent_addresss_line_1, $permanent_addresss_line_2, $permanent_area_id, $permanent_city_id, $permanent_state_id, $permanent_pincode, $mother_tongue, $blood_group, $indentification_mark_1, $indentification_mark_2, $remarks, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $datatable;
+    public $student_id, $registration_id, $first_name, $middle_name, $last_name, $date_of_birth, $place_of_birth, $gender, $cast_category_id, $cast_name, $nationality_id, $religion_id, $address_line_1, $address_line_2, $area_id, $city_id, $state_id, $pincode, $permanent_addresss_line_1, $permanent_addresss_line_2, $permanent_area_id, $permanent_city_id, $permanent_state_id, $permanent_pincode, $mother_tongue, $blood_group, $indentification_mark_1, $indentification_mark_2, $remarks, $is_active, $created_by, $created_on, $updated_by, $updated_on, $table_name, $datatable;
 
     function __construct() {
         parent::__construct();
@@ -15,7 +15,7 @@ class Student_model extends CI_Model {
         $this->place_of_birth = '';
         $this->gender = '';
         $this->cast_category_id = 0;
-        $this->cast = '';
+        $this->cast_name = '';
         $this->nationality_id = 0;
         $this->religion_id = 0;
         $this->address_line_1 = '';
@@ -54,7 +54,7 @@ class Student_model extends CI_Model {
             'place_of_birth' => $this->place_of_birth,
             'gender' => $this->gender,
             'cast_category_id' => $this->cast_category_id,
-            'cast' => $this->cast,
+            'cast_name' => $this->cast_name,
             'nationality_id' => $this->nationality_id,
             'religion_id' => $this->religion_id,
             'address_line_1' => $this->address_line_1,
@@ -106,7 +106,7 @@ class Student_model extends CI_Model {
             'place_of_birth' => $this->place_of_birth,
             'gender' => $this->gender,
             'cast_category_id' => $this->cast_category_id,
-            'cast' => $this->cast,
+            'cast_name' => $this->cast_name,
             'nationality_id' => $this->nationality_id,
             'religion_id' => $this->religion_id,
             'address_line_1' => $this->address_line_1,
@@ -145,6 +145,7 @@ class Student_model extends CI_Model {
     function get(){
         $output = [];
         $this->load->model('registration_model');
+        $this->load->model('cast_category_model');
         if(!empty($this->is_active)){
             $where['s.is_active'] = $this->is_active;
         }else{
@@ -154,9 +155,16 @@ class Student_model extends CI_Model {
             $where['s.student_id'] = $this->student_id;
         }
         $joins = [
-            $this->registration_model->table_name.' r' => ['(s.registration_id = r.registration_id AND r.is_active = 1)','LEFT']
+            $this->registration_model->table_name.' r' => ['(s.registration_id = r.registration_id AND r.is_active = 1)','INNER'],
+            $this->cast_category_model->table_name.' ca' => ['(s.cast_category_id = ca.cast_category_id AND ca.is_active = 1)','INNER'],
+            $this->nationality_model->table_name.' n' => ['(s.nationality_id = n.nationality_id AND n.is_active = 1)','LEFT'],
+            $this->religion_model->table_name.' re' => ['(s.religion_id = re.religion_id AND re.is_active = 1)','LEFT'],
+            $this->area_master_model->table_name.' a' => ['(s.area_id = a.area_master_id AND a.is_active = 1)','LEFT'],
+            $this->city_model->table_name.' c' => ['(s.city_id = c.city_id AND c.is_active = 1)','INNER'],
+            $this->state_model->table_name.' sa' => ['(s.state_id = sa.state_id AND sa.status = 1)','INNER']
+
         ];
-        $fields = '*';
+        $fields = 's.*,';
         $results = $this->global_model->select($this->table_name.' s', $where, $fields, $joins);
         if(!empty($this->datatable)){
             $output = $this->prepare_result_datatable($results);
@@ -202,7 +210,7 @@ class Student_model extends CI_Model {
                     'place_of_birth' => $result->place_of_birth,
                     'gender' => $result->gender,
                     'cast_category_id' => $result->cast_category_id,
-                    'cast' => $result->cast,
+                    'cast_name' => $result->cast_name,
                     'nationality_id' => $result->nationality_id,
                     'religion_id' => $result->religion_id,
                     'address_line_1' => $result->address_line_1,
