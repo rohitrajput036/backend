@@ -79,7 +79,7 @@ class Role_model_mango extends CI_Model {
 
         $results = $this->mongo_db->get_where($this->table_name,$where);
 
-        print_r($results);exit;
+        // print_r($results);exit;
         $output = [];
         if($this->role_id > 0){
             $where['role_id'] = $this->role_id;
