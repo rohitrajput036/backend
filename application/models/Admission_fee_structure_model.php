@@ -71,7 +71,6 @@ class Admission_fee_structure_model extends CI_Model {
     function get($for_table = false){
         $this->load->model('admission_class_model');
         $this->load->model('admission_fee_model');
-        $this->load->model('admission_model');
         if($this->admission_fee_structure_id > 0){
             $where['a.admission_fee_structure_id'] = $this->admission_fee_structure_id;
         }
@@ -85,7 +84,19 @@ class Admission_fee_structure_model extends CI_Model {
         }
         $joins = [
             $this->admission_class_model->table_name.' ac' => ['(a.admission_class_id=ac.admission_class_id AND ac.is_active = 1)','INNER'],
-            
+            $this->fee_structure_master_model->table_name.' fe' => ['(a.fee_structure_master_id = fe.fee_structure_master_id AND fe.is_active =1)','INNER']
         ];
+        $fields = 'a.*';
+        $order_by = NULL;
+        $result = $this->global_model->select($this->table_name.' a',$where, $fildes, $joins, NULL,NULL, $oder_by);
+        if(isset($results) &&  $results->num_rows() > 0){
+            $i=0;
+            foreach($resutls->result() as $result){
+                ++$i;
+                if($this->for_table){
+
+                }
+            }
+        }
     }
 }
